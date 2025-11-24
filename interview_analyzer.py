@@ -1,47 +1,77 @@
 """
-Simple Interview Analyzer using LiteLLM
-Analyzes interview transcriptions and provides feedback
+BQ Interview Analyzer using LiteLLM
+Analyzes behavioral questions and self-introductions for FAANG interviews
 """
 
 from dotenv import load_dotenv
 from litellm import completion
+from prompts import (
+    SYSTEM_MESSAGE_INTRODUCTION,
+    SYSTEM_MESSAGE_BQ_QUESTION,
+    get_introduction_prompt,
+    BQQuestionPrompt,
+)
 
 load_dotenv()
 
 
 class InterviewAnalyzer:
-    """Simple interview analyzer"""
+    """BQ Interview Analyzer for FAANG standards"""
 
     def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
 
-    def analyze(self, transcription: str, role: str = "Software Engineer") -> str:
+    def analyze_introduction(self, introduction: str, role: str = "Software Engineer", yoe: int = None) -> str:
         """
-        Analyze interview transcription and return feedback
+        Analyze self-introduction (1-2 minutes) and provide FAANG-standard feedback
         
         Args:
-            transcription: Interview transcription text
+            introduction: Self-introduction text (1-2 minutes worth)
             role: Job role being interviewed for
+            yoe: Years of experience (optional, will be inferred if not provided)
             
         Returns:
-            Feedback text from LLM
+            Structured feedback with overall rating, checkpoints, and improvement suggestions
         """
-        prompt = f"""Analyze the following interview transcription for a {role} position and provide feedback including:
-- Hiring decision (Strong Hire / Weak Hire / No Hire)
-- Key strengths
-- Areas of concern
-- Overall assessment
-
-INTERVIEW TRANSCRIPTION:
-{transcription}
-"""
+        prompt = get_introduction_prompt(introduction, role, yoe)
 
         response = completion(
             model=self.model,
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an expert technical interviewer. Provide honest and constructive feedback."
+                    "content": SYSTEM_MESSAGE_INTRODUCTION
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3
+        )
+
+        return response.choices[0].message.content
+
+    def analyze_bq_question(self, question: str, answer: str, role: str = "Software Engineer") -> str:
+        """
+        Analyze a specific BQ question answer following FAANG standards
+        
+        Args:
+            question: The BQ question asked (e.g., "Tell me about your most challenging project")
+            answer: The candidate's answer
+            role: Job role being interviewed for
+            
+        Returns:
+            Structured feedback with result, checkpoints, and improvement suggestions
+        """
+        prompt = BQQuestionPrompt.get_prompt(question, answer, role)
+
+        response = completion(
+            model=self.model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SYSTEM_MESSAGE_BQ_QUESTION
                 },
                 {
                     "role": "user",
@@ -56,32 +86,39 @@ INTERVIEW TRANSCRIPTION:
 
 def main():
     """Example usage"""
-    transcription = """
-Interviewer: Can you write a function to reverse a linked list?
-
-Candidate: Sure! I'll use three pointers: previous, current, and next.
-Here's my approach:
-```python
-def reverse_linked_list(head):
-    prev = None
-    current = head
-    while current:
-        next_node = current.next
-        current.next = prev
-        prev = current
-        current = next_node
-    return prev
-```
-The time complexity is O(n) and space complexity is O(1).
-
-Interviewer: Great! How would you design a URL shortener service?
-
-Candidate: We could use a hash function like MD5 and take the first few characters.
-We'd need a database to store the mappings and handle collisions.
-"""
-
     analyzer = InterviewAnalyzer()
-    feedback = analyzer.analyze(transcription, role="Software Engineer")
+    
+    # Example 1: Self-introduction analysis
+    print("=" * 80)
+    print("EXAMPLE 1: Self-Introduction Analysis")
+    print("=" * 80)
+    
+    introduction = """
+    Hi, I'm John. I've been a software engineer for about 5 years now. 
+    I started my career at a startup where I worked on web applications, 
+    then moved to a mid-size company where I focused on backend systems. 
+    I'm really interested in distributed systems and have worked with 
+    microservices architecture. I'm excited about this opportunity because 
+    I want to work on systems at scale.
+    """
+    
+    feedback = analyzer.analyze_introduction(introduction, role="Software Engineer", yoe=5)
+    print(feedback)
+    
+    print("\n" + "=" * 80)
+    print("EXAMPLE 2: BQ Question Analysis")
+    print("=" * 80)
+    
+    # Example 2: BQ question analysis
+    question = "Tell me about your most challenging project."
+    answer = """
+    So, I was working on this project where we had to migrate our 
+    database. It was challenging because we had a lot of data and 
+    couldn't have downtime. I worked with the team to plan it out, 
+    and we did it over a weekend. It went pretty well.
+    """
+    
+    feedback = analyzer.analyze_bq_question(question, answer, role="Software Engineer")
     print(feedback)
 
 
