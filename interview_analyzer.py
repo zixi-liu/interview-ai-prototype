@@ -9,7 +9,7 @@ from prompts import (
     SYSTEM_MESSAGE_INTRODUCTION,
     SYSTEM_MESSAGE_BQ_QUESTION,
     get_introduction_prompt,
-    BQQuestionPrompt,
+    BQQuestions,
 )
 
 load_dotenv()
