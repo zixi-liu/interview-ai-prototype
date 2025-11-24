@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  interview-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: interview-analyzer:latest
+    container_name: interview-analyzer-app
+    env_file:
+      - .env
+    volumes:
+      # Mount data directory for input/output files
+      - ./data:/app/data
+      # Optionally mount transcriptions directory
+      - ./transcriptions:/app/transcriptions:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Override the default command if needed
+    # command: python example_usage.py
+    restart: unless-stopped
+    # If you want to keep the container running for manual execution
+    # command: tail -f /dev/null
+
+  # Optional: Add a web service in the future
+  # web:
+  #   build: .
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - interview-analyzer
