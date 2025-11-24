@@ -64,7 +64,8 @@ class InterviewAnalyzer:
         Returns:
             Structured feedback with result, checkpoints, and improvement suggestions
         """
-        prompt = BQQuestionPrompt.get_prompt(question, answer, role)
+        bq_questions = BQQuestions()
+        prompt = bq_questions.get_prompt(question, answer, role)
 
         response = completion(
             model=self.model,
