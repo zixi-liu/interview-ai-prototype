@@ -451,47 +451,48 @@ async def analyze_audio(
         # Read audio content
         audio_content = await audio.read()
 
-        # Convert audio if needed (webm -> wav)
-        # GPT-4o audio supports: wav, mp3, flac, opus, pcm16 (NOT webm)
-        if audio.content_type and "webm" in audio.content_type.lower():
-            from pydub import AudioSegment
-            import io
+        # Always convert to WAV for GPT-4o audio compatibility
+        # Mobile browsers use different formats: iOS=MP4/AAC, Android=WebM/Opus
+        # GPT-4o audio supports: wav, mp3, flac, opus, pcm16
+        from pydub import AudioSegment
+        import io
 
-            # Save to temp file, convert, then read back
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_input:
-                temp_input.write(audio_content)
-                temp_input_path = temp_input.name
+        print(f"[Audio] Received format: {audio.content_type}, size: {len(audio_content)} bytes")
 
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_output:
-                temp_output_path = temp_output.name
+        # Save input audio to temp file
+        input_suffix = ".audio"
+        if audio.content_type:
+            if "webm" in audio.content_type.lower():
+                input_suffix = ".webm"
+            elif "mp4" in audio.content_type.lower() or "m4a" in audio.content_type.lower():
+                input_suffix = ".m4a"
+            elif "mpeg" in audio.content_type.lower() or "mp3" in audio.content_type.lower():
+                input_suffix = ".mp3"
 
-            try:
-                # Convert webm to wav
-                audio_segment = AudioSegment.from_file(temp_input_path, format="webm")
-                audio_segment.export(temp_output_path, format="wav")
+        with tempfile.NamedTemporaryFile(delete=False, suffix=input_suffix) as temp_input:
+            temp_input.write(audio_content)
+            temp_input_path = temp_input.name
 
-                # Read converted audio
-                with open(temp_output_path, "rb") as f:
-                    audio_content = f.read()
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_output:
+            temp_output_path = temp_output.name
 
-                audio_format = "wav"
-                print(f"[Audio] Converted webm to wav, new size: {len(audio_content)} bytes")
-            finally:
-                # Cleanup
-                if os.path.exists(temp_input_path):
-                    os.unlink(temp_input_path)
-                if os.path.exists(temp_output_path):
-                    os.unlink(temp_output_path)
-        else:
-            # Determine format from content type
-            audio_format = "wav"  # default
-            if audio.content_type:
-                if "mp3" in audio.content_type.lower():
-                    audio_format = "mp3"
-                elif "flac" in audio.content_type.lower():
-                    audio_format = "flac"
-                elif "opus" in audio.content_type.lower():
-                    audio_format = "opus"
+        try:
+            # Convert any format to wav using pydub
+            audio_segment = AudioSegment.from_file(temp_input_path)
+            audio_segment.export(temp_output_path, format="wav")
+
+            # Read converted audio
+            with open(temp_output_path, "rb") as f:
+                audio_content = f.read()
+
+            audio_format = "wav"
+            print(f"[Audio] Converted to wav, new size: {len(audio_content)} bytes")
+        finally:
+            # Cleanup
+            if os.path.exists(temp_input_path):
+                os.unlink(temp_input_path)
+            if os.path.exists(temp_output_path):
+                os.unlink(temp_output_path)
 
         # Encode audio to base64
         audio_b64 = base64.b64encode(audio_content).decode()
