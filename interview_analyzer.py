@@ -104,7 +104,7 @@ def main():
     I want to work on systems at scale.
     """
     
-    feedback = analyzer.analyze_introduction(introduction, role="Software Engineer", yoe=5)
+    feedback = analyzer.analyze_introduction(introduction, role="Software Engineer", company="Tech Company", yoe=5)
     print(feedback)
     
     print("\n" + "=" * 80)
