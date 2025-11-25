@@ -297,10 +297,6 @@
                     <label for="company">Company *</label>
                     <input type="text" id="company" name="company" placeholder="e.g., Google" required>
                 </div>
-                <div class="form-group">
-                    <label for="yoe">Years of Experience *</label>
-                    <input type="number" id="yoe" name="yoe" min="0" max="50" placeholder="e.g., 5" required>
-                </div>
             </div>
 
             <div class="input-container">
@@ -476,9 +472,7 @@
 
             const role = document.getElementById('role').value;
             const company = document.getElementById('company').value;
-            const yoe = document.getElementById('yoe').value;
-
-            if (!role || !company || !yoe) {
+            if (!role || !company) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -486,7 +480,6 @@
             const formData = new FormData();
             formData.append('role', role);
             formData.append('company', company);
-            formData.append('yoe', yoe);
 
             let endpoint = '/analyze/text';
 

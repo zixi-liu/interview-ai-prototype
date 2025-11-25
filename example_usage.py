@@ -35,8 +35,7 @@ def example_1_introduction():
     feedback = analyzer.analyze_introduction(
         introduction=introduction,
         role="Senior Software Engineer",
-        company="Google",
-        yoe=7
+        company="Google"
     )
     print(feedback)
     print()

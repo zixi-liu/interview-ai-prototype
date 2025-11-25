@@ -15,7 +15,7 @@ SYSTEM_MESSAGE_BQ_QUESTION = (
 )
 
 
-def get_introduction_prompt(introduction: str, role: str, company: str, yoe: int) -> str:
+def get_introduction_prompt(introduction: str, role: str, company: str) -> str:
     """
     Generate prompt for self-introduction analysis
 
@@ -23,7 +23,6 @@ def get_introduction_prompt(introduction: str, role: str, company: str, yoe: int
         introduction: Self-introduction text
         role: Job role being interviewed for
         company: Target company name
-        yoe: Years of experience
 
     Returns:
         Formatted prompt string
@@ -32,8 +31,6 @@ def get_introduction_prompt(introduction: str, role: str, company: str, yoe: int
     return f"""Analyze the following self-introduction for a {role} position at {company}.
 Provide a comprehensive evaluation following FAANG standards.
 
-(Candidate has {yoe} years of experience)
-
 SELF-INTRODUCTION:
 {introduction}
 
@@ -41,7 +38,7 @@ Please provide your analysis in the following structured format:
 
 ## Overall Rating
 [no hire / weak hire / hire / strong hire]
-(Note: Rating should be based on FAANG standards and consider the candidate's years of experience)
+(Note: Rating should be based on FAANG standards)
 
 ## Checkpoints Evaluation
 

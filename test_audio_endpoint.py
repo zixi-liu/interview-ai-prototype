@@ -11,8 +11,7 @@ def test_audio_endpoint():
     # Test data
     data = {
         "role": "Software Engineer",
-        "company": "Google",
-        "yoe": "5"
+        "company": "Google"
     }
 
     # We need actual audio file to test

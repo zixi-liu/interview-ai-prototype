@@ -236,11 +236,6 @@ async def home():
                     </div>
 
                     <div class="form-group">
-                        <label for="yoe">Years of Experience (optional)</label>
-                        <input type="number" id="yoe" name="yoe" min="0" max="50" placeholder="e.g., 3">
-                    </div>
-
-                    <div class="form-group">
                         <label for="introduction">Your Self-Introduction</label>
                         <textarea id="introduction" name="introduction"
                                   placeholder="Hi, I'm... I have X years of experience in..."
@@ -257,11 +252,6 @@ async def home():
                     <div class="form-group">
                         <label for="audio-role">Job Role</label>
                         <input type="text" id="audio-role" name="role" value="Software Engineer" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="audio-yoe">Years of Experience (optional)</label>
-                        <input type="number" id="audio-yoe" name="yoe" min="0" max="50" placeholder="e.g., 3">
                     </div>
 
                     <div class="form-group">
@@ -313,8 +303,6 @@ async def home():
                 const formData = new FormData();
                 formData.append('introduction', document.getElementById('introduction').value);
                 formData.append('role', document.getElementById('role').value);
-                const yoe = document.getElementById('yoe').value;
-                if (yoe) formData.append('yoe', yoe);
 
                 await analyzeIntroduction(formData, '/analyze/text');
             });
@@ -375,8 +363,6 @@ async def home():
                 const formData = new FormData();
                 formData.append('audio', audioBlob, 'recording.wav');
                 formData.append('role', document.getElementById('audio-role').value);
-                const yoe = document.getElementById('audio-yoe').value;
-                if (yoe) formData.append('yoe', yoe);
 
                 await analyzeIntroduction(formData, '/analyze/audio');
             });
@@ -418,16 +404,14 @@ async def home():
 async def analyze_text(
     introduction: str = Form(...),
     role: str = Form(...),
-    company: str = Form(...),
-    yoe: int = Form(...)
+    company: str = Form(...)
 ):
     """Analyze text introduction"""
     try:
         feedback = get_analyzer().analyze_introduction(
             introduction=introduction,
             role=role,
-            company=company,
-            yoe=yoe
+            company=company
         )
         return JSONResponse({"feedback": feedback, "input_type": "text"})
     except Exception as e:
@@ -438,8 +422,7 @@ async def analyze_text(
 async def analyze_audio(
     audio: UploadFile = File(...),
     role: str = Form(...),
-    company: str = Form(...),
-    yoe: int = Form(...)
+    company: str = Form(...)
 ):
     """Analyze audio introduction using GPT-4o audio input directly"""
     try:
@@ -501,8 +484,7 @@ async def analyze_audio(
         text_prompt = get_introduction_prompt(
             introduction="[Audio input - analyzing spoken content]",
             role=role,
-            company=company,
-            yoe=yoe
+            company=company
         )
 
         # Use OpenAI client directly for audio (LiteLLM doesn't support audio input format yet)
