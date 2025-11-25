@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Bro</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-wrapper {
+            position: relative;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            transition: border-color 0.3s;
+        }
+        .input-wrapper:focus-within {
+            border-color: #667eea;
+        }
+        #introduction-text {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            padding-bottom: 50px;
+            border: none;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+        }
+        #introduction-text:focus {
+            outline: none;
+        }
+        .input-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+        .icon-btn.active {
+            background: #667eea;
+        }
+        .icon-btn.active svg {
+            fill: white;
+        }
+        .icon-btn.recording {
+            background: #e74c3c;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.2);
+        }
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+            transition: fill 0.2s;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .file-input {
+            display: none;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .submit-btn:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        .loading.show {
+            display: block;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+            border-left: 4px solid #667eea;
+        }
+        #result.show {
+            display: block;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            margin: 0;
+        }
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #c33;
+            margin-top: 20px;
+        }
+        .recording-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .recording-overlay.show {
+            display: flex;
+        }
+        .recording-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .waveform-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 80px;
+            margin: 30px 0;
+        }
+        .waveform-bar {
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+            animation: waveform 1s ease-in-out infinite;
+        }
+        .waveform-bar:nth-child(1) { animation-delay: 0s; }
+        .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+        .waveform-bar:nth-child(6) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(7) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(8) { animation-delay: 0.1s; }
+        @keyframes waveform {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+        .recording-timer {
+            font-size: 24px;
+            font-weight: 600;
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+        .stop-recording-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e74c3c;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stop-recording-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(231, 76, 60, 0.6);
+        }
+        .stop-recording-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💪 Interview Bro</h1>
+        <p class="subtitle">Your AI buddy for crushing interview intros</p>
+
+        <form id="feedback-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="role">Job Role *</label>
+                    <input type="text" id="role" name="role" placeholder="e.g., Software Engineer" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company *</label>
+                    <input type="text" id="company" name="company" placeholder="e.g., Google" required>
+                </div>
+                <div class="form-group">
+                    <label for="yoe">Years of Experience *</label>
+                    <input type="number" id="yoe" name="yoe" min="0" max="50" placeholder="e.g., 5" required>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <label>Your Self-Introduction *</label>
+                <div class="input-wrapper">
+                    <textarea
+                        id="introduction-text"
+                        placeholder="Type or speak your self-introduction here..."
+                    ></textarea>
+                    <div class="input-controls">
+                        <input type="file" id="file-input" class="file-input" accept=".txt,.pdf,.doc,.docx">
+                        <button type="button" class="icon-btn" id="attach-btn" title="Attach file">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 0 1 5 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 0 0 5 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="icon-btn" id="mic-btn" title="Record audio">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Analyze Introduction</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing your introduction...</p>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <!-- Recording Modal -->
+    <div class="recording-overlay" id="recording-overlay">
+        <div class="recording-modal">
+            <h2>Recording...</h2>
+            <div class="waveform-container">
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+            </div>
+            <div class="recording-timer" id="modal-timer">0:00</div>
+            <button class="stop-recording-btn" id="stop-recording-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <rect x="6" y="6" width="12" height="12" rx="2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        let recordingStartTime;
+        let timerInterval;
+        let isRecording = false;
+        let hasAudioRecording = false;
+
+        const introText = document.getElementById('introduction-text');
+        const micBtn = document.getElementById('mic-btn');
+        const attachBtn = document.getElementById('attach-btn');
+        const fileInput = document.getElementById('file-input');
+        const form = document.getElementById('feedback-form');
+        const recordingOverlay = document.getElementById('recording-overlay');
+        const modalTimer = document.getElementById('modal-timer');
+        const stopRecordingBtn = document.getElementById('stop-recording-btn');
+
+        // File attachment
+        attachBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const text = await file.text();
+                introText.value = text;
+            }
+        });
+
+        // Microphone recording
+        micBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                await startRecording();
+            }
+        });
+
+        // Stop recording button
+        stopRecordingBtn.addEventListener('click', () => {
+            stopRecording();
+        });
+
+        async function startRecording() {
+            try {
+                // Reset visual state
+                introText.style.background = 'white';
+                introText.placeholder = 'Type or speak your self-introduction here...';
+                micBtn.style.background = '';
+
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    // Use the actual MIME type from MediaRecorder
+                    const mimeType = mediaRecorder.mimeType || 'audio/webm';
+                    audioBlob = new Blob(audioChunks, { type: mimeType });
+                    hasAudioRecording = true;
+                    introText.placeholder = '🎤 Audio recorded successfully! Click "Analyze Introduction" to get feedback.';
+                    introText.style.background = '#f0f9ff';
+                    micBtn.style.background = '#10b981';
+                    micBtn.title = 'Audio recorded - click to record again';
+                    console.log('Audio blob created:', audioBlob.size, 'bytes, type:', mimeType);
+
+                    // Hide modal
+                    recordingOverlay.classList.remove('show');
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+
+                // Show recording modal
+                recordingOverlay.classList.add('show');
+
+                recordingStartTime = Date.now();
+                timerInterval = setInterval(updateModalTimer, 100);
+            } catch (err) {
+                alert('Error accessing microphone: ' + err.message);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                clearInterval(timerInterval);
+            }
+        }
+
+        function updateModalTimer() {
+            const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            modalTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Auto-stop recording if still recording
+            if (isRecording) {
+                stopRecording();
+                // Give it a moment to process
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            const role = document.getElementById('role').value;
+            const company = document.getElementById('company').value;
+            const yoe = document.getElementById('yoe').value;
+
+            if (!role || !company || !yoe) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('role', role);
+            formData.append('company', company);
+            formData.append('yoe', yoe);
+
+            let endpoint = '/analyze/text';
+
+            if (hasAudioRecording && audioBlob) {
+                formData.append('audio', audioBlob, 'recording.wav');
+                endpoint = '/analyze/audio';
+                console.log('Submitting audio:', audioBlob.size, 'bytes to', endpoint);
+            } else {
+                const introduction = introText.value;
+                if (!introduction || !introduction.trim()) {
+                    alert('Please enter your introduction or record audio');
+                    return;
+                }
+                formData.append('introduction', introduction);
+                console.log('Submitting text to', endpoint);
+            }
+
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('result').innerHTML = '';
+
+            try {
+                console.log('Sending request to:', endpoint);
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+                console.log('Response status:', response.status);
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Analysis failed');
+                }
+
+                let resultHTML = '<div style="display: grid; gap: 20px;">';
+
+                // Show transcription if available (for audio input)
+                if (data.transcription) {
+                    resultHTML += `
+                        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                                <span style="font-size: 28px; margin-right: 12px;">📝</span>
+                                <h2 style="margin: 0; color: #333; font-size: 22px; font-weight: 600;">Your Transcription</h2>
+                            </div>
+                            <p style="margin: 0; color: #555; line-height: 1.8; font-size: 16px; padding: 15px 20px; background: #f9fafb; border-radius: 8px;">${data.transcription}</p>
+                        </div>
+                    `;
+                }
+
+                // Convert markdown to HTML for better display
+                const feedbackHTML = convertMarkdownToHTML(data.feedback);
+                resultHTML += `
+                    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+                            <span style="font-size: 28px; margin-right: 12px;">📊</span>
+                            <h2 style="margin: 0; color: #333; font-size: 22px; font-weight: 600;">Evaluation & Feedback</h2>
+                        </div>
+                        ${feedbackHTML}
+                    </div>
+                `;
+
+                resultHTML += '</div>';
+
+                document.getElementById('result').innerHTML = resultHTML;
+                document.getElementById('result').classList.add('show');
+            } catch (error) {
+                document.getElementById('result').innerHTML =
+                    `<div class="error">Error: ${error.message}</div>`;
+                document.getElementById('result').classList.add('show');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        });
+
+        // Convert markdown to HTML
+        function convertMarkdownToHTML(markdown) {
+            let html = markdown;
+
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<h3 style="color: #333; margin: 25px 0 12px 0; font-size: 18px; font-weight: 600;">$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2 style="color: #333; margin: 30px 0 15px 0; font-size: 22px; font-weight: 600; padding-bottom: 10px; border-bottom: 2px solid #e0e0e0;">$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1 style="color: #333; margin: 35px 0 20px 0; font-size: 26px; font-weight: 700;">$1</h1>');
+
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #333; font-weight: 600;">$1</strong>');
+
+            // Lists
+            html = html.replace(/^\- (.*$)/gim, '<li style="margin: 8px 0; color: #555; line-height: 1.6;">$1</li>');
+            html = html.replace(/^\d+\. (.*$)/gim, '<li style="margin: 8px 0; color: #555; line-height: 1.6;">$1</li>');
+
+            // Wrap consecutive list items
+            html = html.replace(/(<li.*<\/li>\n?)+/g, function(match) {
+                return '<ul style="margin: 15px 0; padding-left: 25px;">' + match + '</ul>';
+            });
+
+            // Paragraphs
+            html = html.split('\n\n').map(para => {
+                if (!para.startsWith('<h') && !para.startsWith('<ul') && !para.startsWith('<li') && para.trim()) {
+                    return '<p style="margin: 15px 0; color: #555; line-height: 1.8; font-size: 15px;">' + para + '</p>';
+                }
+                return para;
+            }).join('\n');
+
+            // Rating badges
+            html = html.replace(/\[Pass\]/g, '<span style="display: inline-block; padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 12px; font-size: 13px; font-weight: 600; margin-left: 8px;">✓ Pass</span>');
+            html = html.replace(/\[No-Pass\]/g, '<span style="display: inline-block; padding: 4px 12px; background: #f8d7da; color: #721c24; border-radius: 12px; font-size: 13px; font-weight: 600; margin-left: 8px;">✗ No-Pass</span>');
+            html = html.replace(/\[no hire\]/gi, '<span style="display: inline-block; padding: 6px 16px; background: #f8d7da; color: #721c24; border-radius: 16px; font-size: 15px; font-weight: 700; margin: 10px 0;">✗ No Hire</span>');
+            html = html.replace(/\[weak hire\]/gi, '<span style="display: inline-block; padding: 6px 16px; background: #fff3cd; color: #856404; border-radius: 16px; font-size: 15px; font-weight: 700; margin: 10px 0;">⚠ Weak Hire</span>');
+            html = html.replace(/\[hire\]/gi, '<span style="display: inline-block; padding: 6px 16px; background: #d1ecf1; color: #0c5460; border-radius: 16px; font-size: 15px; font-weight: 700; margin: 10px 0;">✓ Hire</span>');
+            html = html.replace(/\[strong hire\]/gi, '<span style="display: inline-block; padding: 6px 16px; background: #d4edda; color: #155724; border-radius: 16px; font-size: 15px; font-weight: 700; margin: 10px 0;">✓✓ Strong Hire</span>');
+
+            return html;
+        }
+    </script>
+</body>
+</html>

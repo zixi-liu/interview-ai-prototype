@@ -32,7 +32,12 @@ def example_1_introduction():
     be a great fit for your team.
     """
     
-    feedback = analyzer.analyze_introduction(introduction, role="Senior Software Engineer", yoe=7)
+    feedback = analyzer.analyze_introduction(
+        introduction=introduction,
+        role="Senior Software Engineer",
+        company="Google",
+        yoe=7
+    )
     print(feedback)
     print()
 

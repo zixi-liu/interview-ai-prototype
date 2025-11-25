@@ -8,5 +8,5 @@ venv/
 data/
 transcriptions/
 sample_interview.txt
-tests/__pycache__/
+tests/
 *.pytest_cache/

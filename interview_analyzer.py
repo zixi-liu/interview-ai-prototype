@@ -21,19 +21,20 @@ class InterviewAnalyzer:
     def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
 
-    def analyze_introduction(self, introduction: str, role: str = "Software Engineer", yoe: int = None) -> str:
+    def analyze_introduction(self, introduction: str, role: str, company: str, yoe: int) -> str:
         """
         Analyze self-introduction (1-2 minutes) and provide FAANG-standard feedback
-        
+
         Args:
             introduction: Self-introduction text (1-2 minutes worth)
             role: Job role being interviewed for
-            yoe: Years of experience (optional, will be inferred if not provided)
-            
+            company: Target company name
+            yoe: Years of experience
+
         Returns:
             Structured feedback with overall rating, checkpoints, and improvement suggestions
         """
-        prompt = get_introduction_prompt(introduction, role, yoe)
+        prompt = get_introduction_prompt(introduction, role, company, yoe)
 
         response = completion(
             model=self.model,

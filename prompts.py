@@ -15,28 +15,24 @@ SYSTEM_MESSAGE_BQ_QUESTION = (
 )
 
 
-def get_introduction_prompt(introduction: str, role: str, yoe: int = None) -> str:
+def get_introduction_prompt(introduction: str, role: str, company: str, yoe: int) -> str:
     """
     Generate prompt for self-introduction analysis
-    
+
     Args:
         introduction: Self-introduction text
         role: Job role being interviewed for
-        yoe: Years of experience (optional)
-        
+        company: Target company name
+        yoe: Years of experience
+
     Returns:
         Formatted prompt string
     """
-    yoe_context = (
-        f" (Candidate has {yoe} years of experience)"
-        if yoe
-        else " (Infer years of experience from the introduction)"
-    )
-    
-    return f"""Analyze the following self-introduction for a {role} position at FAANG companies. 
+
+    return f"""Analyze the following self-introduction for a {role} position at {company}.
 Provide a comprehensive evaluation following FAANG standards.
 
-{yoe_context}
+(Candidate has {yoe} years of experience)
 
 SELF-INTRODUCTION:
 {introduction}
