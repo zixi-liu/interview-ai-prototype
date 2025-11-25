@@ -5,8 +5,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY app.py .
 COPY interview_analyzer.py .
-COPY example_usage.py .
 COPY prompts.py .
+COPY static/ ./static/
 
-CMD ["python", "interview_analyzer.py"]
+CMD ["python", "app.py"]
