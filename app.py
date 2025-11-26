@@ -32,7 +32,7 @@ from jinja2 import (
 from litellm import acompletion
 
 from interview_analyzer import InterviewAnalyzer
-from prompts import SYSTEM_MESSAGE_INTRODUCTION, get_introduction_prompt
+from prompts import SystemMessage, get_introduction_prompt
 
 # Constants
 DEFAULT_MODEL = "gpt-4o"
@@ -230,7 +230,7 @@ async def _analyze_transcription(transcription: str, role: str, company: str) ->
         messages=[
             {
                 "role": "system",
-                "content": SYSTEM_MESSAGE_INTRODUCTION
+                "content": SystemMessage.INTRODUCTION
             },
             {
                 "role": "user",
@@ -257,7 +257,7 @@ async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, com
         messages=[
             {
                 "role": "system",
-                "content": SYSTEM_MESSAGE_INTRODUCTION
+                "content": SystemMessage.INTRODUCTION
             },
             {
                 "role": "user",

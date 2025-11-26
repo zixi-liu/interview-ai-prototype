@@ -6,8 +6,7 @@ Analyzes behavioral questions and self-introductions for FAANG interviews
 from dotenv import load_dotenv
 from litellm import acompletion
 from prompts import (
-    SYSTEM_MESSAGE_INTRODUCTION,
-    SYSTEM_MESSAGE_BQ_QUESTION,
+    SystemMessage,
     get_introduction_prompt,
     BQQuestions,
 )
@@ -40,7 +39,7 @@ class InterviewAnalyzer:
             messages=[
                 {
                     "role": "system",
-                    "content": SYSTEM_MESSAGE_INTRODUCTION
+                    "content": SystemMessage.INTRODUCTION
                 },
                 {
                     "role": "user",
@@ -72,7 +71,7 @@ class InterviewAnalyzer:
             messages=[
                 {
                     "role": "system",
-                    "content": SYSTEM_MESSAGE_BQ_QUESTION
+                    "content": SystemMessage.BQ_QUESTION
                 },
                 {
                     "role": "user",
