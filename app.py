@@ -243,6 +243,45 @@ async def _analyze_transcription(transcription: str, role: str, company: str) ->
     return response.choices[0].message.content
 
 
+async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, company: str) -> str:
+    audio_b64 = base64.b64encode(audio_content).decode()
+
+    text_prompt = get_introduction_prompt(
+        introduction=AUDIO_PLACEHOLDER,
+        role=role,
+        company=company
+    )
+    
+    response = await acompletion(
+        model=DEFAULT_MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_MESSAGE_INTRODUCTION
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": text_prompt
+                    },
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": audio_b64,
+                            "format": audio_format
+                        }
+                    }
+                ]
+            }
+        ],
+        temperature=0.3
+    )
+    
+    return response.choices[0].message.content
+
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Serve the main UI"""
@@ -303,7 +342,8 @@ async def analyze_audio(
         transcription = await _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
 
         # Analyze transcription
-        feedback = await _analyze_transcription(transcription, role, company)
+        # feedback = await _analyze_transcription(transcription, role, company)
+        feedback = await _analyze_audio(audio_content, audio.content_type or "", role, company)
 
         return JSONResponse({
             "feedback": feedback,
