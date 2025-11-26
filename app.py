@@ -7,7 +7,7 @@ import asyncio
 import os
 import re
 import base64
-import tempfile
+import subprocess
 from pathlib import Path
 
 from fastapi import (
@@ -30,7 +30,6 @@ from jinja2 import (
     FileSystemLoader
 )
 from litellm import acompletion
-from pydub import AudioSegment
 
 from interview_analyzer import InterviewAnalyzer
 from prompts import SYSTEM_MESSAGE_INTRODUCTION, get_introduction_prompt
@@ -69,18 +68,34 @@ def get_analyzer():
     return analyzer
 
 
-def _get_audio_suffix(content_type: str) -> str:
-    """Determine audio file suffix from content type"""
-    # use regex to match the content type
+def _get_ffmpeg_input_format(content_type: str) -> str:
+    """Determine ffmpeg input format from content type"""
+    # Map common MIME types to ffmpeg format names
+    format_map = {
+        "mpeg": "mp3",
+        "mp4": "mp4",
+        "webm": "webm",
+        "ogg": "ogg",
+        "opus": "opus",
+        "flac": "flac",
+        "wav": "wav",
+        "aac": "aac",
+        "m4a": "m4a",
+    }
+    
+    # Extract format from content type (e.g., "audio/mpeg" -> "mpeg")
     match = re.match(r"audio/([^;]+)", content_type)
     if match:
-        return f".{match.group(1).lower()}"
-    return ".audio"
+        format_name = match.group(1).lower()
+        return format_map.get(format_name, format_name)
+    
+    # Default to auto-detect
+    return "auto"
 
 
 def _convert_audio_to_wav_sync(audio_content: bytes, content_type: str) -> bytes:
     """
-    Synchronous audio conversion (CPU-intensive, runs in thread pool)
+    Convert audio to WAV format directly in memory using ffmpeg (no temp files, no AudioSegment)
     
     Args:
         audio_content: Raw audio bytes
@@ -89,32 +104,50 @@ def _convert_audio_to_wav_sync(audio_content: bytes, content_type: str) -> bytes
     Returns:
         WAV format audio bytes
     """
-    input_suffix = _get_audio_suffix(content_type)
-    temp_input_path = None
-    temp_output_path = None
+    input_format = _get_ffmpeg_input_format(content_type)
+    
+    # Build ffmpeg command to convert from stdin to stdout
+    # -f: input format
+    # -i pipe:0: read from stdin
+    # -f wav: output format as WAV
+    # -: output to stdout
+    # -y: overwrite output file (not needed for stdout, but harmless)
+    cmd = [
+        "ffmpeg",
+        "-f", input_format,
+        "-i", "pipe:0",  # Read from stdin
+        "-f", AUDIO_TARGET_FORMAT,  # Output format
+        "-",  # Output to stdout
+        "-y"  # Overwrite (for stdout this is harmless)
+    ]
     
     try:
-        # Save input audio to temp file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=input_suffix) as temp_input:
-            temp_input.write(audio_content)
-            temp_input_path = temp_input.name
-        
-        # Create output temp file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_output:
-            temp_output_path = temp_output.name
-        
-        # Convert to WAV (CPU-intensive operation)
-        audio_segment = AudioSegment.from_file(temp_input_path)
-        audio_segment.export(temp_output_path, format=AUDIO_TARGET_FORMAT)
-        
-        # Read converted audio
-        with open(temp_output_path, "rb") as f:
-            return f.read()
-    finally:
-        # Cleanup temp files
-        for path in [temp_input_path, temp_output_path]:
-            if path and os.path.exists(path):
-                os.unlink(path)
+        # Run ffmpeg with audio content as stdin, capture stdout
+        process = subprocess.run(
+            cmd,
+            input=audio_content,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+        return process.stdout
+    except subprocess.CalledProcessError as e:
+        # If format detection fails, try with auto-detect
+        if input_format != "auto":
+            cmd[2] = "auto"  # Change input format to auto-detect
+            try:
+                process = subprocess.run(
+                    cmd,
+                    input=audio_content,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    check=True
+                )
+                return process.stdout
+            except subprocess.CalledProcessError:
+                raise RuntimeError(f"Audio conversion failed: {e.stderr.decode('utf-8', errors='ignore')}")
+        else:
+            raise RuntimeError(f"Audio conversion failed: {e.stderr.decode('utf-8', errors='ignore')}")
 
 
 async def _convert_audio_to_wav(audio_content: bytes, content_type: str) -> bytes:
