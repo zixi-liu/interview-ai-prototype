@@ -4,7 +4,7 @@ Analyzes behavioral questions and self-introductions for FAANG interviews
 """
 
 from dotenv import load_dotenv
-from litellm import completion
+from litellm import acompletion
 from prompts import (
     SYSTEM_MESSAGE_INTRODUCTION,
     SYSTEM_MESSAGE_BQ_QUESTION,
@@ -21,7 +21,7 @@ class InterviewAnalyzer:
     def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
 
-    def analyze_introduction(self, introduction: str, role: str, company: str) -> str:
+    async def analyze_introduction(self, introduction: str, role: str, company: str) -> str:
         """
         Analyze self-introduction (1-2 minutes) and provide FAANG-standard feedback
 
@@ -35,7 +35,7 @@ class InterviewAnalyzer:
         """
         prompt = get_introduction_prompt(introduction, role, company)
 
-        response = completion(
+        response = await acompletion(
             model=self.model,
             messages=[
                 {
@@ -52,7 +52,7 @@ class InterviewAnalyzer:
 
         return response.choices[0].message.content
 
-    def analyze_bq_question(self, question: str, answer: str, role: str = "Software Engineer") -> str:
+    async def analyze_bq_question(self, question: str, answer: str, role: str = "Software Engineer") -> str:
         """
         Analyze a specific BQ question answer following FAANG standards
         
@@ -67,7 +67,7 @@ class InterviewAnalyzer:
         bq_questions = BQQuestions()
         prompt = bq_questions.get_prompt(question, answer, role)
 
-        response = completion(
+        response = await acompletion(
             model=self.model,
             messages=[
                 {
@@ -85,8 +85,10 @@ class InterviewAnalyzer:
         return response.choices[0].message.content
 
 
-def main():
+async def main():
     """Example usage"""
+    import asyncio
+    
     analyzer = InterviewAnalyzer()
     
     # Example 1: Self-introduction analysis
@@ -103,7 +105,7 @@ def main():
     I want to work on systems at scale.
     """
     
-    feedback = analyzer.analyze_introduction(introduction, role="Software Engineer", company="Tech Company")
+    feedback = await analyzer.analyze_introduction(introduction, role="Software Engineer", company="Tech Company")
     print(feedback)
     
     print("\n" + "=" * 80)
@@ -119,9 +121,10 @@ def main():
     and we did it over a weekend. It went pretty well.
     """
     
-    feedback = analyzer.analyze_bq_question(question, answer, role="Software Engineer")
+    feedback = await analyzer.analyze_bq_question(question, answer, role="Software Engineer")
     print(feedback)
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())

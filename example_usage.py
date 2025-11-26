@@ -2,10 +2,11 @@
 Example usage for BQ Interview Analyzer
 """
 
+import asyncio
 from interview_analyzer import InterviewAnalyzer
 
 
-def example_1_introduction():
+async def example_1_introduction():
     """Example 1: Self-introduction analysis"""
     print("=" * 80)
     print("EXAMPLE 1: Self-Introduction Analysis")
@@ -32,7 +33,7 @@ def example_1_introduction():
     be a great fit for your team.
     """
     
-    feedback = analyzer.analyze_introduction(
+    feedback = await analyzer.analyze_introduction(
         introduction=introduction,
         role="Senior Software Engineer",
         company="Google"
@@ -41,7 +42,7 @@ def example_1_introduction():
     print()
 
 
-def example_2_bq_question():
+async def example_2_bq_question():
     """Example 2: BQ question analysis"""
     print("=" * 80)
     print("EXAMPLE 2: BQ Question Analysis")
@@ -87,17 +88,17 @@ def example_2_bq_question():
     recognition from the CTO.
     """
     
-    feedback = analyzer.analyze_bq_question(question, answer, role="Senior Software Engineer")
+    feedback = await analyzer.analyze_bq_question(question, answer, role="Senior Software Engineer")
     print(feedback)
     print()
 
 
-def main():
+async def main():
     """Run both examples"""
-    example_1_introduction()
+    await example_1_introduction()
     print("\n\n")
-    example_2_bq_question()
+    await example_2_bq_question()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

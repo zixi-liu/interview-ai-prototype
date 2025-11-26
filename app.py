@@ -3,8 +3,11 @@ FastAPI Web UI for Interview Analyzer
 Supports text and audio input for self-introduction analysis
 """
 
+import asyncio
 import os
-import tempfile
+import re
+import base64
+import subprocess
 from pathlib import Path
 
 from fastapi import (
@@ -19,9 +22,6 @@ from fastapi.responses import (
     HTMLResponse, 
     JSONResponse
 )
-from fastapi.staticfiles import (
-    StaticFiles
-)
 from fastapi.middleware.cors import (
     CORSMiddleware
 )
@@ -29,8 +29,19 @@ from jinja2 import (
     Environment, 
     FileSystemLoader
 )
+from litellm import acompletion
 
 from interview_analyzer import InterviewAnalyzer
+from prompts import SYSTEM_MESSAGE_INTRODUCTION, get_introduction_prompt
+
+# Constants
+DEFAULT_MODEL = "gpt-4o"
+AUDIO_MODEL = "gpt-4o-audio-preview"
+AUDIO_TARGET_FORMAT = "wav"
+DEFAULT_PORT = 8000
+AUDIO_PLACEHOLDER = "[Audio input - analyzing spoken content]"
+TRANSCRIPTION_PROMPT = "Please transcribe the following audio exactly as spoken:"
+
 
 app = FastAPI(title="Interview Feedback System", version="1.0.0")
 
@@ -50,10 +61,186 @@ jinja_env = Environment(loader=FileSystemLoader("templates"))
 analyzer = None
 
 def get_analyzer():
+    """Get or create the InterviewAnalyzer instance"""
     global analyzer
     if analyzer is None:
-        analyzer = InterviewAnalyzer(model="gpt-4o")
+        analyzer = InterviewAnalyzer(model=DEFAULT_MODEL)
     return analyzer
+
+
+def _get_ffmpeg_input_format(content_type: str) -> str:
+    """Determine ffmpeg input format from content type"""
+    # Map common MIME types to ffmpeg format names
+    format_map = {
+        "mpeg": "mp3",
+        "mp4": "mp4",
+        "webm": "webm",
+        "ogg": "ogg",
+        "opus": "opus",
+        "flac": "flac",
+        "wav": "wav",
+        "aac": "aac",
+        "m4a": "m4a",
+    }
+    
+    # Extract format from content type (e.g., "audio/mpeg" -> "mpeg")
+    match = re.match(r"audio/([^;]+)", content_type)
+    if match:
+        format_name = match.group(1).lower()
+        return format_map.get(format_name, format_name)
+    
+    # Default to auto-detect
+    return "auto"
+
+
+def _convert_audio_to_wav_sync(audio_content: bytes, content_type: str) -> bytes:
+    """
+    Convert audio to WAV format directly in memory using ffmpeg (no temp files, no AudioSegment)
+    
+    Args:
+        audio_content: Raw audio bytes
+        content_type: MIME type of the audio
+        
+    Returns:
+        WAV format audio bytes
+    """
+    input_format = _get_ffmpeg_input_format(content_type)
+    
+    # Build ffmpeg command to convert from stdin to stdout
+    # -f: input format
+    # -i pipe:0: read from stdin
+    # -f wav: output format as WAV
+    # -: output to stdout
+    # -y: overwrite output file (not needed for stdout, but harmless)
+    cmd = [
+        "ffmpeg",
+        "-f", input_format,
+        "-i", "pipe:0",  # Read from stdin
+        "-f", AUDIO_TARGET_FORMAT,  # Output format
+        "-",  # Output to stdout
+        "-y"  # Overwrite (for stdout this is harmless)
+    ]
+    
+    try:
+        # Run ffmpeg with audio content as stdin, capture stdout
+        process = subprocess.run(
+            cmd,
+            input=audio_content,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+        return process.stdout
+    except subprocess.CalledProcessError as e:
+        # If format detection fails, try with auto-detect
+        if input_format != "auto":
+            cmd[2] = "auto"  # Change input format to auto-detect
+            try:
+                process = subprocess.run(
+                    cmd,
+                    input=audio_content,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    check=True
+                )
+                return process.stdout
+            except subprocess.CalledProcessError:
+                raise RuntimeError(f"Audio conversion failed: {e.stderr.decode('utf-8', errors='ignore')}")
+        else:
+            raise RuntimeError(f"Audio conversion failed: {e.stderr.decode('utf-8', errors='ignore')}")
+
+
+async def _convert_audio_to_wav(audio_content: bytes, content_type: str) -> bytes:
+    """
+    Convert audio content to WAV format asynchronously
+    
+    Args:
+        audio_content: Raw audio bytes
+        content_type: MIME type of the audio
+        
+    Returns:
+        WAV format audio bytes
+    """
+    # Run CPU-intensive conversion in thread pool to avoid blocking event loop
+    return await asyncio.to_thread(_convert_audio_to_wav_sync, audio_content, content_type)
+
+
+async def _transcribe_audio(audio_content: bytes, audio_format: str) -> str:
+    """
+    Transcribe audio using GPT-4o audio model asynchronously via LiteLLM
+    
+    Args:
+        audio_content: Audio bytes in WAV format
+        audio_format: Audio format (should be "wav")
+        
+    Returns:
+        Transcribed text
+    """
+    audio_b64 = base64.b64encode(audio_content).decode()
+    
+    response = await acompletion(
+        model=AUDIO_MODEL,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": TRANSCRIPTION_PROMPT
+                    },
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": audio_b64,
+                            "format": audio_format
+                        }
+                    }
+                ]
+            }
+        ],
+        modalities=["text"]
+    )
+    
+    return response.choices[0].message.content
+
+
+async def _analyze_transcription(transcription: str, role: str, company: str) -> str:
+    """
+    Analyze transcribed text using LiteLLM asynchronously
+    
+    Args:
+        transcription: Transcribed text from audio
+        role: Job role
+        company: Company name
+        
+    Returns:
+        Analysis feedback
+    """
+    text_prompt = get_introduction_prompt(
+        introduction=AUDIO_PLACEHOLDER,
+        role=role,
+        company=company
+    )
+    
+    # Replace placeholder with actual transcription
+    text_prompt = text_prompt.replace(AUDIO_PLACEHOLDER, transcription)
+    
+    response = await acompletion(
+        model=DEFAULT_MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_MESSAGE_INTRODUCTION
+            },
+            {
+                "role": "user",
+                "content": text_prompt
+            }
+        ],
+        temperature=0.3
+    )
+    
+    return response.choices[0].message.content
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -77,12 +264,15 @@ async def analyze_text(
 ):
     """Analyze text introduction"""
     try:
-        feedback = get_analyzer().analyze_introduction(
+        feedback = await get_analyzer().analyze_introduction(
             introduction=introduction,
             role=role,
             company=company
         )
-        return JSONResponse({"feedback": feedback, "input_type": "text"})
+        return JSONResponse({
+            "feedback": feedback,
+            "input_type": "text"
+        })
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -93,125 +283,33 @@ async def analyze_audio(
     role: str = Form(...),
     company: str = Form(...)
 ):
-    """Analyze audio introduction using GPT-4o audio input directly"""
+    """
+    Analyze audio introduction using GPT-4o audio input directly.
+    
+    Mobile browsers use different formats: iOS=MP4/AAC, Android=WebM/Opus
+    GPT-4o audio supports: wav, mp3, flac, opus, pcm16
+    """
     try:
-        import base64
-        from openai import OpenAI
-        from litellm import completion
-        from prompts import SYSTEM_MESSAGE_INTRODUCTION, get_introduction_prompt
-
         # Read audio content
         audio_content = await audio.read()
-
-        # Always convert to WAV for GPT-4o audio compatibility
-        # Mobile browsers use different formats: iOS=MP4/AAC, Android=WebM/Opus
-        # GPT-4o audio supports: wav, mp3, flac, opus, pcm16
-        from pydub import AudioSegment
-        import io
-
         print(f"[Audio] Received format: {audio.content_type}, size: {len(audio_content)} bytes")
 
-        # Save input audio to temp file
-        input_suffix = ".audio"
-        if audio.content_type:
-            if "webm" in audio.content_type.lower():
-                input_suffix = ".webm"
-            elif "mp4" in audio.content_type.lower() or "m4a" in audio.content_type.lower():
-                input_suffix = ".m4a"
-            elif "mpeg" in audio.content_type.lower() or "mp3" in audio.content_type.lower():
-                input_suffix = ".mp3"
+        # Convert to WAV format for GPT-4o audio compatibility
+        wav_content = await _convert_audio_to_wav(audio_content, audio.content_type or "")
+        print(f"[Audio] Converted to wav, new size: {len(wav_content)} bytes")
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=input_suffix) as temp_input:
-            temp_input.write(audio_content)
-            temp_input_path = temp_input.name
+        # Transcribe audio
+        print(f"[Audio] Sending to GPT-4o audio, format: {AUDIO_TARGET_FORMAT}")
+        transcription = await _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_output:
-            temp_output_path = temp_output.name
-
-        try:
-            # Convert any format to wav using pydub
-            audio_segment = AudioSegment.from_file(temp_input_path)
-            audio_segment.export(temp_output_path, format="wav")
-
-            # Read converted audio
-            with open(temp_output_path, "rb") as f:
-                audio_content = f.read()
-
-            audio_format = "wav"
-            print(f"[Audio] Converted to wav, new size: {len(audio_content)} bytes")
-        finally:
-            # Cleanup
-            if os.path.exists(temp_input_path):
-                os.unlink(temp_input_path)
-            if os.path.exists(temp_output_path):
-                os.unlink(temp_output_path)
-
-        # Encode audio to base64
-        audio_b64 = base64.b64encode(audio_content).decode()
-
-        # Get the text prompt from our prompt management system
-        text_prompt = get_introduction_prompt(
-            introduction="[Audio input - analyzing spoken content]",
-            role=role,
-            company=company
-        )
-
-        # Use OpenAI client directly for audio (LiteLLM doesn't support audio input format yet)
-        client = OpenAI()
-
-        # First get transcription using GPT-4o audio
-        print(f"[Audio] Sending to GPT-4o audio, format: {audio_format}")
-        transcription_response = client.chat.completions.create(
-            model="gpt-4o-audio-preview",
-            modalities=["text"],
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "Please transcribe the following audio exactly as spoken:"
-                        },
-                        {
-                            "type": "input_audio",
-                            "input_audio": {
-                                "data": audio_b64,
-                                "format": audio_format
-                            }
-                        }
-                    ]
-                }
-            ]
-        )
-
-        transcription = transcription_response.choices[0].message.content
-
-        # Now analyze using LiteLLM with the transcription
-        analysis_response = completion(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "system",
-                    "content": SYSTEM_MESSAGE_INTRODUCTION
-                },
-                {
-                    "role": "user",
-                    "content": text_prompt.replace(
-                        "[Audio input - analyzing spoken content]",
-                        transcription
-                    )
-                }
-            ],
-            temperature=0.3
-        )
-
-        feedback = analysis_response.choices[0].message.content
+        # Analyze transcription
+        feedback = await _analyze_transcription(transcription, role, company)
 
         return JSONResponse({
             "feedback": feedback,
             "transcription": transcription,
             "input_type": "audio",
-            "model": "gpt-4o-audio-preview (OpenAI) + gpt-4o (LiteLLM)"
+            "model": f"{AUDIO_MODEL} (LiteLLM) + {DEFAULT_MODEL} (LiteLLM)"
         })
 
     except Exception as e:
@@ -226,5 +324,5 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", DEFAULT_PORT))
     uvicorn.run(app, host="0.0.0.0", port=port)
