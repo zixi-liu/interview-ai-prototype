@@ -2,11 +2,10 @@
 Test audio endpoint with a sample audio
 """
 import requests
-import base64
 
 # Create a simple test by calling the endpoint
 def test_audio_endpoint():
-    url = "http://127.0.0.1:5000/analyze/audio"
+    url = "http://127.0.0.1:8000/analyze/audio"
 
     # Test data
     data = {

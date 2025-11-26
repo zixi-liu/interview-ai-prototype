@@ -7,7 +7,7 @@ An AI-powered interview analyzer with a web interface that provides FAANG-standa
 - 🌐 **Web UI**: Modern, responsive web interface for easy interaction
 - 📝 **Text Analysis**: Analyze self-introductions and BQ answers from text input
 - 🎤 **Audio Input**: Record or upload audio files with automatic transcription
-- 🤖 **AI-Powered**: Uses GPT-4o and LiteLLM for multi-provider LLM support
+- 🤖 **AI-Powered**: Uses LiteLLM for unified async API access to GPT-4o and other LLM providers
 - 📊 **FAANG Standards**: Evaluates candidates using Google, Amazon, Apple, Netflix, and Meta hiring criteria
 - 🐳 **Docker Support**: Easy deployment with Docker and Docker Compose
 - ☁️ **Cloud Ready**: Configured for Railway deployment
@@ -57,29 +57,37 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 #### Self-Introduction Analysis
 
 ```python
+import asyncio
 from interview_analyzer import InterviewAnalyzer
 
-analyzer = InterviewAnalyzer()
-feedback = analyzer.analyze_introduction(
-    introduction="Hi, I'm John. I've been a software engineer for 5 years...",
-    role="Software Engineer",
-    company="Google"
-)
-print(feedback)
+async def main():
+    analyzer = InterviewAnalyzer()
+    feedback = await analyzer.analyze_introduction(
+        introduction="Hi, I'm John. I've been a software engineer for 5 years...",
+        role="Software Engineer",
+        company="Google"
+    )
+    print(feedback)
+
+asyncio.run(main())
 ```
 
 #### Behavioral Question Analysis
 
 ```python
+import asyncio
 from interview_analyzer import InterviewAnalyzer
 
-analyzer = InterviewAnalyzer()
-feedback = analyzer.analyze_bq_question(
-    question="Tell me about your most challenging project.",
-    answer="I worked on a project where we had to migrate...",
-    role="Senior Software Engineer"
-)
-print(feedback)
+async def main():
+    analyzer = InterviewAnalyzer()
+    feedback = await analyzer.analyze_bq_question(
+        question="Tell me about your most challenging project.",
+        answer="I worked on a project where we had to migrate...",
+        role="Senior Software Engineer"
+    )
+    print(feedback)
+
+asyncio.run(main())
 ```
 
 ## API Endpoints
@@ -116,7 +124,7 @@ Analyze an audio self-introduction with automatic transcription.
   "feedback": "Detailed analysis...",
   "transcription": "Transcribed text...",
   "input_type": "audio",
-  "model": "gpt-4o-audio-preview (OpenAI) + gpt-4o (LiteLLM)"
+  "model": "gpt-4o-audio-preview (LiteLLM) + gpt-4o (LiteLLM)"
 }
 ```
 
@@ -216,10 +224,10 @@ The analyzer evaluates candidates using FAANG standards:
 
 ## Dependencies
 
-- `litellm>=1.0.0` - Multi-provider LLM support
+- `litellm>=1.0.0` - Multi-provider LLM support (unified async API for all models)
 - `fastapi>=0.104.0` - Web framework
 - `uvicorn>=0.24.0` - ASGI server
-- `openai>=1.0.0` - OpenAI client for audio transcription
+- `openai>=1.0.0` - OpenAI API support (via LiteLLM)
 - `pydub>=0.25.1` - Audio format conversion
 - `python-dotenv>=1.0.0` - Environment variable management
 
