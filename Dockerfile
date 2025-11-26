@@ -12,5 +12,6 @@ COPY app.py .
 COPY interview_analyzer.py .
 COPY prompts.py .
 COPY static/ ./static/
+COPY templates/ ./templates/
 
 CMD ["python", "app.py"]
