@@ -9,6 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
+COPY utils.py .
 COPY interview_analyzer.py .
 COPY prompts.py .
 COPY static/ ./static/
