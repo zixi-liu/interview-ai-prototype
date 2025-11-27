@@ -60,16 +60,6 @@ app.add_middleware(
 # Setup templates
 jinja_env = Environment(loader=FileSystemLoader("templates"))
 
-# Analyzer will be initialized on first request
-analyzer = None
-
-def get_analyzer():
-    """Get or create the InterviewAnalyzer instance"""
-    global analyzer
-    if analyzer is None:
-        analyzer = InterviewAnalyzer(model=DEFAULT_MODEL)
-    return analyzer
-
 
 def _get_ffmpeg_input_format(content_type: str) -> str:
     """Determine ffmpeg input format from content type"""
@@ -376,7 +366,7 @@ async def analyze_text(
 ):
     """Analyze text introduction"""
     try:
-        feedback = await get_analyzer().analyze_introduction(
+        feedback = await InterviewAnalyzer(model=DEFAULT_MODEL).analyze_introduction(
             introduction=introduction,
             role=role,
             company=company
