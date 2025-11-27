@@ -343,7 +343,7 @@ async def analyze_audio(
 
         # Analyze transcription
         # feedback = await _analyze_transcription(transcription, role, company)
-        feedback = await _analyze_audio(audio_content, audio.content_type or "", role, company)
+        feedback = await _analyze_audio(wav_content, audio.content_type or "", role, company)
 
         return JSONResponse({
             "feedback": feedback,
