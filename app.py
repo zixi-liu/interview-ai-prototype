@@ -6,7 +6,6 @@ Supports text and audio input for self-introduction analysis
 import asyncio
 import os
 import re
-import base64
 import json
 import subprocess
 from pathlib import Path
@@ -31,19 +30,12 @@ from jinja2 import (
     Environment, 
     FileSystemLoader
 )
-from litellm import acompletion
 
-from interview_analyzer import InterviewAnalyzer
-from prompts import SystemMessage, get_introduction_prompt
+from interview_analyzer import InterviewAnalyzer, AUDIO_TARGET_FORMAT
 
 # Constants
 DEFAULT_MODEL = "gpt-4o"
-AUDIO_MODEL = "gpt-4o-audio-preview"
-AUDIO_MODEL_MINI = "gpt-4o-mini-audio-preview"
-AUDIO_TARGET_FORMAT = "wav"
 DEFAULT_PORT = 8000
-AUDIO_PLACEHOLDER = "[Audio input - analyzing spoken content]"
-TRANSCRIPTION_PROMPT = "Please transcribe the following audio exactly as spoken:"
 
 
 app = FastAPI(title="Interview Feedback System", version="1.0.0")
@@ -158,191 +150,6 @@ async def _convert_audio_to_wav(audio_content: bytes, content_type: str) -> byte
     return await asyncio.to_thread(_convert_audio_to_wav_sync, audio_content, content_type)
 
 
-async def _transcribe_audio(audio_content: bytes, audio_format: str) -> str:
-    """
-    Transcribe audio using GPT-4o audio model asynchronously via LiteLLM
-    
-    Args:
-        audio_content: Audio bytes in WAV format
-        audio_format: Audio format (should be "wav")
-        
-    Returns:
-        Transcribed text
-    """
-    audio_b64 = base64.b64encode(audio_content).decode()
-    
-    response = await acompletion(
-        model=AUDIO_MODEL_MINI,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": TRANSCRIPTION_PROMPT
-                    },
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": audio_b64,
-                            "format": audio_format
-                        }
-                    }
-                ]
-            }
-        ],
-        modalities=["text"]
-    )
-    
-    return response.choices[0].message.content
-
-
-async def _analyze_transcription(transcription: str, role: str, company: str) -> str:
-    """
-    Analyze transcribed text using LiteLLM asynchronously
-    
-    Args:
-        transcription: Transcribed text from audio
-        role: Job role
-        company: Company name
-        
-    Returns:
-        Analysis feedback
-    """
-    text_prompt = get_introduction_prompt(
-        introduction=AUDIO_PLACEHOLDER,
-        role=role,
-        company=company
-    )
-    
-    # Replace placeholder with actual transcription
-    text_prompt = text_prompt.replace(AUDIO_PLACEHOLDER, transcription)
-    
-    response = await acompletion(
-        model=DEFAULT_MODEL,
-        messages=[
-            {
-                "role": "system",
-                "content": SystemMessage.INTRODUCTION
-            },
-            {
-                "role": "user",
-                "content": text_prompt
-            }
-        ],
-        temperature=0.3
-    )
-    
-    return response.choices[0].message.content
-
-
-async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, company: str) -> str:
-    """
-    Analyze audio directly using gpt-4o-audio-preview which supports text+audio mixed input.
-    
-    Args:
-        audio_content: Audio bytes in WAV format
-        audio_format: Audio format (should be "wav")
-        role: Job role
-        company: Company name
-        
-    Returns:
-        Analysis feedback
-    """
-    audio_b64 = base64.b64encode(audio_content).decode()
-
-    text_prompt = get_introduction_prompt(
-        introduction=AUDIO_PLACEHOLDER,
-        role=role,
-        company=company
-    )
-    
-    response = await acompletion(
-        model=AUDIO_MODEL_MINI,  # Use gpt-4o-audio-preview which supports text+audio input
-        messages=[
-            {
-                "role": "system",
-                "content": SystemMessage.INTRODUCTION
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": text_prompt
-                    },
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": audio_b64,
-                            "format": audio_format
-                        }
-                    }
-                ]
-            }
-        ],
-        temperature=0.3,
-        modalities=["text"]  # Request text output
-    )
-    
-    return response.choices[0].message.content
-
-
-async def _analyze_audio_stream(audio_content: bytes, audio_format: str, role: str, company: str):
-    """
-    Analyze audio directly using gpt-4o-audio-preview with streaming response.
-    
-    Args:
-        audio_content: Audio bytes in WAV format
-        audio_format: Audio format (should be "wav")
-        role: Job role
-        company: Company name
-        
-    Yields:
-        Text chunks from streaming response
-    """
-    audio_b64 = base64.b64encode(audio_content).decode()
-
-    text_prompt = get_introduction_prompt(
-        introduction=AUDIO_PLACEHOLDER,
-        role=role,
-        company=company
-    )
-    
-    response_stream = await acompletion(
-        model=AUDIO_MODEL,  # Use gpt-4o-audio-preview which supports text+audio input
-        messages=[
-            {
-                "role": "system",
-                "content": SystemMessage.INTRODUCTION
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": text_prompt
-                    },
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": audio_b64,
-                            "format": audio_format
-                        }
-                    }
-                ]
-            }
-        ],
-        temperature=0.3,
-        modalities=["text"],  # Request text output
-        stream=True  # Enable streaming
-    )
-    
-    async for chunk in response_stream:
-        if chunk.choices and len(chunk.choices) > 0:
-            delta = chunk.choices[0].delta
-            if hasattr(delta, 'content') and delta.content:
-                yield delta.content
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -402,17 +209,18 @@ async def analyze_audio(
 
         # Analyze audio directly using gpt-4o-audio-preview (supports text+audio input)
         # Execute analysis and transcription concurrently for better performance
-        print(f"[Audio] Sending to {AUDIO_MODEL} for direct analysis, format: {AUDIO_TARGET_FORMAT}")
+        analyzer = InterviewAnalyzer(model=DEFAULT_MODEL)
+        print(f"[Audio] Sending to {analyzer.audio_model} for direct analysis, format: {AUDIO_TARGET_FORMAT}")
         feedback, transcription = await asyncio.gather(
-            _analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company),
-            _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
+            analyzer.analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company),
+            analyzer.transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
         )
 
         return JSONResponse({
             "feedback": feedback,
             "transcription": transcription,
             "input_type": "audio",
-            "model": f"{AUDIO_MODEL} (LiteLLM)"
+            "model": f"{analyzer.audio_model} (LiteLLM)"
         })
 
     except Exception as e:
@@ -444,8 +252,9 @@ async def analyze_audio_stream(
         # Create async generator for streaming response
         async def generate_stream():
             try:
-                print(f"[Audio Stream] Sending to {AUDIO_MODEL} for streaming analysis, format: {AUDIO_TARGET_FORMAT}")
-                async for chunk in _analyze_audio_stream(wav_content, AUDIO_TARGET_FORMAT, role, company):
+                analyzer = InterviewAnalyzer(model=DEFAULT_MODEL)
+                print(f"[Audio Stream] Sending to {analyzer.audio_model} for streaming analysis, format: {AUDIO_TARGET_FORMAT}")
+                async for chunk in analyzer.analyze_audio_stream(wav_content, AUDIO_TARGET_FORMAT, role, company):
                     # Format as Server-Sent Events (SSE)
                     # SSE format: "data: <content>\n\n"
                     yield f"data: {chunk}\n\n"
