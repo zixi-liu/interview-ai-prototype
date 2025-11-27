@@ -60,6 +60,34 @@ class InterviewAnalyzer:
 
         return response.choices[0].message.content
 
+    async def analyze_introduction_stream(self, introduction: str, role: str, company: str) -> str:
+        """
+        Analyze self-introduction (1-2 minutes) and provide FAANG-standard feedback with streaming response.
+        """
+        prompt = get_introduction_prompt(introduction, role, company)
+        
+        response_stream = await acompletion(
+            model=self.model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SystemMessage.INTRODUCTION
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3,
+            stream=True,
+        )
+
+        async for chunk in response_stream:
+            if chunk.choices and len(chunk.choices) > 0:
+                delta = chunk.choices[0].delta
+                if hasattr(delta, 'content') and delta.content:
+                    yield delta.content
+
     async def transcribe_audio(self, audio_content: bytes, audio_format: str = AUDIO_TARGET_FORMAT) -> str:
         """
         Transcribe audio using GPT-4o audio model asynchronously via LiteLLM
@@ -236,6 +264,36 @@ class InterviewAnalyzer:
         )
 
         return response.choices[0].message.content
+
+    async def analyze_bq_question_stream(self, question: str, answer: str, role: str = "Software Engineer") -> str:
+        """
+        Analyze a specific BQ question answer following FAANG standards with streaming response.
+        """
+        bq_questions = BQQuestions()
+        prompt = bq_questions.get_prompt(question, answer, role)
+        
+        response_stream = await acompletion(
+            model=self.model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SystemMessage.BQ_QUESTION
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+
+                },
+            ],
+            temperature=0.3,
+            stream=True
+        )
+
+        async for chunk in response_stream:
+            if chunk.choices and len(chunk.choices) > 0:
+                delta = chunk.choices[0].delta
+                if hasattr(delta, 'content') and delta.content:
+                    yield delta.content
 
 
 async def main():
