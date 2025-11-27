@@ -351,11 +351,12 @@ async def analyze_audio(
         print(f"[Audio] Converted to wav, new size: {len(wav_content)} bytes")
 
         # Analyze audio directly using gpt-4o-audio-preview (supports text+audio input)
+        # Execute analysis and transcription concurrently for better performance
         print(f"[Audio] Sending to {AUDIO_MODEL} for direct analysis, format: {AUDIO_TARGET_FORMAT}")
-        feedback = await _analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company)
-
-        # Optionally transcribe for display (can be done in parallel if needed)
-        transcription = await _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
+        feedback, transcription = await asyncio.gather(
+            _analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company),
+            _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
+        )
 
         return JSONResponse({
             "feedback": feedback,
