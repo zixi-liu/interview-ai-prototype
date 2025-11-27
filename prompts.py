@@ -3,16 +3,16 @@ Prompt templates for BQ Interview Analyzer
 """
 
 # System messages
-SYSTEM_MESSAGE_INTRODUCTION = (
-    "You are an expert FAANG behavioral interviewer with deep knowledge of hiring standards "
-    "at Google, Amazon, Apple, Netflix, and Meta. Provide honest, constructive, and detailed "
-    "feedback following FAANG evaluation criteria."
-)
-
-SYSTEM_MESSAGE_BQ_QUESTION = (
-    "You are an expert FAANG behavioral interviewer. You evaluate answers using the STAR method "
-    "(Situation, Task, Action, Result) and FAANG hiring standards. Provide detailed, actionable feedback."
-)
+class SystemMessage:
+    INTRODUCTION = (
+        "You are an expert FAANG behavioral interviewer with deep knowledge of hiring standards "
+        "at Google, Amazon, Apple, Netflix, and Meta. Provide honest, constructive, and detailed "
+        "feedback following FAANG evaluation criteria."
+    )
+    BQ_QUESTION = (
+        "You are an expert FAANG behavioral interviewer. You evaluate answers using the STAR method "
+        "(Situation, Task, Action, Result) and FAANG hiring standards. Provide detailed, actionable feedback."
+    )
 
 
 def get_introduction_prompt(introduction: str, role: str, company: str) -> str:
