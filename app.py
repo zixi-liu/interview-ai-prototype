@@ -39,6 +39,7 @@ from prompts import SystemMessage, get_introduction_prompt
 # Constants
 DEFAULT_MODEL = "gpt-4o"
 AUDIO_MODEL = "gpt-4o-audio-preview"
+AUDIO_MODEL_MINI = "gpt-4o-mini-audio-preview"
 AUDIO_TARGET_FORMAT = "wav"
 DEFAULT_PORT = 8000
 AUDIO_PLACEHOLDER = "[Audio input - analyzing spoken content]"
@@ -181,7 +182,7 @@ async def _transcribe_audio(audio_content: bytes, audio_format: str) -> str:
     audio_b64 = base64.b64encode(audio_content).decode()
     
     response = await acompletion(
-        model=AUDIO_MODEL,
+        model=AUDIO_MODEL_MINI,
         messages=[
             {
                 "role": "user",
@@ -267,7 +268,7 @@ async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, com
     )
     
     response = await acompletion(
-        model=AUDIO_MODEL,  # Use gpt-4o-audio-preview which supports text+audio input
+        model=AUDIO_MODEL_MINI,  # Use gpt-4o-audio-preview which supports text+audio input
         messages=[
             {
                 "role": "system",
