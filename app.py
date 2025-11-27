@@ -244,6 +244,18 @@ async def _analyze_transcription(transcription: str, role: str, company: str) ->
 
 
 async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, company: str) -> str:
+    """
+    Analyze audio directly using gpt-4o-audio-preview which supports text+audio mixed input.
+    
+    Args:
+        audio_content: Audio bytes in WAV format
+        audio_format: Audio format (should be "wav")
+        role: Job role
+        company: Company name
+        
+    Returns:
+        Analysis feedback
+    """
     audio_b64 = base64.b64encode(audio_content).decode()
 
     text_prompt = get_introduction_prompt(
@@ -253,7 +265,7 @@ async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, com
     )
     
     response = await acompletion(
-        model=DEFAULT_MODEL,
+        model=AUDIO_MODEL,  # Use gpt-4o-audio-preview which supports text+audio input
         messages=[
             {
                 "role": "system",
@@ -276,7 +288,8 @@ async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, com
                 ]
             }
         ],
-        temperature=0.3
+        temperature=0.3,
+        modalities=["text"]  # Request text output
     )
     
     return response.choices[0].message.content
@@ -337,19 +350,18 @@ async def analyze_audio(
         wav_content = await _convert_audio_to_wav(audio_content, audio.content_type or "")
         print(f"[Audio] Converted to wav, new size: {len(wav_content)} bytes")
 
-        # Transcribe audio
-        print(f"[Audio] Sending to GPT-4o audio, format: {AUDIO_TARGET_FORMAT}")
-        transcription = await _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
+        # Analyze audio directly using gpt-4o-audio-preview (supports text+audio input)
+        print(f"[Audio] Sending to {AUDIO_MODEL} for direct analysis, format: {AUDIO_TARGET_FORMAT}")
+        feedback = await _analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company)
 
-        # Analyze transcription
-        # feedback = await _analyze_transcription(transcription, role, company)
-        feedback = await _analyze_audio(wav_content, audio.content_type or "", role, company)
+        # Optionally transcribe for display (can be done in parallel if needed)
+        transcription = await _transcribe_audio(wav_content, AUDIO_TARGET_FORMAT)
 
         return JSONResponse({
             "feedback": feedback,
             "transcription": transcription,
             "input_type": "audio",
-            "model": f"{AUDIO_MODEL} (LiteLLM) + {DEFAULT_MODEL} (LiteLLM)"
+            "model": f"{AUDIO_MODEL} (LiteLLM)"
         })
 
     except Exception as e:
