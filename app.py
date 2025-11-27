@@ -7,6 +7,7 @@ import asyncio
 import os
 import re
 import base64
+import json
 import subprocess
 from pathlib import Path
 
@@ -20,7 +21,8 @@ from fastapi import (
 )
 from fastapi.responses import (
     HTMLResponse, 
-    JSONResponse
+    JSONResponse,
+    StreamingResponse
 )
 from fastapi.middleware.cors import (
     CORSMiddleware
@@ -295,6 +297,63 @@ async def _analyze_audio(audio_content: bytes, audio_format: str, role: str, com
     return response.choices[0].message.content
 
 
+async def _analyze_audio_stream(audio_content: bytes, audio_format: str, role: str, company: str):
+    """
+    Analyze audio directly using gpt-4o-audio-preview with streaming response.
+    
+    Args:
+        audio_content: Audio bytes in WAV format
+        audio_format: Audio format (should be "wav")
+        role: Job role
+        company: Company name
+        
+    Yields:
+        Text chunks from streaming response
+    """
+    audio_b64 = base64.b64encode(audio_content).decode()
+
+    text_prompt = get_introduction_prompt(
+        introduction=AUDIO_PLACEHOLDER,
+        role=role,
+        company=company
+    )
+    
+    response_stream = await acompletion(
+        model=AUDIO_MODEL,  # Use gpt-4o-audio-preview which supports text+audio input
+        messages=[
+            {
+                "role": "system",
+                "content": SystemMessage.INTRODUCTION
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": text_prompt
+                    },
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": audio_b64,
+                            "format": audio_format
+                        }
+                    }
+                ]
+            }
+        ],
+        temperature=0.3,
+        modalities=["text"],  # Request text output
+        stream=True  # Enable streaming
+    )
+    
+    async for chunk in response_stream:
+        if chunk.choices and len(chunk.choices) > 0:
+            delta = chunk.choices[0].delta
+            if hasattr(delta, 'content') and delta.content:
+                yield delta.content
+
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Serve the main UI"""
@@ -364,6 +423,58 @@ async def analyze_audio(
             "input_type": "audio",
             "model": f"{AUDIO_MODEL} (LiteLLM)"
         })
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/analyze/audio/stream")
+async def analyze_audio_stream(
+    audio: UploadFile = File(...),
+    role: str = Form(...),
+    company: str = Form(...)
+):
+    """
+    Analyze audio introduction using GPT-4o audio input with streaming response.
+    
+    Returns Server-Sent Events (SSE) stream of analysis feedback.
+    Mobile browsers use different formats: iOS=MP4/AAC, Android=WebM/Opus
+    GPT-4o audio supports: wav, mp3, flac, opus, pcm16
+    """
+    try:
+        # Read audio content
+        audio_content = await audio.read()
+        print(f"[Audio Stream] Received format: {audio.content_type}, size: {len(audio_content)} bytes")
+
+        # Convert to WAV format for GPT-4o audio compatibility
+        wav_content = await _convert_audio_to_wav(audio_content, audio.content_type or "")
+        print(f"[Audio Stream] Converted to wav, new size: {len(wav_content)} bytes")
+
+        # Create async generator for streaming response
+        async def generate_stream():
+            try:
+                print(f"[Audio Stream] Sending to {AUDIO_MODEL} for streaming analysis, format: {AUDIO_TARGET_FORMAT}")
+                async for chunk in _analyze_audio_stream(wav_content, AUDIO_TARGET_FORMAT, role, company):
+                    # Format as Server-Sent Events (SSE)
+                    # SSE format: "data: <content>\n\n"
+                    yield f"data: {chunk}\n\n"
+                # Send completion signal
+                yield "data: [DONE]\n\n"
+            except Exception as e:
+                # Send error as SSE event
+                error_data = json.dumps({"error": str(e)})
+                yield f"data: {error_data}\n\n"
+                raise
+
+        return StreamingResponse(
+            generate_stream(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no"  # Disable buffering in nginx
+            }
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
