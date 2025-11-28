@@ -180,3 +180,19 @@ class Colors:
         )
         
         return colored_feedback
+
+    async def stream_and_print(stream_generator):
+        """Helper function to stream and print chunks"""
+        buffer = ''
+        async for chunk in stream_generator:
+            buffer += chunk
+            
+            # Print complete lines when we encounter newlines
+            while '\n' in buffer:
+                line, buffer = buffer.split('\n', 1)
+                print(Colors.feedback(line + '\n'), end='')
+        
+        # Print remaining content
+        if buffer:
+            print(Colors.feedback(buffer), end='')
+        print()

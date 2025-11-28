@@ -9,22 +9,6 @@ from prompts import BQQuestions
 from utils import Colors
 
 
-async def stream_and_print(stream_generator):
-    """Helper function to stream and print chunks"""
-    buffer = ''
-    async for chunk in stream_generator:
-        buffer += chunk
-        
-        # Print complete lines when we encounter newlines
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            print(Colors.feedback(line + '\n'), end='')
-    
-    # Print remaining content
-    if buffer:
-        print(Colors.feedback(buffer), end='')
-    print()
-
 async def example_1_introduction():
     """Example 1: Self-introduction analysis"""
     print("=" * 80)
@@ -67,7 +51,7 @@ async def example_1_introduction():
         company="Google",
         stream=True
     )
-    await stream_and_print(result)
+    await Colors.stream_and_print(result)
 
 
 async def example_2_bq_question():
@@ -122,7 +106,7 @@ async def example_2_bq_question():
         role="Senior Software Engineer",
         stream=True
     )
-    await stream_and_print(result)
+    await Colors.stream_and_print(result)
 
 
 async def main():
