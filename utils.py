@@ -2,9 +2,11 @@
 Utility functions for audio processing and format conversion
 """
 
-import asyncio
 import re
+import sys
+import asyncio
 import subprocess
+
 from interview_analyzer import AUDIO_TARGET_FORMAT
 
 
@@ -126,3 +128,55 @@ class AudioConverter:
             content_type
         )
 
+
+# ANSI color codes
+class Colors:
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+
+    def feedback(feedback: str):
+        """
+        Print feedback with Pass in green and No-Pass in red
+        
+        Args:
+            feedback: The feedback text to print
+            end: String appended after the last value (default: newline)
+        """
+        # Enable ANSI color support on Windows
+        if sys.platform == 'win32':
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+        
+        # Colorful No-Pass, No Hire (case insensitive) - must come before "Pass" and "Hire"
+        colored_feedback = re.sub(
+            r'\b(No-Pass|No Hire)\b',
+            f'{Colors.RED}{Colors.BOLD}\\1{Colors.RESET}',
+            feedback,
+            flags=re.IGNORECASE
+        )
+        if Colors.RESET in colored_feedback:
+            return colored_feedback
+        
+        # Colorful Weak Hire (case insensitive) - must come before "Hire"
+        colored_feedback = re.sub(
+            r'\b(Weak Hire|Borderline)\b',
+            f'{Colors.YELLOW}{Colors.BOLD}\\1{Colors.RESET}',
+            colored_feedback,
+            flags=re.IGNORECASE
+        )
+        if Colors.RESET in colored_feedback:
+            return colored_feedback
+        
+        # Colorful Pass, Hire (case insensitive) - comes after "No-Pass" and "Strong Hire"/"Weak Hire"
+        colored_feedback = re.sub(  
+            r'\b(Strong Hire|Pass|Hire)\b',
+            f'{Colors.GREEN}{Colors.BOLD}\\1{Colors.RESET}',
+            colored_feedback,
+            flags=re.IGNORECASE
+        )
+        
+        return colored_feedback

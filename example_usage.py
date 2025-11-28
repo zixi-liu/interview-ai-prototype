@@ -3,52 +3,10 @@ Example usage for BQ Interview Analyzer
 """
 
 import asyncio
-import re
-import sys
+
 from interview_analyzer import InterviewAnalyzer
-
-
-# ANSI color codes
-class Colors:
-    GREEN = '\033[92m'
-    LIGHT_GREEN = '\033[92m'
-    RED = '\033[91m'
-    LIGHT_RED = '\033[91m'
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
-
-
-def print_colored_feedback(feedback: str, end: str = '\n'):
-    """
-    Print feedback with Pass in green and No-Pass in red
-    
-    Args:
-        feedback: The feedback text to print
-        end: String appended after the last value (default: newline)
-    """
-    # Enable ANSI color support on Windows
-    if sys.platform == 'win32':
-        import ctypes
-        kernel32 = ctypes.windll.kernel32
-        kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
-    
-    # Replace Pass, Hire, Strong Hire with green Pass (case insensitive)
-    colored_feedback = re.sub(
-        r'\b(Pass|Hire|Strong Hire)\b',
-        f'{Colors.GREEN}{Colors.BOLD}\\1{Colors.RESET}',
-        feedback,
-        flags=re.IGNORECASE
-    )
-    
-    # Replace No-Pass, No hire with red No-Pass (case insensitive)
-    colored_feedback = re.sub(
-        r'\b(No-Pass|No hire)\b',
-        f'{Colors.RED}{Colors.BOLD}\\1{Colors.RESET}',
-        colored_feedback,
-        flags=re.IGNORECASE
-    )
-    
-    print(colored_feedback, end=end)
+from prompts import BQQuestions
+from utils import Colors
 
 
 async def example_1_introduction():
@@ -59,6 +17,15 @@ async def example_1_introduction():
     print()
     
     analyzer = InterviewAnalyzer()
+
+    # bad_introduction = """
+    # Hi, my name is Alex. I graduated from XYZ University last year with a degree in Computer Science.
+    # I have done some school projects in Java and Python.
+    # I like coding and I’m excited to apply for this position because I want to learn more and improve myself.
+    # I don’t have much experience with large-scale systems yet,
+    # but I’m willing to learn whatever is needed. Thank you.
+    # """
+    # introduction = bad_introduction
     
     introduction = """
     Hi, I'm Sarah. I'm a software engineer with 7 years of experience, 
@@ -78,13 +45,24 @@ async def example_1_introduction():
     be a great fit for your team.
     """
     
+    buffer = ''
+    
     async for chunk in analyzer.analyze_introduction_stream(
         introduction=introduction,
         role="Senior Software Engineer",
         company="Google"
     ):
-        print_colored_feedback(chunk, end='')
-    print()  # 在streaming结束后添加换行
+        buffer += chunk
+        
+        # Print complete lines when we encounter newlines
+        while '\n' in buffer:
+            line, buffer = buffer.split('\n', 1)
+            print(Colors.feedback(line + '\n'), end='')
+    
+    # Print remaining content
+    if buffer:
+        print(Colors.feedback(buffer), end='')
+    print()
 
 
 async def example_2_bq_question():
@@ -96,7 +74,7 @@ async def example_2_bq_question():
     
     analyzer = InterviewAnalyzer()
     
-    question = "Tell me about your most challenging project."
+    question = BQQuestions.MOST_CHALLENGING_PROJECT
     
     answer = """
     Sure. The most challenging project I worked on was when I had to lead 
@@ -132,10 +110,21 @@ async def example_2_bq_question():
     independently. The project was considered a huge success, and I received 
     recognition from the CTO.
     """
+
+    buffer = ''
     
     async for chunk in analyzer.analyze_bq_question_stream(question, answer, role="Senior Software Engineer"):
-        print_colored_feedback(chunk, end='')
-    print()  # 在streaming结束后添加换行
+        buffer += chunk
+        
+        # Print complete lines when we encounter newlines
+        while '\n' in buffer:
+            line, buffer = buffer.split('\n', 1)
+            print(Colors.feedback(line + '\n'), end='')
+    
+    # Print remaining content
+    if buffer:
+        print(Colors.feedback(buffer), end='')
+    print()
 
 
 async def main():
