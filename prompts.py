@@ -79,6 +79,9 @@ class BQQuestions:
     MOST_CHALLENGING_PROJECT = """
     Tell me about your most challenging project.
     """
+    SOLVED_CONFLICT = """
+    Tell me about a time you solved a conflict.
+    """
     TECHNICAL_PROBLEM_SOLVING = """
     Tell me about a time you faced a technical problem and how you solved it.
     """

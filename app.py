@@ -154,7 +154,8 @@ async def analyze_audio_stream(
             try:
                 analyzer = InterviewAnalyzer(model=DEFAULT_MODEL)
                 print(f"[Audio Stream] Sending to {analyzer.audio_model} for streaming analysis, format: {AUDIO_TARGET_FORMAT}")
-                async for chunk in analyzer.analyze_audio_stream(wav_content, AUDIO_TARGET_FORMAT, role, company):
+                result = analyzer.analyze_audio(wav_content, AUDIO_TARGET_FORMAT, role, company, stream=True)
+                async for chunk in result:
                     # Format as Server-Sent Events (SSE)
                     # SSE format: "data: <content>\n\n"
                     yield f"data: {chunk}\n\n"

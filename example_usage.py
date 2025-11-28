@@ -9,6 +9,22 @@ from prompts import BQQuestions
 from utils import Colors
 
 
+async def stream_and_print(stream_generator):
+    """Helper function to stream and print chunks"""
+    buffer = ''
+    async for chunk in stream_generator:
+        buffer += chunk
+        
+        # Print complete lines when we encounter newlines
+        while '\n' in buffer:
+            line, buffer = buffer.split('\n', 1)
+            print(Colors.feedback(line + '\n'), end='')
+    
+    # Print remaining content
+    if buffer:
+        print(Colors.feedback(buffer), end='')
+    print()
+
 async def example_1_introduction():
     """Example 1: Self-introduction analysis"""
     print("=" * 80)
@@ -45,24 +61,13 @@ async def example_1_introduction():
     be a great fit for your team.
     """
     
-    buffer = ''
-    
-    async for chunk in analyzer.analyze_introduction_stream(
+    result = await analyzer.analyze_introduction(
         introduction=introduction,
         role="Senior Software Engineer",
-        company="Google"
-    ):
-        buffer += chunk
-        
-        # Print complete lines when we encounter newlines
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            print(Colors.feedback(line + '\n'), end='')
-    
-    # Print remaining content
-    if buffer:
-        print(Colors.feedback(buffer), end='')
-    print()
+        company="Google",
+        stream=True
+    )
+    await stream_and_print(result)
 
 
 async def example_2_bq_question():
@@ -110,21 +115,14 @@ async def example_2_bq_question():
     independently. The project was considered a huge success, and I received 
     recognition from the CTO.
     """
-
-    buffer = ''
     
-    async for chunk in analyzer.analyze_bq_question_stream(question, answer, role="Senior Software Engineer"):
-        buffer += chunk
-        
-        # Print complete lines when we encounter newlines
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            print(Colors.feedback(line + '\n'), end='')
-    
-    # Print remaining content
-    if buffer:
-        print(Colors.feedback(buffer), end='')
-    print()
+    result = await analyzer.analyze_bq_question(
+        question=question,
+        answer=answer,
+        role="Senior Software Engineer",
+        stream=True
+    )
+    await stream_and_print(result)
 
 
 async def main():
