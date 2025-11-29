@@ -231,3 +231,35 @@ class InterviewAnalyzer:
             return self._extract_stream_chunks(response)
         else:
             return response.choices[0].message.content
+
+    async def customized_analyze(
+        self,
+        prompt: str,
+        stream: bool = False
+    ):
+        """
+        Customized analyze using a custom prompt
+
+        Args:
+            prompt: Custom prompt
+            stream: Whether to stream the response
+
+        Returns:
+            If stream=False: Complete feedback string
+            If stream=True: Async iterator yielding text chunks
+        """
+        messages = [
+            {"role": "user", "content": prompt}
+        ]
+
+        response = await acompletion(
+            model=self.model,
+            messages=messages,
+            temperature=0.3,
+            stream=stream
+        )
+
+        if stream:
+            return self._extract_stream_chunks(response)
+        else:
+            return response.choices[0].message.content

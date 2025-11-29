@@ -8,14 +8,9 @@ if _project_root not in sys.path:
 
 from interview_analyzer import InterviewAnalyzer
 from prompts import BQQuestions
-from utils import Colors
+from utils import Colors, FeedbackRecorder
 
-async def solve_conflict():
-    analyzer = InterviewAnalyzer()
-    question = BQQuestions.SOLVED_CONFLICT
-    print("=" * 80)
-    print(f"Question: {question}")
-    answer = """
+GOOD_ANSWER = """
     Certainly. In my previous role I found myself in the midst of a conflict 
     regarding resource allocation for two critical projects within our development team.
 
@@ -45,17 +40,30 @@ async def solve_conflict():
     is data-driven there is less room for subjective opinion and it becomes easier to align 
     different stakeholders.
     """
+
+
+async def solve_conflict():
+    analyzer = InterviewAnalyzer()
+    question = BQQuestions.SOLVED_CONFLICT
+    print("=" * 80)
+    print(f"Question: {question}")
+    answer = GOOD_ANSWER
+
     print("=" * 80)
     print("Answer:")
     print(answer)
 
-    result = await analyzer.analyze_bq_question(
-        question=question,
-        answer=answer,
-        role="Senior Software Engineer",
-        stream=True
-    )
-    await Colors.stream_and_print(result)
+    prompt = BQQuestions.real_interview(question, answer, "Junior-Mid") + BQQuestions.bar_raiser()
+    result = await analyzer.customized_analyze(prompt, stream=True)
+    feedback = await Colors.stream_and_print(result)
+
+    red_flag_prompt = BQQuestions.red_flag(question, answer, "Junior-Mid") + BQQuestions.bar_raiser()
+    red_flag_result = await analyzer.customized_analyze(red_flag_prompt, stream=True)
+    red_flag_feedback = await Colors.stream_and_print(red_flag_result)
+
+    feedback_recorder = FeedbackRecorder()
+    feedback_recorder.save_feedback(question, answer, feedback)
+    feedback_recorder.save_red_flag(question, answer, red_flag_feedback)
 
 async def main():
     await solve_conflict()
