@@ -158,7 +158,7 @@ Please provide your analysis in the following structured format:
 - [Additional areas...]
 """
 
-    def real_interview(self, question: str, answer: str, level: str = "Junior-Mid") -> str:
+    def real_interview(question: str, answer: str, level: str = "Junior-Mid") -> str:
         """
         Generate prompt for real interview evaluation
 
@@ -259,7 +259,7 @@ IMPORTANT:
 - Only evaluate.
 """
 
-    def red_flag(self, question: str, answer: str, level: str = "Junior-Mid") -> str:
+    def red_flag(question: str, answer: str, level: str = "Junior-Mid") -> str:
         """
         Generate prompt for red flag evaluation
 
@@ -367,3 +367,51 @@ As a result:
 - Do not give the benefit of the doubt unless explicitly demonstrated
 - Apply a conservative, “hire only if obviously strong” bar
 """
+
+
+class BQAnswer:
+    def improve_story(feedback_full_content: str) -> str:
+        return f"""You are a FAANG-level behavioral interview answer optimizer.
+
+Your task:
+Using ONLY the content inside INPUT: section, extract the candidate’s original answer
+and rewrite it into a significantly stronger version that meets the highest bar for a FAANG Senior-level behavioral interview.
+
+MANDATORY REQUIREMENTS:
+- Output ONLY the improved answer (no analysis, no explanation, no bullet points).
+- The improved answer MUST:
+    • Achieve Solid Strong on ALL FAANG behavioral competencies:
+        - Ownership
+        - Problem Solving
+        - Execution
+        - Collaboration
+        - Communication
+        - Leadership / Influence
+        - Culture Fit
+    • Achieve a Solid Strong Hire final recommendation.
+    • Fix every weakness mentioned in the MD feedback.
+    • Eliminate every Red Flag with high-confidence “no red flags”.
+    • Demonstrate unambiguous ownership, senior-level scope, and cross-team influence.
+    • Include measurable impact, metrics, trade-offs, decision reasoning.
+    • Remain realistic and credible for a FAANG Senior Engineer.
+
+INPUT:
+{feedback_full_content}
+
+Now produce ONLY the improved answer."""
+
+
+class BQFeedback:
+    def extract_question(feedback_full_content: str) -> str:
+        return f"""Extract only the content under the "## Question" section from the markdown input below. 
+Output only the question text, nothing else.
+
+Input:
+{feedback_full_content}"""
+
+    def extract_answer(feedback_full_content: str) -> str:
+        return f"""Extract only the content under the "## Answer" section from the markdown input below. 
+Output only the answer text, nothing else.
+
+Input:
+{feedback_full_content}"""
