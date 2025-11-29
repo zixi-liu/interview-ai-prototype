@@ -1,0 +1,19 @@
+{
+  "conflict": [
+    "Tell me about a time you solved a conflict."
+  ],
+  "failure": [
+    "Tell me about the biggest mistake you made at work."
+  ],
+  "execution": [
+    "Tell me about your most challenging project.",
+    "Tell me about a time you had to meet a tight deadline."
+  ],
+  "problem_solving": [
+    "Tell me about a time when you had to dive deep to understand a problem."
+  ],
+  "growth": [
+    "Tell me about a time when you received negative feedback.",
+    "Tell me about a time you worked outside your comfort zone."
+  ]
+}

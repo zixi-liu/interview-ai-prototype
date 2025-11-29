@@ -10,3 +10,5 @@ transcriptions/
 sample_interview.txt
 tests/
 *.pytest_cache/
+history.json
+history.html
