@@ -23,6 +23,19 @@ Open `http://localhost:8000` in your browser.
 
 ---
 
+## 🎯 Try Examples
+
+**Run example code directly:**
+
+```bash
+# Run behavioral question analysis example
+python examples/solve_conflict.py
+```
+
+This will analyze a sample answer to a behavioral interview question and show you how the analyzer works.
+
+---
+
 ## What It Does
 
 - 📝 **Text Analysis**: Analyze self-introductions and behavioral question answers
