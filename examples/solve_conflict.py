@@ -10,6 +10,8 @@ from interview_analyzer import InterviewAnalyzer
 from prompts import BQQuestions
 from utils import Colors, FeedbackRecorder
 
+# NOTE: https://igotanoffer.com/blogs/tech/tell-me-about-a-time-you-had-a-conflict
+# #4 "Tell me about a time you dealt with a group conflict" (mid/senior candidate)
 GOOD_ANSWER = """
     Certainly. In my previous role I found myself in the midst of a conflict 
     regarding resource allocation for two critical projects within our development team.
@@ -41,6 +43,30 @@ GOOD_ANSWER = """
     different stakeholders.
     """
 
+# NOTE: Improved using GPT5.1
+BETER_ANSWER = """
+    Sure. One conflict I handled recently was around resource allocation between our Product team and our Infrastructure team. 
+    Both had high-priority projects, but they were fighting for the same set of engineers, and discussions had completely 
+    stalled because everyone was arguing based on “what felt fair.”
+
+    Since the delay was blocking two critical launches, I stepped in and took ownership of the decision process. 
+    I spent some time gathering concrete data from both sides—impact projections, engineering estimates, risks, 
+    dependencies—and built a simple comparison model that laid out the trade-offs under different allocation scenarios.
+
+    Instead of having another open-ended debate, I organized a structured decision review. I walked everyone through 
+    the data, and to avoid the conversation drifting back into opinions, I set a few clear criteria upfront: alignment 
+    with quarterly goals, risk to customers, and expected business impact. Based on that, I proposed a hybrid plan: give 
+    Product the resources needed to hit their near-term launch, while still guaranteeing enough support for Infra so 
+    their core milestone wouldn’t slip by multiple sprints.
+
+    With that structure, we were able to reach alignment in under an hour. Product shipped on time and ended up driving 
+    about a 12% uplift in user activation, and Infrastructure only slipped by one sprint instead of three. And the best 
+    part is that both teams later adopted the same data-driven framework for future prioritization, which made conflicts 
+    a lot easier to resolve.
+
+    For me, the big takeaway was that conflict resolution isn’t just about facilitating discussion—it’s about bringing 
+    clarity, creating shared decision rules, and taking ownership of guiding everyone toward an objective outcome.
+    """
 
 async def solve_conflict():
     analyzer = InterviewAnalyzer()
