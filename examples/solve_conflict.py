@@ -88,8 +88,7 @@ async def solve_conflict():
     red_flag_feedback = await Colors.stream_and_print(red_flag_result)
 
     feedback_recorder = FeedbackRecorder()
-    feedback_recorder.save_feedback(question, answer, feedback)
-    feedback_recorder.save_red_flag(question, answer, red_flag_feedback)
+    feedback_recorder.save_feedback(question, answer, feedback, red_flag_feedback)
 
 async def main():
     await solve_conflict()

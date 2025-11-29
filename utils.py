@@ -263,7 +263,12 @@ class FeedbackRecorder:
             counter += 1
         return candidate
 
-    def save_feedback(self, question: str, answer: str, feedback: str) -> str:
+    def save_feedback(
+        self, 
+        question: str, 
+        answer: str, 
+        feedback: str,
+        red_flag: str | None = None) -> str:
         """
         Save a single interview feedback record as a markdown file.
 
@@ -273,6 +278,7 @@ class FeedbackRecorder:
             question: The interview question text.
             answer: The candidate's answer text.
             feedback: The evaluation/feedback text (containing rating keywords).
+            red_flag: Optional red flag evaluation text.
 
         Returns:
             The full file path of the created markdown file.
@@ -290,7 +296,7 @@ class FeedbackRecorder:
         norm_feedback = textwrap.dedent(feedback).strip()
 
         content_lines = [
-            f"# Interview Feedback ({date_str})",
+            f"# {'Red Flag Evaluation' if red_flag else 'Interview Feedback'} ({date_str})",
             "",
             f"**Rating**: {rating}",
             "",
@@ -308,48 +314,22 @@ class FeedbackRecorder:
             "",
         ]
 
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write("\n".join(content_lines))
+        if red_flag:
+            norm_red_flag = textwrap.dedent(red_flag).strip()
+            content_lines.extend([
+                "## Red Flag",
+                "",
+                norm_red_flag,
+                "",
+            ])
+        else:
+            content_lines.extend([
+                "## Feedback",
+                "",
+                norm_feedback,
+                "",
+            ])
 
-        return filepath
-
-    def save_red_flag(self, question: str, answer: str, red_flag: str) -> str:
-        """
-        Save a single red flag evaluation record as a markdown file.
-
-        The file name format is: yyyymmdd-red-flag.md
-
-        Args:
-            question: The interview question text.
-            answer: The candidate's answer text.
-            red_flag: The red flag evaluation text.
-        """
-        date_str = datetime.now().strftime("%Y%m%d")
-        filename = f"{date_str}-red-flag.md"
-        directory = self._ensure_feedback_dir()
-        filepath = self._unique_filepath(directory, filename)
-
-        # Normalize blocks to avoid extra indentation in markdown
-        norm_question = textwrap.dedent(question).strip()
-        norm_answer = textwrap.dedent(answer).strip()
-        norm_red_flag = textwrap.dedent(red_flag).strip()
-
-        content_lines = [
-            f"# Red Flag Evaluation ({date_str})",
-            "",
-            "## Question",
-            "",
-            norm_question,
-            "",
-            "## Answer",
-            "",
-            norm_answer,
-            "",
-            "## Red Flag",
-            "",
-            norm_red_flag,
-            "",
-        ]
         with open(filepath, "w", encoding="utf-8") as f:
             f.write("\n".join(content_lines))
 
