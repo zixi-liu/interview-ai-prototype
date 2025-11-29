@@ -10,6 +10,7 @@ if _project_root not in sys.path:
 from interview_analyzer import InterviewAnalyzer
 from prompts import BQQuestions, BQAnswer, BQFeedback
 from utils import Colors
+from advance.self_improve import StorySelfImprove
 
 example_dir = Path(os.path.dirname(os.path.abspath(__file__)))
 root_dir = example_dir.parent
@@ -48,8 +49,33 @@ async def story_improve():
     red_flag_feedback = await Colors.stream_and_print(red_flag_result)
 
 
+async def story_improve_with_feedback():
+    self_improve = StorySelfImprove(feedback_file=feedback_file)
+    print("=" * 80)
+    print("Question:")
+    print(await self_improve.question())
+    print("=" * 80)
+    print("Original Answer:")
+    print(await self_improve.answer())
+    await self_improve.run()
+    print("=" * 80)
+    print("Improved Answer:")
+    print(await self_improve.improved_answer())
+    print("=" * 80)
+    print("Feedback:")
+    print(await self_improve.feedback())
+    print("=" * 80)
+    print("Red Flag Feedback:")
+    print(await self_improve.red_flag_feedback())
+    print("=" * 80)
+    print("iterate times:")
+    print(self_improve.iterate_times)
+
+
+
 async def main():
     await story_improve()
+    # await story_improve_with_feedback()
 
 if __name__ == "__main__":
     asyncio.run(main())

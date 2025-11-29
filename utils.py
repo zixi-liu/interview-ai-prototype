@@ -206,6 +206,15 @@ class Colors:
         return text
 
 
+class StreamProcessor:
+    async def get_text(stream_generator) -> str:
+        text = ''
+        async for chunk in stream_generator:
+            text += chunk
+        return text
+
+
+
 class FeedbackRecorder:
     """Feedback recorder for real interview evaluation"""
 

@@ -415,3 +415,17 @@ Output only the answer text, nothing else.
 
 Input:
 {feedback_full_content}"""
+
+    def is_perfect(content: str) -> str:
+        return f"""Read the content inside INPUT: section and evaluate two conditions:
+
+(1) The Final Overall Recommendation must be "Strong Hire".
+(2) The Red Flag section must indicate that there are no red flags.
+
+If and only if BOTH conditions are met, output: True
+Otherwise output: False
+
+Output ONLY True or False, with no explanation.
+
+Input:
+{content}"""
