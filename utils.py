@@ -221,11 +221,11 @@ class FeedbackRecorder:
         r"\bWeak Hire\b",
         r"\bLeaning Hire\b",
         r"\bBorderline\b",
-        r"\bPass\b",
-        r"\bHire\b",
+        r"\bLeaning No Hire\b",
         r"\bNo-Pass\b",
         r"\bNo Hire\b",
-        r"\bLeaning No Hire\b",
+        r"\bPass\b",
+        r"\bHire\b",
     ]
 
     def __init__(self, base_dir: str | None = None) -> None:
