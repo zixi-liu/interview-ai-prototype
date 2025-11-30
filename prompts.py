@@ -173,12 +173,21 @@ Please provide your analysis in the following structured format:
         """
         probing_section = """
 ============================================================
-2. Probing Follow-up Questions
-- 3–6 deep probing questions
+7. Probing Follow-up Questions
+- Generate 3–6 targeted probing questions based on the weaknesses identified above
+- Questions MUST specifically target:
+    * Competencies rated Below(🤔) or Concern(❌) in section 5
+    * Gaps identified in "Areas for Improvement" (section 4)
+    * Any ambiguity about candidate's personal contribution vs team effort
+- Include at least one question from each category:
+    * Ownership: "What was YOUR specific decision that changed the outcome?"
+    * Reflection: "What mistake did you make, and what would you do differently?"
+    * Metrics: "What specific numbers can you share about YOUR contribution?"
 - MUST align with the LEVEL (Junior, Senior, Staff)
     * Junior-Mid: clarity, correctness, thinking process
     * Senior: ownership, cross-team alignment, decision-making
     * Staff: strategy, multi-team scope, org-level influence
+- Questions should elicit AUTHENTIC details that can't be fabricated
 ============================================================
 """ if include_probing else ""
 
@@ -203,9 +212,9 @@ OUTPUT (Follow this structure EXACTLY):
 - No full sentences
 - Simulate EXACTLY how FAANG interviewers type quick notes
 ============================================================
-{probing_section}
+
 ============================================================
-3. Formal Interview Summary (for hiring committee)
+2. Formal Interview Summary (for hiring committee)
 - 4–7 sentences
 - Objective, concise, professional
 - Summarize the scenario, actions, tradeoffs, results
@@ -213,7 +222,7 @@ OUTPUT (Follow this structure EXACTLY):
 ============================================================
 
 ============================================================
-4. Strengths (Interviewer perspective)
+3. Strengths (Interviewer perspective)
 - Bullet points
 - Must reflect the LEVEL
     * Junior-Mid: clarity, reliability, structured thinking
@@ -222,14 +231,14 @@ OUTPUT (Follow this structure EXACTLY):
 ============================================================
 
 ============================================================
-5. Areas for Improvement
+4. Areas for Improvement
 - Bullet points
 - Every candidate must have 1–2 realistic improvement points
 - Must match LEVEL expectations (e.g., Staff has higher bar)
 ============================================================
 
 ============================================================
-6. Competency Ratings (use FAANG rubric)
+5. Competency Ratings (use FAANG rubric)
 Use:
 Strong(🌟) / Meets+(👍) / Meets(👌) / Below(🤔) / Concern(❌)
 
@@ -244,7 +253,7 @@ Dimensions:
 ============================================================
 
 ============================================================
-7. Final Overall Recommendation
+6. Final Overall Recommendation
 Choose:
 - 🌟 Strong Hire
 - 👍Hire
@@ -256,7 +265,7 @@ Include a short justification (1–3 sentences)
 aligned with real FAANG interviewer tone,
 and LEVEL-appropriate reasoning.
 ============================================================
-
+{probing_section}
 IMPORTANT:
 - Do NOT give coaching, advice, or rewrite answers.
 - Only evaluate.
@@ -427,7 +436,7 @@ class BQAnswer:
         return f"""You are a FAANG-level behavioral interview answer optimizer.
 
 Your task:
-Using ONLY the content inside INPUT: section, extract the candidate’s original answer
+Using ONLY the content inside INPUT: section, extract the candidate's original answer
 and rewrite it into a significantly stronger version that meets the highest bar for a FAANG Senior-level behavioral interview.
 
 MANDATORY REQUIREMENTS:
@@ -443,13 +452,69 @@ MANDATORY REQUIREMENTS:
         - Culture Fit
     • Achieve a Solid Strong Hire final recommendation.
     • Fix every weakness mentioned in the MD feedback.
-    • Eliminate every Red Flag with high-confidence “no red flags”.
+    • Eliminate every Red Flag with high-confidence "no red flags".
     • Demonstrate unambiguous ownership, senior-level scope, and cross-team influence.
     • Include measurable impact, metrics, trade-offs, decision reasoning.
     • Remain realistic and credible for a FAANG Senior Engineer.
 
 INPUT:
 {feedback_full_content}
+
+Now produce ONLY the improved answer."""
+
+    def improve_with_probing_answers(
+        original_answer: str,
+        feedback: str,
+        probing_qa: list[dict]
+    ) -> str:
+        """
+        Generate prompt to improve answer using user's real answers to probing questions.
+
+        Args:
+            original_answer: The candidate's original answer
+            feedback: The feedback received from evaluation
+            probing_qa: List of dicts with 'q' (question) and 'a' (user's answer)
+
+        Returns:
+            Formatted prompt string
+        """
+        qa_text = "\n".join([f"Q: {qa['q']}\nA: {qa['a']}\n" for qa in probing_qa])
+
+        return f"""You are a FAANG-level behavioral interview answer optimizer.
+
+Your task:
+Rewrite the original answer into a Strong Hire version by using the USER'S REAL ANSWERS
+to fix every weakness in the FEEDBACK. Do NOT fabricate - use only what the user provided.
+
+MANDATORY REQUIREMENTS:
+- Output ONLY the improved answer (no analysis, no explanation, no bullet points).
+- The improved answer MUST:
+    • Achieve Solid Strong on ALL FAANG behavioral competencies:
+        - Ownership
+        - Problem Solving
+        - Execution
+        - Collaboration
+        - Communication
+        - Leadership / Influence
+        - Culture Fit
+    • Achieve a Solid Strong Hire final recommendation.
+    • Fix every weakness mentioned in the FEEDBACK using the user's real details.
+    • Eliminate every Red Flag using the user's authentic reflections and specifics.
+    • Demonstrate unambiguous ownership using the user's specific decisions and actions.
+    • Include the exact metrics and numbers the user provided.
+    • Include the user's real mistakes and lessons learned for genuine reflection.
+    • Remain realistic and credible - the user's real experience is the foundation.
+
+INPUT:
+
+=== ORIGINAL ANSWER ===
+{original_answer}
+
+=== FEEDBACK (WEAKNESSES TO FIX) ===
+{feedback}
+
+=== USER'S PROBING ANSWERS (USE THESE TO FIX WEAKNESSES) ===
+{qa_text}
 
 Now produce ONLY the improved answer."""
 

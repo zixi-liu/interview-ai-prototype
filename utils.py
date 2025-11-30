@@ -247,7 +247,7 @@ class FeedbackParser:
     def extract_probing_questions(feedback: str) -> list:
         """Extract probing follow-up questions from feedback text"""
         questions = []
-        match = re.search(r'2\.\s*Probing Follow-up Questions(.*?)(?:={3,}|$)', feedback, re.DOTALL | re.IGNORECASE)
+        match = re.search(r'Probing Follow-up Questions(.*?)(?:={3,}|$)', feedback, re.DOTALL | re.IGNORECASE)
         if match:
             for line in match.group(1).strip().split('\n'):
                 line = line.strip()
