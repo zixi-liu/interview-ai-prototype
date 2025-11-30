@@ -349,13 +349,13 @@ class InterviewCLI:
 
         if eval_choice in [1, 3]:
             self.print_header("Interview Evaluation")
-            prompt = self.bq.real_interview(question, answer, level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.real_interview(question, answer, level) + BQQuestions.bar_raiser()
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             feedback = await Colors.stream_and_print(result)
 
         if eval_choice in [2, 3]:
             self.print_header("Red Flag Analysis")
-            prompt = self.bq.red_flag(question, answer, level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.red_flag(question, answer, level) + BQQuestions.bar_raiser()
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             red_flag_feedback = await Colors.stream_and_print(result)
 

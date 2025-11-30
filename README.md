@@ -54,6 +54,12 @@ This will analyze a sample answer to a behavioral interview question and show yo
 3. Enter job role, company, and your introduction
 4. Get instant AI feedback
 
+### CLI
+
+```bash
+python cli.py                    # Interactive mode
+```
+
 ### Programmatic Usage
 
 ```python
