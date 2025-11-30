@@ -112,22 +112,22 @@ class InterviewCLI:
                 print("Opened in browser.")
             else:
                 sessions = self.storage.get_all_sessions()
-                self.show_history(sessions)
+                await self.show_history(sessions)
             return False
         elif cmd.startswith("history --category "):
             category = cmd.replace("history --category ", "")
             sessions = self.storage.get_sessions_by_category(category)
-            self.show_history(sessions)
+            await self.show_history(sessions)
             return False
         elif cmd.startswith("history --rating "):
             rating = cmd.replace("history --rating ", "")
             sessions = self.storage.get_sessions_by_rating(rating)
-            self.show_history(sessions)
+            await self.show_history(sessions)
             return False
         elif cmd.startswith("history --search "):
             query = cmd.replace("history --search ", "")
             sessions = self.storage.get_sessions_by_question(query)
-            self.show_history(sessions)
+            await self.show_history(sessions)
             return False
         elif cmd == "open all":
             if not self.last_filtered_sessions:
@@ -244,7 +244,7 @@ class InterviewCLI:
                 print(f"\nRed Flag Analysis:")
                 print(session.get("red_flag_feedback", ""))
 
-    def show_history(self, sessions: list):
+    async def show_history(self, sessions: list):
         """Display a list of sessions"""
         if not sessions:
             print("No sessions found.")
@@ -253,7 +253,7 @@ class InterviewCLI:
 
         print(f"\nFound {len(sessions)} session(s):\n")
         for session in sessions:
-            self.print_session(session)
+            await self.print_session(session)
 
         self.last_filtered_sessions = sessions
         print(f"\n{Colors.DIM}  ⎿ Tip: /open <session_id> to view one, /open all to view all{Colors.RESET}")
@@ -785,21 +785,21 @@ async def main():
     # Handle command-line history queries
     if args.history:
         sessions = cli.storage.get_all_sessions()
-        cli.show_history(sessions)
+        await cli.show_history(sessions)
     elif args.stats:
         cli.show_stats()
     elif args.category:
         sessions = cli.storage.get_sessions_by_category(args.category)
-        cli.show_history(sessions)
+        await cli.show_history(sessions)
     elif args.rating:
         sessions = cli.storage.get_sessions_by_rating(args.rating)
-        cli.show_history(sessions)
+        await cli.show_history(sessions)
     elif args.last:
         sessions = cli.storage.get_last_n_sessions(args.last)
-        cli.show_history(sessions)
+        await cli.show_history(sessions)
     elif args.search:
         sessions = cli.storage.get_sessions_by_question(args.search)
-        cli.show_history(sessions)
+        await cli.show_history(sessions)
     elif args.id:
         session = cli.storage.get_session_by_id(args.id)
         if session:
