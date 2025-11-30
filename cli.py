@@ -10,14 +10,28 @@ import sys
 import webbrowser
 from pathlib import Path
 
+from prompt_toolkit import PromptSession
+from prompt_toolkit.history import InMemoryHistory
+
 from interview_analyzer import InterviewAnalyzer
-from prompts import BQQuestions, get_introduction_prompt, SystemMessage
+from prompts import BQQuestions, BQAnswer, get_introduction_prompt, SystemMessage
 from storage import LocalStorage
-from utils import Colors
+from utils import Colors, FeedbackParser
+from advance.story_builder import StoryBuilder
 
 # Add missing color codes
 Colors.CYAN = '\033[96m'
 Colors.DIM = '\033[2m'
+
+
+def strip_star_prefixes(text: str) -> str:
+    """Remove STAR prefixes like **Situation:** for cleaner evaluation"""
+    import re
+    # Remove markdown bold STAR prefixes
+    text = re.sub(r'\*\*(Situation|Task|Action|Result):\*\*\s*', '', text)
+    # Also handle non-bold versions
+    text = re.sub(r'(Situation|Task|Action|Result):\s*', '', text)
+    return text.strip()
 
 
 class QuestionBank:
@@ -49,29 +63,32 @@ class InterviewCLI:
         self.bq = BQQuestions()
         self.storage = LocalStorage()
         self.last_filtered_sessions = []
+        # prompt_toolkit session for command history (up/down arrows)
+        self.prompt_session = PromptSession(history=InMemoryHistory())
 
     def print_header(self, text: str):
         print(f"\n{text}\n")
 
-    def print_menu(self, title: str, options: list, show_commands: bool = False) -> int:
+
+    async def print_menu(self, title: str, options: list, show_commands: bool = False) -> int:
         """Display menu and get user choice. Returns -1 for quit, or option number."""
         print(f"\n{title}")
         for i, option in enumerate(options, 1):
             print(f"  {i}. {option}")
         if show_commands:
-            print(f"\n{Colors.DIM}  ⎿ Tip: q to exit, /history, /help{Colors.RESET}")
+            print(f"\n{Colors.DIM}  ⎿ Tip: /q to exit, /history, /help{Colors.RESET}")
 
         while True:
             try:
-                choice = input("\n> ").strip()
-            except EOFError:
+                choice = (await self.prompt_session.prompt_async("\n> ")).strip()
+            except (EOFError, KeyboardInterrupt):
                 return -1
 
-            if choice.lower() == 'q':
+            if choice.lower() in ['q', '/q']:
                 return -1
             if choice.startswith('/') and show_commands:
                 cmd = choice[1:]  # Remove leading /
-                show_menu = self.handle_command(cmd)
+                show_menu = await self.handle_command(cmd)
                 return -2 if show_menu else -3  # -2 = show menu, -3 = wait for input
             if choice.isdigit():
                 num = int(choice)
@@ -79,7 +96,7 @@ class InterviewCLI:
                     return num
             print("Please enter a number to select an option")
 
-    def handle_command(self, cmd: str) -> bool:
+    async def handle_command(self, cmd: str) -> bool:
         """Handle slash commands. Returns True if should show menu, False otherwise."""
         cmd = cmd.strip().lower()
 
@@ -87,7 +104,7 @@ class InterviewCLI:
             print("\nView history:")
             print("  1. In terminal")
             print("  2. In browser (HTML)")
-            choice = input("\n> ").strip()
+            choice = (await self.prompt_session.prompt_async("\n> ")).strip()
             if choice == "2":
                 html_path = self.storage.storage_dir / "history.html"
                 self.storage._generate_html(self.storage._load_history())
@@ -117,14 +134,14 @@ class InterviewCLI:
                 print("No sessions to display. Run /history first.")
             else:
                 for session in self.last_filtered_sessions:
-                    self.print_session(session, show_full=True)
+                    await self.print_session(session, show_full=True)
                     print("\n" + "─" * 50 + "\n")
             return False
         elif cmd.startswith("open "):
             session_id = cmd.replace("open ", "")
             session = self.storage.get_session_by_id(session_id)
             if session:
-                self.print_session(session, show_full=True)
+                await self.print_session(session, show_full=True)
             else:
                 print("Session not found.")
             return False
@@ -148,17 +165,18 @@ class InterviewCLI:
             print(f"Unknown command. Type /help for options.")
             return False
 
-    def get_multiline_input(self, prompt: str) -> str:
-        print(f"\n{prompt}")
+    async def get_multiline_input(self, prompt_text: str) -> str:
+        print(f"\n{prompt_text}")
         print(f"{Colors.DIM}  ⎿ Tip: Enter twice to submit, /q to exit{Colors.RESET}\n")
 
         lines = []
         empty_count = 0
 
         while True:
-            line = input()
-            if line.strip().lower() == "/q":
-                return ""  # Return empty to signal exit
+            line = await self.prompt_session.prompt_async("")
+            # Immediate commands - return as-is without needing double Enter
+            if line.strip().lower() in ["/q", "/done", "/question", "/skip"]:
+                return line.strip().lower()
             if line == "":
                 empty_count += 1
                 if empty_count >= 2:
@@ -170,7 +188,7 @@ class InterviewCLI:
 
         return "\n".join(lines).strip()
 
-    def print_session(self, session: dict, show_full: bool = False):
+    async def print_session(self, session: dict, show_full: bool = False):
         """Print a session summary or full details"""
         timestamp = session.get("timestamp", "")[:10]
         session_type = session.get("type", "unknown")
@@ -194,10 +212,34 @@ class InterviewCLI:
         if show_full:
             print(f"\nQuestion:")
             print(session.get("question", ""))
-            print(f"\nAnswer:")
+
+            # Show draft answer if exists (Story Builder flow)
+            if session.get("draft_answer"):
+                print(f"\nDraft Answer:")
+                print(session.get("draft_answer", ""))
+                print(f"\nImproved Answer:")
+            else:
+                print(f"\nAnswer:")
             print(session.get("answer", ""))
-            print(f"\nFeedback:")
-            print(session.get("feedback", ""))
+
+            # Check if session has follow-up evaluation
+            if session.get("feedback_followup"):
+                view_choice = (await self.prompt_session.prompt_async("\nView: 1. Original feedback  2. With follow-ups: ")).strip()
+                if view_choice == "2":
+                    if session.get("followup_qa"):
+                        print(f"\nFollow-up Q&A:")
+                        for i, (fq, fa) in enumerate(session["followup_qa"], 1):
+                            print(f"\n  Q{i}: {fq}")
+                            print(f"  A{i}: {fa}")
+                    print(f"\nFeedback (with follow-ups):")
+                    print(session.get("feedback_followup", ""))
+                else:
+                    print(f"\nFeedback:")
+                    print(session.get("feedback", ""))
+            else:
+                print(f"\nFeedback:")
+                print(session.get("feedback", ""))
+
             if session.get("red_flag_feedback"):
                 print(f"\nRed Flag Analysis:")
                 print(session.get("red_flag_feedback", ""))
@@ -250,15 +292,15 @@ class InterviewCLI:
     async def practice_self_intro(self):
         self.print_header(f"{Colors.BOLD}Self-Introduction Practice{Colors.RESET}")
 
-        role = input("Enter job role (e.g., Software Engineer): ").strip()
+        role = (await self.prompt_session.prompt_async("Enter job role (e.g., Software Engineer): ")).strip()
         if not role:
             role = "Software Engineer"
 
-        company = input("Enter company (e.g., Meta): ").strip()
+        company = (await self.prompt_session.prompt_async("Enter company (e.g., Meta): ")).strip()
         if not company:
             company = "Meta"
 
-        introduction = self.get_multiline_input("Enter your self-introduction:")
+        introduction = await self.get_multiline_input("Enter your self-introduction:")
 
         if not introduction:
             print("No introduction provided. Returning to menu.")
@@ -295,7 +337,7 @@ class InterviewCLI:
             print("No questions found in question bank.")
             return
 
-        choice = self.print_menu("Select a category:", categories)
+        choice = await self.print_menu("Select a category:", categories)
         if choice < 1:
             return
 
@@ -307,7 +349,7 @@ class InterviewCLI:
             print("No questions in this category.")
             return
 
-        choice = self.print_menu("Select a question:", questions)
+        choice = await self.print_menu("Select a question:", questions)
         if choice < 1:
             return
 
@@ -315,7 +357,7 @@ class InterviewCLI:
 
         # Select level
         levels = ["Junior-Mid", "Senior", "Staff"]
-        choice = self.print_menu("Select your level:", levels)
+        choice = await self.print_menu("Select your level:", levels)
         if choice < 1:
             return
 
@@ -325,7 +367,7 @@ class InterviewCLI:
         print(f"\nQuestion:")
         print(f"{question}\n")
 
-        answer = self.get_multiline_input("Enter your answer:")
+        answer = await self.get_multiline_input("Enter your answer:")
 
         if not answer:
             print("No answer provided. Returning to menu.")
@@ -337,7 +379,7 @@ class InterviewCLI:
             "Red Flag Detection Only",
             "Both (Full + Red Flags)"
         ]
-        eval_choice = self.print_menu("Select evaluation type:", eval_types)
+        eval_choice = await self.print_menu("Select evaluation type:", eval_types)
         if eval_choice < 1:
             return
 
@@ -349,15 +391,87 @@ class InterviewCLI:
 
         if eval_choice in [1, 3]:
             self.print_header("Interview Evaluation")
-            prompt = BQQuestions.real_interview(question, answer, level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.real_interview(question, answer, level) + BQQuestions.bar_raiser(level)
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             feedback = await Colors.stream_and_print(result)
 
         if eval_choice in [2, 3]:
             self.print_header("Red Flag Analysis")
-            prompt = BQQuestions.red_flag(question, answer, level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.red_flag(question, answer, level) + BQQuestions.bar_raiser(level)
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             red_flag_feedback = await Colors.stream_and_print(result)
+
+        # Follow-up questions flow
+        feedback_followup = ""
+        followup_qa = []
+        original_answer = answer  # Save original answer before improvement
+
+        if eval_choice in [1, 3] and feedback:
+            # Extract probing questions from feedback
+            probing_questions = FeedbackParser.extract_probing_questions(feedback)
+
+            if probing_questions:
+                print(f"\n{Colors.DIM}Found {len(probing_questions)} follow-up questions.{Colors.RESET}")
+                followup_choice = (await self.prompt_session.prompt_async("\nWould you like to practice follow-up questions? (y/n): ")).strip().lower()
+
+                if followup_choice == 'y':
+                    # Extract original rating for calibration
+                    original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
+
+                    print(f"\n{Colors.DIM}  ⎿ Tip: Enter twice to skip question, /done to evaluate, /skip to skip all{Colors.RESET}\n")
+
+                    skip_all = False
+                    for i, fq in enumerate(probing_questions, 1):
+                        print(f"\n{Colors.BOLD}Follow-up Question {i}/{len(probing_questions)}:{Colors.RESET}")
+                        print(f"{fq}\n")
+
+                        fa = await self.get_multiline_input("Your answer:")
+
+                        if fa == '/done':
+                            print("Ending follow-up questions.")
+                            break
+                        elif fa in ['/skip', '/question', '/q']:
+                            print("Skipping follow-up questions.")
+                            skip_all = True
+                            break
+                        elif not fa:
+                            print("Skipped.")
+                            continue
+                        else:
+                            followup_qa.append((fq, fa))
+
+                    # Generate improved answer and re-evaluate if user answered any questions
+                    if followup_qa and not skip_all:
+                        BLUE = '\033[38;5;75m'
+
+                        # Convert to dict format for improve_with_probing_answers
+                        probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
+
+                        # Step 1: Rewrite the answer using user's probing answers
+                        print(f"\n{BLUE}Rewriting your answer with the new details...{Colors.RESET}\n")
+                        prompt = BQAnswer.improve_with_probing_answers(answer, feedback, probing_qa_dicts)
+                        result = await self.analyzer.customized_analyze(prompt, stream=True)
+                        improved_answer = await Colors.stream_and_print(result)
+
+                        print(f"\n{Colors.BOLD}Improved Answer:{Colors.RESET}")
+                        print("-" * 40)
+                        print(improved_answer)
+                        print("-" * 40)
+
+                        # Step 2: Re-evaluate the improved answer
+                        print(f"\n{BLUE}Re-evaluating improved answer...{Colors.RESET}\n")
+
+                        self.print_header("Improved Answer Evaluation")
+                        prompt = (
+                            BQQuestions.real_interview(question, improved_answer, level, include_probing=False)
+                            + BQQuestions.bar_raiser(level)
+                            + BQQuestions.followup_calibration(original_rating)
+                        )
+                        result = await self.analyzer.customized_analyze(prompt, stream=True)
+                        feedback_followup = await Colors.stream_and_print(result)
+
+                        # Update answer to the improved version for saving
+                        answer = improved_answer
 
         # Save session
         session_id = self.storage.save_session(
@@ -367,7 +481,10 @@ class InterviewCLI:
             feedback=feedback or red_flag_feedback,
             category=category,
             level=level,
-            red_flag_feedback=red_flag_feedback if eval_choice == 3 else None
+            red_flag_feedback=red_flag_feedback if eval_choice == 3 else None,
+            feedback_followup=feedback_followup if feedback_followup else None,
+            followup_qa=followup_qa if followup_qa else None,
+            draft_answer=original_answer if original_answer != answer else None
         )
         print(f"\nSession saved (ID: {session_id})")
 
@@ -401,16 +518,21 @@ class InterviewCLI:
         while True:
             options = [
                 "Self-Introduction",
-                "Behavioral Questions"
+                "Behavioral Questions",
+                "Build Story from Scratch"
             ]
             if show_menu:
-                choice = self.print_menu("What would you like to practice today?", options, show_commands=True)
+                choice = await self.print_menu("What would you like to practice today?", options, show_commands=True)
             else:
                 # Wait for command input without showing menu
                 print(f"{Colors.DIM}  ⎿ Tap twice to go back to main menu{Colors.RESET}")
                 empty_count = 0
                 while True:
-                    line = input()
+                    try:
+                        line = await self.prompt_session.prompt_async("")
+                    except (EOFError, KeyboardInterrupt):
+                        choice = -1
+                        break
                     if line.strip() == "":
                         empty_count += 1
                         if empty_count >= 2:
@@ -418,7 +540,7 @@ class InterviewCLI:
                             break
                     elif line.strip().startswith("/"):
                         cmd = line.strip()[1:]  # Remove leading /
-                        show_menu = self.handle_command(cmd)
+                        show_menu = await self.handle_command(cmd)
                         break
                     elif line.strip().lower() == "q":
                         choice = -1
@@ -442,6 +564,206 @@ class InterviewCLI:
             elif choice == 2:
                 show_menu = True
                 await self.practice_bq()
+            elif choice == 3:
+                show_menu = True
+                await self.build_story()
+
+    async def build_story(self):
+        """Build a BQ story from scratch, then hand off to Story Improver"""
+        self.print_header(f"{Colors.BOLD}Build Story from Scratch{Colors.RESET}")
+
+        builder = StoryBuilder()
+
+        # Select category
+        categories = sorted(builder.get_categories())
+        choice = await self.print_menu("Select a category:", categories)
+        if choice < 1:
+            return
+        category = categories[choice - 1]
+
+        # Select sub-scenario
+        sub_scenarios = builder.get_sub_scenarios(category)
+        if not sub_scenarios:
+            print("No sub-scenarios found.")
+            return
+
+        # Show sub-scenarios with descriptions
+        print(f"\nSelect a scenario that sounds familiar to you:")
+        for i, s in enumerate(sub_scenarios, 1):
+            print(f"  {i}. {s['sub_scenario'].replace('_', ' ')}")
+            print(f"     {Colors.DIM}{s['description']}{Colors.RESET}")
+
+        while True:
+            try:
+                choice_str = (await self.prompt_session.prompt_async("\n> ")).strip()
+            except (EOFError, KeyboardInterrupt):
+                return
+            if choice_str.lower() in ['q', '/q']:
+                return
+            if choice_str.isdigit():
+                num = int(choice_str)
+                if 1 <= num <= len(sub_scenarios):
+                    break
+            print("Please enter a number to select an option")
+
+        selected = sub_scenarios[num - 1]
+        builder.select_scenario(category, selected["sub_scenario"])
+
+        # Get core STAR questions
+        BLUE = '\033[38;5;75m'
+        questions = builder.get_core_questions()
+
+        print(f"Let's build your story. Answer these questions about your experience:")
+        print(f"{Colors.DIM}  ⎿ Tip: Be specific - include names, numbers, timelines{Colors.RESET}\n")
+
+        for i, q in enumerate(questions, 1):
+            print(f"\n{Colors.BOLD}Q{i}: {q}{Colors.RESET}")
+            answer = await self.get_multiline_input("")
+
+            if answer in ['/q', '/skip']:
+                print("Exiting story builder.")
+                return
+            if not answer:
+                print("Skipped.")
+                continue
+
+            builder.add_response(q, answer)
+
+        if not builder.user_responses:
+            print("No responses provided. Returning to menu.")
+            return
+
+        # Generate draft
+        print(f"\n{BLUE}Generating your initial story draft...{Colors.RESET}\n")
+        draft = await builder.generate_draft()
+
+        print(f"{Colors.BOLD}Your Draft Story:{Colors.RESET}")
+        print("-" * 40)
+        print(draft)
+        print("-" * 40)
+
+        # Ask if user wants to improve
+        improve_choice = (await self.prompt_session.prompt_async(
+            "\nWould you like to evaluate and improve this story? (y/n): "
+        )).strip().lower()
+
+        if improve_choice != 'y':
+            # Save as-is
+            session_id = self.storage.save_session(
+                session_type="bq",
+                question=builder.get_question(),
+                answer=draft,
+                feedback="(Draft - not evaluated)",
+                category=category
+            )
+            print(f"\nDraft saved (ID: {session_id})")
+            return
+
+        # Hand off to Story Improver (existing BQ evaluation flow)
+        question = builder.get_question()
+
+        # Select level for evaluation
+        levels = ["Junior-Mid", "Senior", "Staff"]
+        choice = await self.print_menu("Select your level for evaluation:", levels)
+        if choice < 1:
+            return
+        level = levels[choice - 1]
+
+        print(f"\n{BLUE}Evaluating your story...{Colors.RESET}\n")
+
+        # Strip STAR prefixes for evaluation (so LLM judges content, not formatting)
+        draft_for_eval = strip_star_prefixes(draft)
+
+        # Run full evaluation
+        self.print_header("Interview Evaluation")
+        prompt = self.bq.real_interview(question, draft_for_eval, level) + BQQuestions.bar_raiser(level)
+        result = await self.analyzer.customized_analyze(prompt, stream=True)
+        feedback = await Colors.stream_and_print(result)
+
+        # Red flag check
+        self.print_header("Red Flag Analysis")
+        prompt = BQQuestions.red_flag(question, draft_for_eval, level) + BQQuestions.bar_raiser(level)
+        result = await self.analyzer.customized_analyze(prompt, stream=True)
+        red_flag_feedback = await Colors.stream_and_print(result)
+
+        # Follow-up questions flow (same as practice_bq)
+        feedback_followup = ""
+        followup_qa = []
+        original_draft = draft  # Save original draft before improvement
+
+        probing_questions = FeedbackParser.extract_probing_questions(feedback)
+
+        if probing_questions:
+            print(f"\n{Colors.DIM}Found {len(probing_questions)} follow-up questions.{Colors.RESET}")
+            followup_choice = (await self.prompt_session.prompt_async(
+                "\nWould you like to answer follow-up questions to improve? (y/n): "
+            )).strip().lower()
+
+            if followup_choice == 'y':
+                original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
+
+                print(f"\n{Colors.DIM}  ⎿ Tip: Enter twice to skip, /done to evaluate{Colors.RESET}\n")
+
+                for i, fq in enumerate(probing_questions, 1):
+                    print(f"\n{Colors.BOLD}Follow-up {i}/{len(probing_questions)}:{Colors.RESET}")
+                    print(f"{fq}\n")
+
+                    fa = await self.get_multiline_input("Your answer:")
+
+                    if fa == '/done':
+                        break
+                    elif fa in ['/skip', '/q']:
+                        break
+                    elif not fa:
+                        continue
+                    else:
+                        followup_qa.append((fq, fa))
+
+                if followup_qa:
+                    # Convert to dict format for improve_with_probing_answers
+                    probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
+
+                    # Step 1: Rewrite the answer using user's probing answers
+                    print(f"\n{BLUE}Rewriting your story with the new details...{Colors.RESET}\n")
+                    prompt = BQAnswer.improve_with_probing_answers(draft, feedback, probing_qa_dicts)
+                    result = await self.analyzer.customized_analyze(prompt, stream=True)
+                    improved_draft = await Colors.stream_and_print(result)
+
+                    print(f"\n{Colors.BOLD}Improved Story:{Colors.RESET}")
+                    print("-" * 40)
+                    print(improved_draft)
+                    print("-" * 40)
+
+                    # Step 2: Re-evaluate the improved answer (strip STAR prefixes)
+                    print(f"\n{BLUE}Re-evaluating improved story...{Colors.RESET}\n")
+
+                    self.print_header("Improved Story Evaluation")
+                    improved_for_eval = strip_star_prefixes(improved_draft)
+                    prompt = (
+                        BQQuestions.real_interview(question, improved_for_eval, level, include_probing=False)
+                        + BQQuestions.bar_raiser(level)
+                        + BQQuestions.followup_calibration(original_rating)
+                    )
+                    result = await self.analyzer.customized_analyze(prompt, stream=True)
+                    feedback_followup = await Colors.stream_and_print(result)
+
+                    # Update draft to the improved version for saving
+                    draft = improved_draft
+
+        # Save session
+        session_id = self.storage.save_session(
+            session_type="bq",
+            question=question,
+            answer=draft,
+            feedback=feedback,
+            category=category,
+            level=level,
+            red_flag_feedback=red_flag_feedback,
+            feedback_followup=feedback_followup if feedback_followup else None,
+            followup_qa=followup_qa if followup_qa else None,
+            draft_answer=original_draft if original_draft != draft else None
+        )
+        print(f"\nSession saved (ID: {session_id})")
 
 
 def parse_args():
@@ -481,7 +803,7 @@ async def main():
     elif args.id:
         session = cli.storage.get_session_by_id(args.id)
         if session:
-            cli.print_session(session, show_full=True)
+            await cli.print_session(session, show_full=True)
         else:
             print("Session not found.")
     else:

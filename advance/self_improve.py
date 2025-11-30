@@ -60,14 +60,14 @@ class StorySelfImprove:
 
     async def feedback(self) -> str | None:
         if not self._feedback:
-            prompt = BQQuestions.real_interview(await self.question(), await self.improved_answer(), self.level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.real_interview(await self.question(), await self.improved_answer(), self.level) + BQQuestions.bar_raiser(self.level)
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             self._feedback = await StreamProcessor.get_text(result)
         return self._feedback
 
     async def red_flag_feedback(self) -> str | None:
         if not self._red_flag_feedback:
-            prompt = BQQuestions.red_flag(await self.question(), await self.improved_answer(), self.level) + BQQuestions.bar_raiser()
+            prompt = BQQuestions.red_flag(await self.question(), await self.improved_answer(), self.level) + BQQuestions.bar_raiser(self.level)
             result = await self.analyzer.customized_analyze(prompt, stream=True)
             self._red_flag_feedback = await StreamProcessor.get_text(result)
         return self._red_flag_feedback
@@ -174,7 +174,7 @@ class HumanInLoopImprove:
         """Evaluate an answer and return feedback"""
         prompt = (
             BQQuestions.real_interview(await self.question(), answer, self.level)
-            + BQQuestions.bar_raiser()
+            + BQQuestions.bar_raiser(self.level)
         )
         result = await self.analyzer.customized_analyze(prompt, stream=True)
         return await StreamProcessor.get_text(result)
@@ -183,7 +183,7 @@ class HumanInLoopImprove:
         """Evaluate an answer for red flags"""
         prompt = (
             BQQuestions.red_flag(await self.question(), answer, self.level)
-            + BQQuestions.bar_raiser()
+            + BQQuestions.bar_raiser(self.level)
         )
         result = await self.analyzer.customized_analyze(prompt, stream=True)
         return await StreamProcessor.get_text(result)

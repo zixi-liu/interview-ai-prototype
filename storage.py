@@ -10,6 +10,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+from utils import FeedbackParser
+
 
 DEFAULT_STORAGE_DIR = Path(__file__).parent
 HISTORY_FILE = "history.json"
@@ -45,6 +47,10 @@ class LocalStorage:
         import re
         # Escape HTML
         text = text.replace("<", "&lt;").replace(">", "&gt;")
+        # Convert ==== separators to <hr>
+        text = re.sub(r'^={3,}$', r'<hr>', text, flags=re.MULTILINE)
+        # Convert section titles like "1. Real-Time Raw Notes" to bold headers
+        text = re.sub(r'^(\d+\.\s+.+)$', r'<strong>\1</strong>', text, flags=re.MULTILINE)
         # Bold **text** or __text__
         text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'__(.+?)__', r'<strong>\1</strong>', text)
@@ -58,8 +64,6 @@ class LocalStorage:
         # Bullet points
         text = re.sub(r'^- (.+)$', r'<li>\1</li>', text, flags=re.MULTILINE)
         text = re.sub(r'^• (.+)$', r'<li>\1</li>', text, flags=re.MULTILINE)
-        # Numbered lists
-        text = re.sub(r'^\d+\. (.+)$', r'<li>\1</li>', text, flags=re.MULTILINE)
         # Colorize ratings - only match standalone ratings (with word boundaries)
         text = re.sub(r'\b(Strong Hire)\b', r'<span style="color: #28a745; font-weight: 600;">\1</span>', text, flags=re.IGNORECASE)
         text = re.sub(r'\b(Leaning No Hire)\b', r'<span style="color: #fd7e14; font-weight: 600;">\1</span>', text, flags=re.IGNORECASE)
@@ -123,7 +127,7 @@ class LocalStorage:
 """
 
         for s in reversed(sessions):  # Most recent first
-            rating = s.get("rating", "N/A")
+            rating = s.get("rating") or "N/A"
             if "Strong Hire" in rating:
                 rating_class = "rating-strong-hire"
             elif "Leaning No Hire" in rating:
@@ -147,6 +151,43 @@ class LocalStorage:
             if red_flag:
                 red_flag = self._format_text(red_flag)
 
+            # Follow-up data
+            followup_qa = s.get("followup_qa", [])
+            feedback_followup = s.get("feedback_followup", "")
+            if feedback_followup:
+                feedback_followup = self._format_text(feedback_followup)
+            rating_followup = s.get("rating_followup", "")
+            draft_answer = s.get("draft_answer", "")
+            if draft_answer:
+                draft_answer = self._format_text(draft_answer)
+
+            # Format follow-up Q&A
+            followup_qa_html = ""
+            if followup_qa:
+                followup_qa_html = "<div class='section'><div class='section-title'>Follow-up Q&A</div><div class='section-body'>"
+                for i, (fq, fa) in enumerate(followup_qa, 1):
+                    fq_safe = fq.replace("<", "&lt;").replace(">", "&gt;")
+                    fa_safe = fa.replace("<", "&lt;").replace(">", "&gt;")
+                    followup_qa_html += f"<strong>Q{i}:</strong> {fq_safe}<br><strong>A{i}:</strong> {fa_safe}<br><br>"
+                followup_qa_html += "</div></div>"
+
+            # Rating for follow-up
+            followup_rating_html = ""
+            if rating_followup:
+                if "Strong Hire" in rating_followup:
+                    fu_rating_class = "rating-strong-hire"
+                elif "Leaning No Hire" in rating_followup:
+                    fu_rating_class = "rating-leaning-no-hire"
+                elif "Leaning Hire" in rating_followup:
+                    fu_rating_class = "rating-leaning-hire"
+                elif "No Hire" in rating_followup:
+                    fu_rating_class = "rating-no-hire"
+                elif "Hire" in rating_followup:
+                    fu_rating_class = "rating-hire"
+                else:
+                    fu_rating_class = "rating-leaning-hire"
+                followup_rating_html = f"<span class='rating {fu_rating_class}' style='margin-left: 10px;'>After Follow-up: {rating_followup}</span>"
+
             html += f"""
     <div class="session" id="session-{s.get('id', '')}">
         <div class="session-header" onclick="this.parentElement.classList.toggle('expanded')">
@@ -156,19 +197,23 @@ class LocalStorage:
             </div>
             <div>
                 <span class="rating {rating_class}">{rating}</span>
+                {followup_rating_html}
                 <span class="toggle-icon">▼</span>
             </div>
         </div>
         <div class="session-content">
+            {"<div class='section'><div class='section-title'>Draft Answer</div><div class='section-body'>" + draft_answer + "</div></div>" if draft_answer else ""}
             <div class="section">
-                <div class="section-title">Your Answer</div>
+                <div class="section-title">{"Improved Answer" if draft_answer else "Your Answer"}</div>
                 <div class="section-body">{answer}</div>
             </div>
             <div class="section">
-                <div class="section-title">Feedback</div>
+                <div class="section-title">Initial Feedback</div>
                 <div class="section-body">{feedback}</div>
             </div>
             {"<div class='section'><div class='section-title'>Red Flag Analysis</div><div class='section-body'>" + red_flag + "</div></div>" if red_flag else ""}
+            {followup_qa_html}
+            {"<div class='section'><div class='section-title'>Follow-up Evaluation</div><div class='section-body'>" + feedback_followup + "</div></div>" if feedback_followup else ""}
         </div>
     </div>
 """
@@ -181,30 +226,8 @@ class LocalStorage:
             f.write(html)
 
     def _extract_rating(self, feedback: str) -> Optional[str]:
-        """Extract rating from feedback text"""
-        # First try to find rating in "Overall Rating" section (more accurate)
-        overall_match = re.search(r'Overall Rating[:\s]*\*?\*?([^*\n]+)\*?\*?', feedback, re.IGNORECASE)
-        if overall_match:
-            overall_text = overall_match.group(1).strip()
-            # Check for known ratings in the overall section
-            for rating in ['Strong Hire', 'Weak Hire', 'Leaning No Hire', 'Leaning Hire', 'No Hire', 'Hire']:
-                if rating.lower() in overall_text.lower():
-                    return rating
-
-        # Fallback: search entire feedback (order matters - more specific first)
-        patterns = [
-            r'(Strong Hire)',
-            r'(Weak Hire)',
-            r'(Leaning No Hire)',
-            r'(Leaning Hire)',
-            r'(No Hire)',
-            r'(Hire)',
-        ]
-        for pattern in patterns:
-            match = re.search(pattern, feedback, re.IGNORECASE)
-            if match:
-                return match.group(1)
-        return None
+        """Extract rating from feedback"""
+        return FeedbackParser.extract_rating(feedback)
 
     def save_session(
         self,
@@ -216,7 +239,10 @@ class LocalStorage:
         level: Optional[str] = None,
         role: Optional[str] = None,
         company: Optional[str] = None,
-        red_flag_feedback: Optional[str] = None
+        red_flag_feedback: Optional[str] = None,
+        feedback_followup: Optional[str] = None,
+        followup_qa: Optional[list] = None,
+        draft_answer: Optional[str] = None
     ) -> str:
         """
         Save a practice session
@@ -231,6 +257,8 @@ class LocalStorage:
             role: Target job role
             company: Target company
             red_flag_feedback: Red flag analysis (if any)
+            feedback_followup: Feedback after follow-up questions (if any)
+            followup_qa: List of follow-up Q&A tuples [(q1, a1), ...]
 
         Returns:
             Session ID
@@ -258,6 +286,13 @@ class LocalStorage:
             session["company"] = company
         if red_flag_feedback:
             session["red_flag_feedback"] = red_flag_feedback
+        if feedback_followup:
+            session["feedback_followup"] = feedback_followup
+            session["rating_followup"] = self._extract_rating(feedback_followup)
+        if followup_qa:
+            session["followup_qa"] = followup_qa
+        if draft_answer:
+            session["draft_answer"] = draft_answer
 
         history["sessions"].append(session)
         self._save_history(history)

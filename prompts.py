@@ -76,6 +76,17 @@ Please provide your analysis in the following structured format:
 
 
 class BQQuestions:
+    # FAANG competency dimensions used for evaluation
+    COMPETENCIES = [
+        "Ownership",
+        "Problem Solving",
+        "Execution",
+        "Collaboration",
+        "Communication",
+        "Leadership / Influence",
+        "Culture Fit",
+    ]
+
     MOST_CHALLENGING_PROJECT = """
     Tell me about your most challenging project.
     """
@@ -261,6 +272,12 @@ Choose:
 - 🤨 Leaning No Hire
 - ❌ No Hire
 
+STRICT RATING RULES (MUST follow):
+- If ANY competency is Concern(❌): rating MUST be No Hire
+- If ANY competency is Below(🤔): rating MUST be Leaning No Hire or worse
+- For Staff level: if Leadership/Influence is not Strong(🌟) or Meets+(👍), rating MUST be Leaning No Hire or worse
+- For Senior level: if Ownership is Below(🤔), rating MUST be Leaning No Hire or worse
+
 Include a short justification (1–3 sentences)
 aligned with real FAANG interviewer tone,
 and LEVEL-appropriate reasoning.
@@ -388,12 +405,11 @@ No-Pass if:
 ============================================================
 """
 
-    def bar_raiser() -> str:
-        return """
+    def bar_raiser(level: str = "Senior") -> str:
+        return f"""
 --- STRICT BAR ENFORCEMENT ---
-Use Senior-level (L5) expectations by default.
-If the example does not clearly demonstrate Senior-level ownership, scope, and cross-team impact,
-downgrade the rating aggressively.
+Evaluate strictly for {level} level. If the example does not clearly demonstrate
+{level}-level ownership, scope, and impact, downgrade the rating aggressively.
 
 --- OWNERSHIP TRACING ---
 Perform ownership tracing on every step of the answer.
@@ -402,7 +418,7 @@ Penalize any ambiguity or executor-style contribution.
 
 --- SCOPE VALIDATION ---
 Challenge the scope of the example.
-If the impact is limited to the candidate’s immediate task or small surface area,
+If the impact is limited to the candidate's immediate task or small surface area,
 mark the competency as Below or Concern.
 
 --- NEGATIVITY BIAS MODEL ---
@@ -424,10 +440,9 @@ Assume the interview is taking place in late 2025, where:
 
 As a result:
 - Treat borderline answers as Leaning No Hire or No Hire
-- Require clear, unambiguous Senior-level ownership, scope, and impact
+- Require clear, unambiguous {level}-level ownership, scope, and impact
 - Penalize vagueness, missing metrics, unclear scope, or executor-style contributions
 - Do not give the benefit of the doubt unless explicitly demonstrated
-- Apply a conservative, “hire only if obviously strong” bar
 """
 
 
@@ -552,3 +567,37 @@ Output ONLY True or False, with no explanation.
 
 Input:
 {content}"""
+
+
+class StoryBuilder:
+    """Prompts for building initial BQ stories from scratch"""
+
+    def generate_draft(
+        category: str,
+        sub_scenario: str,
+        question: str,
+        user_responses: list[dict],
+        level: str = "Senior"
+    ) -> str:
+        """Generate initial STAR draft from user's core responses"""
+        qa_text = "\n".join([f"Q: {r['q']}\nA: {r['a']}\n" for r in user_responses])
+
+        competencies = "\n".join(f"- {c}" for c in BQQuestions.COMPETENCIES)
+
+        return f"""Create a STAR-format behavioral interview answer.
+
+QUESTION: "{question}"
+SCENARIO: {category} / {sub_scenario}
+
+USER'S INPUT:
+{qa_text}
+
+The answer will be evaluated on these FAANG competencies:
+{competencies}
+
+REQUIREMENTS:
+- Use ONLY the user's real details - do NOT fabricate
+- Emphasize personal ownership and specific actions
+- Include metrics/numbers where user provided them
+
+Output ONLY the story."""

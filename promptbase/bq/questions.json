@@ -1,19 +1,72 @@
 {
   "conflict": [
-    "Tell me about a time you solved a conflict."
+    "Tell me about a time you solved a conflict.",
+    "Tell me about a time you disagreed with a technical decision.",
+    "Tell me about a time stakeholders disagreed on priorities.",
+    "Tell me about a time you dealt with conflict between teams.",
+    "Tell me about a time you worked with a difficult colleague.",
+    "Tell me about a time you disagreed with your manager."
   ],
   "failure": [
-    "Tell me about the biggest mistake you made at work."
+    "Tell me about the biggest mistake you made at work.",
+    "Tell me about a time you missed a deadline.",
+    "Tell me about a time you caused a production issue.",
+    "Tell me about a time you made a wrong technical decision.",
+    "Tell me about a time miscommunication caused problems.",
+    "Tell me about a time you underestimated a project."
   ],
   "execution": [
     "Tell me about your most challenging project.",
-    "Tell me about a time you had to meet a tight deadline."
+    "Tell me about a time you had to meet a tight deadline.",
+    "Tell me about a time you delivered with unclear requirements.",
+    "Tell me about a time you delivered with limited resources.",
+    "Tell me about a time you worked with a legacy system.",
+    "Tell me about a time you coordinated across multiple teams."
   ],
   "problem_solving": [
-    "Tell me about a time when you had to dive deep to understand a problem."
+    "Tell me about a time when you had to dive deep to understand a problem.",
+    "Tell me about the hardest bug you had to debug.",
+    "Tell me about a complex system you designed.",
+    "Tell me about a time you optimized a system.",
+    "Tell me about a time you used data to make a decision.",
+    "Tell me about a difficult trade-off you had to make."
   ],
   "growth": [
     "Tell me about a time when you received negative feedback.",
-    "Tell me about a time you worked outside your comfort zone."
+    "Tell me about a time you worked outside your comfort zone.",
+    "Tell me about a time you had to learn something quickly.",
+    "Tell me about a mentor who influenced you.",
+    "Tell me about a time you adapted to change."
+  ],
+  "ambiguity": [
+    "Tell me about a time you worked with unclear requirements.",
+    "Tell me about a time you solved a novel problem.",
+    "Tell me about a time you dealt with changing priorities.",
+    "Tell me about a time you stepped up when ownership was unclear.",
+    "Tell me about a time you decided with incomplete information."
+  ],
+  "leadership": [
+    "Tell me about a time you mentored someone.",
+    "Tell me about a time you drove an initiative.",
+    "Tell me about a time you influenced a decision.",
+    "Tell me about a time you built consensus.",
+    "Tell me about a time you raised the bar for your team.",
+    "Tell me about a time you led through a crisis."
+  ],
+  "teamwork": [
+    "Tell me about working with a cross-functional team.",
+    "Tell me about collaborating across time zones.",
+    "Tell me about a time you supported a teammate.",
+    "Tell me about a time you shared knowledge with your team.",
+    "Tell me about a time you gave difficult feedback to a peer.",
+    "Tell me about a time you unblocked a teammate."
+  ],
+  "ownership": [
+    "Tell me about a time you took initiative.",
+    "Tell me about a time you owned something end-to-end.",
+    "Tell me about a time you took responsibility for a failure.",
+    "Tell me about a time you went beyond your job description.",
+    "Tell me about a time you prioritized long-term over short-term.",
+    "Tell me about a time you anticipated a problem."
   ]
 }
