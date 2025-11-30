@@ -215,6 +215,49 @@ class StreamProcessor:
 
 
 
+class FeedbackParser:
+    """Regex-based parsing for feedback content"""
+
+    @staticmethod
+    def extract_rating(content: str) -> str:
+        """Extract rating from feedback (checks Final Overall Recommendation first, then header)"""
+        # From AI response
+        match = re.search(r'Final Overall Recommendation.*?(Strong Hire|Leaning No Hire|Leaning Hire|No Hire|Hire)', content, re.IGNORECASE | re.DOTALL)
+        if match:
+            return match.group(1)
+        # From saved file header
+        match = re.search(r'\*\*Rating\*\*:\s*(\w+)', content)
+        if match:
+            return match.group(1).replace("_", " ")
+        return None
+
+    @staticmethod
+    def extract_question(content: str) -> str:
+        """Extract question from feedback markdown"""
+        match = re.search(r'## Question\s*\n\n(.+?)(?=\n\n##)', content, re.DOTALL)
+        return match.group(1).strip() if match else None
+
+    @staticmethod
+    def extract_answer(content: str) -> str:
+        """Extract answer from feedback markdown"""
+        match = re.search(r'## Answer\s*\n\n(.+?)(?=\n\n##)', content, re.DOTALL)
+        return match.group(1).strip() if match else None
+
+    @staticmethod
+    def extract_probing_questions(feedback: str) -> list:
+        """Extract probing follow-up questions from feedback text"""
+        questions = []
+        match = re.search(r'2\.\s*Probing Follow-up Questions(.*?)(?:={3,}|$)', feedback, re.DOTALL | re.IGNORECASE)
+        if match:
+            for line in match.group(1).strip().split('\n'):
+                line = line.strip()
+                line = re.sub(r'^[-*•]\s*', '', line)
+                line = re.sub(r'^\d+[\.\)]\s*', '', line)
+                if line and '?' in line:
+                    questions.append(line)
+        return questions[:6]
+
+
 class FeedbackRecorder:
     """Feedback recorder for real interview evaluation"""
 

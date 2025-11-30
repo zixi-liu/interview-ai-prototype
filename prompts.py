@@ -158,7 +158,7 @@ Please provide your analysis in the following structured format:
 - [Additional areas...]
 """
 
-    def real_interview(question: str, answer: str, level: str = "Junior-Mid") -> str:
+    def real_interview(question: str, answer: str, level: str = "Junior-Mid", include_probing: bool = True) -> str:
         """
         Generate prompt for real interview evaluation
 
@@ -166,11 +166,23 @@ Please provide your analysis in the following structured format:
             question: Behavioral question
             answer: Candidate's answer
             level: Level of the candidate (Junior-Mid, Senior, Staff)
+            include_probing: Whether to include probing questions section (default True)
 
         Returns:
             Formatted prompt string
         """
-        return f"""You are a FAANG-level behavioral interview examiner.  
+        probing_section = """
+============================================================
+2. Probing Follow-up Questions
+- 3–6 deep probing questions
+- MUST align with the LEVEL (Junior, Senior, Staff)
+    * Junior-Mid: clarity, correctness, thinking process
+    * Senior: ownership, cross-team alignment, decision-making
+    * Staff: strategy, multi-team scope, org-level influence
+============================================================
+""" if include_probing else ""
+
+        return f"""You are a FAANG-level behavioral interview examiner.
 Your task is to evaluate the candidate EXACTLY as a real interviewer would, based on the LEVEL they are interviewing for.
 
 You MUST follow the internal evaluation style, tone, rubric, and structure used in actual Meta/Google/Amazon interview feedback systems.
@@ -185,22 +197,13 @@ INPUT:
 OUTPUT (Follow this structure EXACTLY):
 
 ============================================================
-1. Real-Time Raw Notes (Interviewer’s scratch notes)
+1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Bullet points only
 - Short fragments, keywords, abbreviations
 - No full sentences
 - Simulate EXACTLY how FAANG interviewers type quick notes
 ============================================================
-
-============================================================
-2. Probing Follow-up Questions
-- 3–6 deep probing questions
-- MUST align with the LEVEL (Junior, Senior, Staff)
-    * Junior-Mid: clarity, correctness, thinking process  
-    * Senior: ownership, cross-team alignment, decision-making  
-    * Staff: strategy, multi-team scope, org-level influence
-============================================================
-
+{probing_section}
 ============================================================
 3. Formal Interview Summary (for hiring committee)
 - 4–7 sentences
@@ -326,6 +329,56 @@ IMPORTANT:
 - Tone must match FAANG interviewer feedback: objective, unemotional, concise.
 """
 
+    def followup_calibration(original_rating: str) -> str:
+        """
+        Additional prompt to calibrate rating based on follow-up Q&A responses
+        Append this after bar_raiser() when evaluating with follow-ups
+
+        Args:
+            original_rating: The rating from the initial evaluation (e.g., "Leaning No Hire")
+        """
+        return f"""
+--- FOLLOW-UP CALIBRATION ---
+The candidate has answered follow-up probing questions after their initial answer.
+The ORIGINAL rating (before follow-ups) was: {original_rating}
+
+IMPORTANT: The "7. Final Overall Recommendation" section above MUST reflect the CALIBRATED rating after considering follow-up responses, NOT the original rating.
+
+Add this section AFTER section 7:
+
+============================================================
+8. Follow-up Assessment
+
+**Follow-up Result:** Pass / No-Pass
+
+Evaluate EACH follow-up response against these criteria:
+- Specificity: Did they provide NEW concrete details (names, numbers, timelines, metrics) not in the original answer?
+- Depth: Did they explain the WHY behind decisions, not just repeat WHAT happened?
+- Consistency: Were there any contradictions or gaps compared to the original story?
+- Ownership: Did they clearly own their actions or deflect to "we" / blame others?
+- Self-awareness: Did they acknowledge tradeoffs, limitations, or learnings?
+
+Pass ONLY if:
+- Majority of follow-up responses add meaningful new information
+- No contradictions or red flags introduced
+- Demonstrates genuine understanding, not rehearsed/vague responses
+
+No-Pass if:
+- Responses are vague, repetitive, or lack new details
+- Candidate struggles to answer or contradicts original story
+- Shows shallow understanding when probed deeper
+
+**Follow-up Feedback:**
+- 2-3 specific bullet points on follow-up performance
+- Reference specific Q&A that was strong or weak
+
+**Rating Calibration:**
+- Original Rating: {original_rating}
+- Final Rating: [the calibrated rating from section 7]
+- Reason: [1-2 sentences explaining upgrade/downgrade/no change]
+============================================================
+"""
+
     def bar_raiser() -> str:
         return """
 --- STRICT BAR ENFORCEMENT ---
@@ -402,21 +455,26 @@ Now produce ONLY the improved answer."""
 
 
 class BQFeedback:
+    """LLM prompts and regex helpers for extracting content from feedback markdown files"""
+
     def extract_question(feedback_full_content: str) -> str:
-        return f"""Extract only the content under the "## Question" section from the markdown input below. 
+        """LLM prompt to extract question"""
+        return f"""Extract only the content under the "## Question" section from the markdown input below.
 Output only the question text, nothing else.
 
 Input:
 {feedback_full_content}"""
 
     def extract_answer(feedback_full_content: str) -> str:
-        return f"""Extract only the content under the "## Answer" section from the markdown input below. 
+        """LLM prompt to extract answer"""
+        return f"""Extract only the content under the "## Answer" section from the markdown input below.
 Output only the answer text, nothing else.
 
 Input:
 {feedback_full_content}"""
 
     def is_perfect(content: str) -> str:
+        """LLM prompt to check if Strong Hire with no red flags"""
         return f"""Read the content inside INPUT: section and evaluate two conditions:
 
 (1) The Final Overall Recommendation must be "Strong Hire".
