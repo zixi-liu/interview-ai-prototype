@@ -14,7 +14,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
 
 from interview_analyzer import InterviewAnalyzer
-from prompts import BQQuestions, BQAnswer, get_introduction_prompt, SystemMessage
+from prompts import BQQuestions, BQAnswer
 from storage import LocalStorage
 from utils import Colors, FeedbackParser
 from advance.story_builder import StoryBuilder

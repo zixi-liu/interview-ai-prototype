@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from litellm import acompletion
 from prompts import (
     SystemMessage,
-    get_introduction_prompt,
+    IntroductionPrompt,
     BQQuestions,
 )
 
@@ -84,7 +84,7 @@ class InterviewAnalyzer:
             If stream=False: Complete feedback string
             If stream=True: Async iterator yielding text chunks
         """
-        prompt = get_introduction_prompt(introduction, role, company)
+        prompt = IntroductionPrompt.analyze(introduction, role, company)
         messages = [
             {"role": "system", "content": SystemMessage.INTRODUCTION},
             {"role": "user", "content": prompt}
@@ -165,7 +165,7 @@ class InterviewAnalyzer:
             If stream=True: Async iterator yielding text chunks
         """
         audio_b64 = base64.b64encode(audio_content).decode()
-        text_prompt = get_introduction_prompt(
+        text_prompt = IntroductionPrompt.analyze(
             introduction=AUDIO_PLACEHOLDER,
             role=role,
             company=company

@@ -15,20 +15,10 @@ class SystemMessage:
     )
 
 
-def get_introduction_prompt(introduction: str, role: str, company: str) -> str:
-    """
-    Generate prompt for self-introduction analysis
-
-    Args:
-        introduction: Self-introduction text
-        role: Job role being interviewed for
-        company: Target company name
-
-    Returns:
-        Formatted prompt string
-    """
-
-    return f"""Analyze the following self-introduction for a {role} position at {company}.
+class IntroductionPrompt:
+    @staticmethod
+    def analyze(introduction: str, role: str, company: str) -> str:
+        return f"""Analyze the following self-introduction for a {role} position at {company}.
 Provide a comprehensive evaluation following FAANG standards.
 
 SELF-INTRODUCTION:
