@@ -12,12 +12,15 @@ from pathlib import Path
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import KeyBindings
 
 from interview_analyzer import InterviewAnalyzer
 from prompts import BQQuestions, BQAnswer
 from storage import LocalStorage
 from utils import Colors, FeedbackParser
 from advance.story_builder import StoryBuilder
+from advance.auto_completion import AutoCompletionEngine
 
 # Add missing color codes
 Colors.CYAN = '\033[96m'
@@ -65,6 +68,8 @@ class InterviewCLI:
         self.last_filtered_sessions = []
         # prompt_toolkit session for command history (up/down arrows)
         self.prompt_session = PromptSession(history=InMemoryHistory())
+        # Auto-completion engine
+        self.auto_completion_engine = AutoCompletionEngine()
 
     def print_header(self, text: str):
         print(f"\n{text}\n")
@@ -188,6 +193,167 @@ class InterviewCLI:
 
         return "\n".join(lines).strip()
 
+    async def _handle_autocomplete_selection(self, completions: list) -> str:
+        """Handle user selection of autocomplete options. Returns selected text or empty string."""
+        if not completions:
+            return ""
+        
+        print(f"\n{Colors.CYAN}Auto-completion options:{Colors.RESET}")
+        for i, comp in enumerate(completions[:3], 1):  # Show max 3 options
+            print(f"  {i}. {comp.get('text', '')[:80]}...")  # Truncate for display
+            if comp.get('reason'):
+                print(f"     {Colors.DIM}{comp['reason'][:60]}...{Colors.RESET}")
+        
+        while True:
+            try:
+                # Use simple text without color codes to avoid display issues
+                choice = (await self.prompt_session.prompt_async(
+                    f"\nSelect option (1-{min(len(completions), 3)}) or press Enter to skip: "
+                )).strip()
+                
+                if not choice:
+                    return ""  # User skipped
+                
+                if choice.isdigit():
+                    num = int(choice)
+                    if 1 <= num <= min(len(completions), 3):
+                        return completions[num - 1].get('text', '')
+                
+                print(f"Please enter a number between 1 and {min(len(completions), 3)}")
+            except (EOFError, KeyboardInterrupt):
+                return ""
+
+    async def get_multiline_input_with_autocomplete(
+        self, 
+        prompt_text: str,
+        scenario: str = "self-intro",
+        role: str = "Software Engineer",
+        company: str = "Meta",
+        question: str = None,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Get multiline input with Tab-triggered autocomplete support.
+        
+        Args:
+            prompt_text: Prompt to display
+            scenario: "self-intro" or "bq answer"
+            role: Job role for context
+            company: Company name (for self-intro)
+            question: BQ question (for bq answer)
+            level: Candidate level (for bq answer)
+        """
+        print(f"\n{prompt_text}")
+        print(f"{Colors.DIM}  ⎿ Tip: Press Tab for autocomplete, Enter twice to submit, /q to exit{Colors.RESET}\n")
+
+        lines = []
+        empty_count = 0
+        current_line_default = ""  # Track current line for continuation after autocomplete
+
+        while True:
+            try:
+                # Create key bindings for Tab key
+                kb = KeyBindings()
+                tab_pressed = [False]  # Use list to allow modification in nested function
+                captured_text = [""]  # Store captured text from buffer
+                
+                @kb.add(Keys.Tab)
+                def handle_tab(event):
+                    """Handle Tab key press for autocomplete"""
+                    tab_pressed[0] = True
+                    # Capture current buffer text before exiting
+                    captured_text[0] = event.app.current_buffer.text
+                    event.app.exit(result=None)
+                
+                # Create a session with custom key bindings
+                session_with_kb = PromptSession(key_bindings=kb, history=InMemoryHistory())
+                
+                # Use default parameter to pre-fill text if we're continuing after autocomplete
+                line = await session_with_kb.prompt_async("", default=current_line_default)
+                current_line_default = ""  # Reset after use
+                
+                # Check if Tab was pressed (indicated by None result and tab_pressed flag)
+                if tab_pressed[0] and line is None:
+                    tab_pressed[0] = False
+                    # Use the captured text
+                    current_text = captured_text[0]
+                    full_text = "\n".join(lines) + "\n" + current_text if lines else current_text
+                    
+                    if full_text.strip():
+                        print(f"\n{Colors.CYAN}Getting autocomplete suggestions...{Colors.RESET}")
+                        try:
+                            if scenario == "self-intro":
+                                result = await self.auto_completion_engine.complete_self_intro(
+                                    partial_text=full_text,
+                                    role=role,
+                                    company=company
+                                )
+                            else:  # bq answer
+                                if not question:
+                                    print(f"{Colors.YELLOW}Warning: Question not provided for BQ autocomplete{Colors.RESET}")
+                                    if current_text:
+                                        lines.append(current_text)
+                                    continue
+                                result = await self.auto_completion_engine.complete_bq_answer(
+                                    partial_text=full_text,
+                                    question=question,
+                                    role=role,
+                                    level=level
+                                )
+                            
+                            if result.get("is_complete"):
+                                print(f"{Colors.GREEN}✓ Your answer appears complete.{Colors.RESET}\n")
+                                if current_text:
+                                    lines.append(current_text)
+                                continue
+                            
+                            completions = result.get("completions", [])
+                            if completions:
+                                selected = await self._handle_autocomplete_selection(completions)
+                                if selected:
+                                    # Append the selected completion to current line
+                                    updated_line = current_text + " " + selected if current_text else selected
+                                    # Set this as the default for the next prompt so user can continue typing
+                                    current_line_default = updated_line
+                                    print(f"\n{Colors.GREEN}✓ Completion applied. Continue typing...{Colors.RESET}\n")
+                                    # Continue loop to prompt again with pre-filled text
+                                    continue
+                                else:
+                                    print(f"\n{Colors.DIM}Skipped autocomplete. Continue typing...{Colors.RESET}\n")
+                                    if current_text:
+                                        lines.append(current_text)
+                            else:
+                                print(f"{Colors.YELLOW}No completion suggestions available.{Colors.RESET}\n")
+                                if current_text:
+                                    lines.append(current_text)
+                        except Exception as e:
+                            print(f"{Colors.YELLOW}Autocomplete error: {str(e)}{Colors.RESET}\n")
+                            if current_text:
+                                lines.append(current_text)
+                    continue
+                
+                # Handle None line (should not happen normally, but handle gracefully)
+                if line is None:
+                    continue
+                
+                # Immediate commands - return as-is without needing double Enter
+                if line.strip().lower() in ["/q", "/done", "/question", "/skip"]:
+                    return line.strip().lower()
+                
+                if line == "":
+                    empty_count += 1
+                    if empty_count >= 2:
+                        break
+                    lines.append(line)
+                else:
+                    empty_count = 0
+                    lines.append(line)
+                    
+            except (EOFError, KeyboardInterrupt):
+                return "\n".join(lines).strip() if lines else ""
+
+        return "\n".join(lines).strip()
+
     async def print_session(self, session: dict, show_full: bool = False):
         """Print a session summary or full details"""
         timestamp = session.get("timestamp", "")[:10]
@@ -300,7 +466,12 @@ class InterviewCLI:
         if not company:
             company = "Meta"
 
-        introduction = await self.get_multiline_input("Enter your self-introduction:")
+        introduction = await self.get_multiline_input_with_autocomplete(
+            "Enter your self-introduction:",
+            scenario="self-intro",
+            role=role,
+            company=company
+        )
 
         if not introduction:
             print("No introduction provided. Returning to menu.")
