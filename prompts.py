@@ -591,3 +591,153 @@ REQUIREMENTS:
 - Include metrics/numbers where user provided them
 
 Output ONLY the story."""
+
+
+class AutoCompletion:
+    """Prompts for auto-completion of self-introduction and BQ answers"""
+
+    @staticmethod
+    def self_intro_completion(partial_text: str, role: str = "Software Engineer", company: str = "FAANG") -> str:
+        """Generate completion suggestions for self-introduction"""
+        return f"""You are an expert FAANG behavioral interviewer helping a candidate complete their self-introduction.
+
+SCENARIO: Self-introduction for {role} position at {company}
+CANDIDATE'S PARTIAL INPUT:
+{partial_text}
+
+TASK:
+1. FIRST, check if the last sentence clearly indicates the introduction has ENDED.
+   - Look for closing phrases like: "Thank you", "I'm looking forward to...", "That's all", "I'm excited to...", or sentences that clearly conclude the introduction
+   - If the last sentence is a clear ending/closing statement, the introduction is STRUCTURALLY COMPLETE
+   - If structurally complete, output: {{"is_complete": true, "message": "Your self-introduction is structurally complete. Consider evaluating it to ensure all key elements are covered."}}
+   - DO NOT provide completions if the introduction has a clear ending.
+
+2. If the last sentence does NOT indicate an ending, evaluate content completeness:
+   - A complete self-intro SHOULD cover these elements:
+     * Background: Who you are and your experience level
+     * Relevant experience: What you've worked on
+     * Key achievements: Specific accomplishments with metrics if possible
+     * Motivation: Why you're interested in this role/company
+     * Connection: How you align with the role/company
+   - If ALL elements are present and well-structured (1-2 minutes when spoken), output: {{"is_complete": true, "message": "Your self-introduction is already complete and strong."}}
+   - DO NOT provide completions if the introduction is already complete.
+   
+2. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+   - Each option should be a natural continuation that:
+     * Completes the current incomplete sentence if the last sentence is incomplete, OR
+     * Adds the next logical missing element if the last sentence is complete
+   - Options should follow FAANG interview best practices:
+     * Be specific and concrete (avoid vague statements)
+     * Show ownership and impact
+     * Demonstrate technical depth
+     * Connect to the target role/company
+     * Be concise and professional
+   - Output format:
+     {{
+       "is_complete": false,
+       "reason": "why the introduction is completed or not",
+       "confidence": "[0-100%]",
+       "completions": [
+         {{
+           "text": "completion option 1",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }},
+         {{
+           "text": "completion option 2",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }},
+         {{
+           "text": "completion option 3",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }}
+       ]
+     }}
+
+CRITICAL RULES:
+- PRIORITY 1: If the last sentence clearly ends the introduction (closing statement), return is_complete: true immediately
+- PRIORITY 2: If all content elements are present, return is_complete: true
+- Only generate completions if the introduction is NOT structurally complete (no clear ending) AND missing content
+- All completions must be realistic, authentic, and follow FAANG standards
+- Output ONLY valid JSON, no additional text"""
+
+    @staticmethod
+    def bq_answer_completion(
+        partial_text: str,
+        question: str,
+        role: str = "Software Engineer",
+        level: str = "Senior"
+    ) -> str:
+        """Generate completion suggestions for BQ answer"""
+        return f"""You are an expert FAANG behavioral interviewer helping a candidate complete their behavioral question answer.
+
+SCENARIO: Behavioral question answer for {role} position (Level: {level})
+QUESTION: {question}
+CANDIDATE'S PARTIAL ANSWER:
+{partial_text}
+
+TASK:
+1. FIRST, check if the last sentence clearly indicates the answer has ENDED.
+   - Look for closing phrases like: "That's how I...", "In conclusion", "Overall", "The key takeaway", or sentences that clearly conclude the story/answer
+   - If the last sentence is a clear ending/closing statement, the answer is STRUCTURALLY COMPLETE
+   - If structurally complete, output: {{"is_complete": true, "message": "Your answer is structurally complete. Consider evaluating it to ensure all STAR elements and {level}-level requirements are covered."}}
+   - DO NOT provide completions if the answer has a clear ending.
+
+2. If the last sentence does NOT indicate an ending, evaluate content completeness:
+   - A complete BQ answer SHOULD have ALL of these STAR elements:
+     * Situation: Clear context and background
+     * Task: Specific challenge or goal
+     * Action: Detailed actions taken (with clear ownership)
+     * Result: Measurable outcomes and impact
+   - For {level} level, also require:
+     * Clear ownership and personal contribution (not just "we")
+     * Cross-functional impact (for Senior+)
+     * Specific metrics and quantifiable results
+     * Reflection/learnings (when appropriate)
+   - If ALL required elements are present and well-structured, output: {{"is_complete": true, "message": "Your answer is already complete and follows STAR format well."}}
+   - DO NOT provide completions if the answer is already complete.
+   
+2. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+   - Each option should be a natural continuation that:
+     * Completes the current incomplete sentence if the last sentence is incomplete, OR
+     * Moves to the next logical STAR section if current section is complete, OR
+     * Adds missing critical elements (metrics, ownership, impact, reflection)
+   - Options should follow FAANG interview best practices:
+     * Use STAR method structure
+     * Show unambiguous ownership and personal contribution
+     * Include specific metrics and quantifiable results
+     * Demonstrate {level}-level scope and impact
+     * Show problem-solving and decision-making
+     * Include reflection/learnings when appropriate
+   - Output format:
+     {{
+       "is_complete": false,
+       "reason": "why the introduction is completed or not",
+       "confidence": "[0-100%]",
+       "completions": [
+         {{
+           "text": "completion option 1",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }},
+         {{
+           "text": "completion option 2",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }},
+         {{
+           "text": "completion option 3",
+           "reason": "why this is recommended",
+           "confidence": "[0-100%]"
+         }}
+       ]
+     }}
+
+CRITICAL RULES:
+- PRIORITY 1: If the last sentence clearly ends the answer (closing statement), return is_complete: true immediately
+- PRIORITY 2: If all STAR elements are present, return is_complete: true
+- Only generate completions if the answer is NOT structurally complete (no clear ending) AND missing STAR elements
+- All completions must be realistic, authentic, and demonstrate {level}-level competency
+- Output ONLY valid JSON, no additional text"""
