@@ -347,11 +347,7 @@ IMPORTANT:
 
     def followup_calibration(original_rating: str) -> str:
         """
-        Additional prompt to calibrate rating based on follow-up Q&A responses
-        Append this after bar_raiser() when evaluating with follow-ups
-
-        Args:
-            original_rating: The rating from the initial evaluation (e.g., "Leaning No Hire")
+        DEPRECATED: Use blind_calibration() instead for unbiased evaluation.
         """
         return f"""
 --- FOLLOW-UP CALIBRATION ---
@@ -392,6 +388,69 @@ No-Pass if:
 - Original Rating: {original_rating}
 - Final Rating: [the calibrated rating from section 7]
 - Reason: [1-2 sentences explaining upgrade/downgrade/no change]
+============================================================
+"""
+
+    @staticmethod
+    def blind_calibration(
+        question: str,
+        answer_a: str,
+        rating_a: str,
+        answer_b: str,
+        rating_b: str
+    ) -> str:
+        """
+        Blind calibration prompt - compares two answers without revealing which is 'improved'.
+        Used after both answers have been evaluated independently.
+
+        Args:
+            question: The BQ question
+            answer_a: First answer (original)
+            rating_a: Rating for first answer
+            answer_b: Second answer (after follow-up)
+            rating_b: Rating for second answer
+        """
+        return f"""You are calibrating interview ratings for two answers to the same behavioral question.
+
+QUESTION: {question}
+
+ANSWER A:
+{answer_a}
+
+RATING A: {rating_a}
+
+---
+
+ANSWER B:
+{answer_b}
+
+RATING B: {rating_b}
+
+---
+
+CALIBRATION TASK:
+Compare the two answers and explain why the ratings are different (or the same).
+
+Evaluate:
+1. What specific details does Answer B have that Answer A lacks? (or vice versa)
+2. Is the rating difference justified based on actual content differences?
+3. Are both ratings accurate, or should either be adjusted?
+
+OUTPUT FORMAT:
+============================================================
+Rating Calibration
+
+**Answer A Rating:** {rating_a}
+**Answer B Rating:** {rating_b}
+**Rating Changed:** Yes / No
+
+**Calibration Reason:**
+[2-3 sentences explaining why the ratings differ or are the same.
+Reference specific content differences that justify the rating change,
+or explain why no change is warranted despite any superficial differences.]
+
+**Key Differences:**
+- [Bullet points of substantive differences between answers]
 ============================================================
 """
 
@@ -591,6 +650,100 @@ REQUIREMENTS:
 - Include metrics/numbers where user provided them
 
 Output ONLY the story."""
+
+
+class ConversationalInterview:
+    """Prompts for conversational follow-up using plan-then-execute approach.
+
+    Step 1: Planning - LLM selects top 3 questions (JSON output)
+    Step 2: Execution - Probe each question separately (max 5 rounds each)
+    """
+
+    MAX_ROUNDS_PER_QUESTION = 5
+    NUM_QUESTIONS = 3
+
+    @staticmethod
+    def planning_prompt(feedback: str, probing_questions: list) -> str:
+        """Prompt for planning which 3 questions to probe"""
+        pq_text = "\n".join([f"{i+1}. {q}" for i, q in enumerate(probing_questions)])
+
+        return f"""You are a FAANG interviewer planning follow-up probing questions.
+
+EVALUATION FEEDBACK:
+{feedback}
+
+AVAILABLE PROBING QUESTIONS:
+{pq_text}
+
+YOUR TASK:
+Select the 3 most critical questions to probe. Prioritize questions that target:
+- Competencies rated Below (🤔) or Concern (❌)
+- Areas where the candidate was vague or lacked specifics
+- Ownership and metrics gaps
+
+OUTPUT FORMAT (JSON only, no other text):
+{{
+  "questions": [
+    {{"id": 1, "question": "exact question text", "reason": "why this is critical"}},
+    {{"id": 2, "question": "exact question text", "reason": "why this is critical"}},
+    {{"id": 3, "question": "exact question text", "reason": "why this is critical"}}
+  ]
+}}"""
+
+    @staticmethod
+    def probe_system_prompt(level: str = "Senior", conversation_history: str = "") -> str:
+        """System prompt for probing a single question"""
+        if conversation_history:
+            history_check = f"""
+=== FOLLOW-UP CONVERSATION (check signals HERE only) ===
+{conversation_history}
+=== END FOLLOW-UP CONVERSATION ===
+
+CRITICAL RULE - CHECK FOLLOW-UP CONVERSATION ABOVE:
+Scan ONLY the follow-up conversation above for these signals:
+- Numbers/percentages (e.g., "50%", "200 tickets", "$2M", "3 months")
+- Specific timeframes (e.g., "2 hours", "6 months", "Q3")
+- Concrete metrics (e.g., "precision improved", "reduced errors by X")
+- Personal actions with "I" (e.g., "I decided", "I proposed", "I built")
+
+If ANY signal found → output ONLY: [SATISFIED]
+Do NOT ask another question if they gave specifics."""
+        else:
+            history_check = """
+No follow-up conversation yet. You MUST ask your probing question first."""
+
+        return f"""You are a FAANG behavioral interviewer probing ONE specific question.
+
+LEVEL: {level}
+{history_check}
+
+YOUR STYLE:
+- Be conversational but professional
+- Question ownership: if they say "we", ask what THEY did
+- Challenge inconsistencies
+- If user seems confused or asks for clarification, provide an example to guide them
+
+FORMAT: [SATISFIED], a follow-up question, or answer to their question."""
+
+    @staticmethod
+    def probe_context(
+        original_question: str,
+        original_answer: str,
+        probing_question: str,
+        question_num: int,
+        total_questions: int
+    ) -> str:
+        """Initial context for probing a single question"""
+        return f"""=== CONTEXT ===
+ORIGINAL BQ: {original_question}
+
+CANDIDATE'S ANSWER:
+{original_answer}
+
+=== PROBING QUESTION {question_num}/{total_questions} ===
+{probing_question}
+
+Ask this question now. Be direct."""
 
 
 class AutoCompletion:
