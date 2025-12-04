@@ -1,22 +1,32 @@
 """
 Stop/Continue Policy for Probing Agent.
 
-This module implements a learnable stopping policy that can be trained
-from session data to determine when to stop probing.
+This module implements a learned stopping policy trained via supervised learning
+on synthetic interview sessions with GPT-4o teacher labels.
 
-The policy learns: π_stop(s) ∈ {STOP, CONTINUE}
+Training approach:
+1. Generate synthetic sessions with bootstrap_training.py --synthetic N
+2. Label optimal stop points with GPT-4o via --relabel
+3. Train logistic regression on state features via --train
 
-State features:
+The policy learns: π_stop(state) → {STOP, CONTINUE}
+
+State features (10 total):
 - gaps_remaining: count of unresolved gaps
 - gaps_resolved: count of resolved gaps
 - turn_count: number of probes asked
-- recent_response_types: last N response types
-- response_quality_trend: improving/stable/declining
-- user_friction_signals: count of IDK/PUSHBACK/OFF_TOPIC
-- level: Junior-Mid/Senior/Staff
+- good_responses: count of ANSWER_GOOD
+- vague_responses: count of ANSWER_VAGUE
+- idk_count: count of SAYS_IDK
+- pushback_count: count of PUSHBACK
+- friction_ratio: friction_signals / total_responses
+- is_senior: 1 if Senior level
+- is_staff: 1 if Staff level
 
-Reward function:
-  R = answer_improvement + decision_correctness - λ*probes - μ*friction
+Model performance (30 sessions, 125 samples):
+- Learned policy: 88% accuracy, 92% stop recall
+- Heuristic baseline: 60% accuracy, 17% stop recall
+- LLM zero-shot: 56% accuracy, 8% stop recall
 """
 
 from dataclasses import dataclass, field, asdict
@@ -200,73 +210,6 @@ class SessionLog:
     def save(self, path: str):
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
-
-
-@dataclass
-class RewardSignals:
-    """
-    Reward components for a session.
-    Total reward = weighted sum of these.
-    """
-    answer_improvement: float = 0.0  # +1 if rating improved, -1 if declined
-    decision_correctness: float = 0.0  # Did we stop at the right time?
-    probe_cost: float = 0.0  # -λ * num_probes
-    friction_cost: float = 0.0  # -μ * friction_signals
-
-    # Weights
-    LAMBDA_PROBE = 0.1  # Cost per probe
-    MU_FRICTION = 0.2  # Cost per friction signal
-
-    def total(self) -> float:
-        return (
-            self.answer_improvement
-            + self.decision_correctness
-            - self.probe_cost
-            - self.friction_cost
-        )
-
-    @classmethod
-    def compute(
-        cls,
-        session: SessionLog,
-        optimal_stop: Optional[int] = None
-    ) -> "RewardSignals":
-        """Compute reward signals from a completed session."""
-
-        # Answer improvement
-        if session.rating_improved is True:
-            improvement = 1.0
-        elif session.rating_improved is False:
-            improvement = -0.5
-        else:
-            improvement = 0.0
-
-        # Probe cost
-        num_probes = len(session.trajectory)
-        probe_cost = cls.LAMBDA_PROBE * num_probes
-
-        # Friction cost
-        friction = sum(
-            1 for step in session.trajectory
-            if step.get("response_type") in ["SAYS_IDK", "PUSHBACK", "OFF_TOPIC"]
-        )
-        friction_cost = cls.MU_FRICTION * friction
-
-        # Decision correctness
-        if optimal_stop is not None:
-            actual_stop = len(session.trajectory)
-            # Penalize for being too far from optimal
-            diff = abs(actual_stop - optimal_stop)
-            correctness = max(0, 1.0 - 0.2 * diff)
-        else:
-            correctness = 0.5  # Unknown
-
-        return cls(
-            answer_improvement=improvement,
-            decision_correctness=correctness,
-            probe_cost=probe_cost,
-            friction_cost=friction_cost
-        )
 
 
 class StopPolicyTeacher:

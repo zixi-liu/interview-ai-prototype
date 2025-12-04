@@ -29,7 +29,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from policy.stop_policy import (
     StateFeatures,
     SessionLog,
-    RewardSignals,
     StopPolicyTeacher,
     LearnedStopPolicy,
 )
