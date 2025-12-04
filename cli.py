@@ -17,7 +17,7 @@ from prompt_toolkit.key_binding import KeyBindings
 from rich.console import Console
 
 from interview_analyzer import InterviewAnalyzer, AgenticInterviewer
-from prompts import BQQuestions, BQAnswer, ConversationalInterview
+from prompts import BQQuestions, BQAnswer
 from storage import LocalStorage
 from utils import Colors, FeedbackParser
 from advance.story_builder import StoryBuilder

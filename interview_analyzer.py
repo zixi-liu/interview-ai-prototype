@@ -11,12 +11,10 @@ from prompts import (
     SystemMessage,
     IntroductionPrompt,
     BQQuestions,
-    ConversationalInterview,
 )
 from policy.stop_policy import (
     StateFeatures,
     SessionLog,
-    RewardSignals,
     HybridStopPolicy,
     StopDecision,
 )
@@ -666,19 +664,3 @@ class AgenticInterviewer:
 
         self.session_log.save(path)
         return path
-
-    def compute_reward(self, optimal_stop_turn: int = None) -> RewardSignals:
-        """
-        Compute reward signals for this session.
-
-        Args:
-            optimal_stop_turn: The optimal turn to stop (from teacher labeling).
-                              If None, decision_correctness will be set to 0.5.
-
-        Returns:
-            RewardSignals with computed rewards.
-        """
-        if self.session_log is None:
-            return None
-
-        return RewardSignals.compute(self.session_log, optimal_stop_turn)
