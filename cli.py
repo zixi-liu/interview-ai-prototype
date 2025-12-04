@@ -16,7 +16,7 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from rich.console import Console
 
-from interview_analyzer import InterviewAnalyzer, ConversationalInterviewer
+from interview_analyzer import InterviewAnalyzer, AgenticInterviewer
 from prompts import BQQuestions, BQAnswer, ConversationalInterview
 from storage import LocalStorage
 from utils import Colors, FeedbackParser
@@ -579,118 +579,116 @@ class InterviewCLI:
         original_answer = answer  # Save original answer before improvement
 
         if eval_choice in [1, 3] and feedback:
-            # Extract probing questions for conversational follow-up
-            probing_questions = FeedbackParser.extract_probing_questions(feedback)
+            followup_choice = (await self.prompt_session.prompt_async(
+                "\nImprove your answer interactively? (y/n): "
+            )).strip().lower()
 
-            if probing_questions:
-                followup_choice = (await self.prompt_session.prompt_async(
-                    "\nImprove your answer interactively? (y/n): "
-                )).strip().lower()
+            if followup_choice == 'y':
+                # Extract original rating for calibration
+                original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
 
-                if followup_choice == 'y':
-                    # Extract original rating for calibration
-                    original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
+                BLUE = '\033[38;5;75m'
+                console = Console()
 
-                    BLUE = '\033[38;5;75m'
-                    console = Console()
+                # Initialize AgenticInterviewer with learned stop policy
+                interviewer = AgenticInterviewer(model="gpt-4o-mini", max_turns=8)
+                with console.status("[bold cyan]Analyzing your answer...", spinner="dots"):
+                    init_result = interviewer.initialize(
+                        question=question,
+                        answer=answer,
+                        evaluation=feedback,
+                        level=level
+                    )
 
-                    # Step 1: Plan - LLM selects top 3 questions (with spinner)
-                    interviewer = ConversationalInterviewer()
-                    with console.status("[bold cyan]Planning probing questions...", spinner="dots"):
-                        await interviewer.plan_questions(feedback, probing_questions)
-
+                # Check if probing is needed
+                if init_result["action"] == "STOP":
+                    print(f"\n{Colors.GREEN}Your answer is complete - no probing needed!{Colors.RESET}")
+                else:
                     print(f"\n{Colors.DIM}  ⎿ Tips: /done to finish, or ask for clarification{Colors.RESET}")
 
-                    # Step 2: Execute - Probe each question
-                    while interviewer.has_more_questions():
-                        # Start this question's probing session (silent)
-                        interviewer.start_question(question, answer, level)
-
-                        # Probe until satisfied or max rounds
-                        while interviewer.should_continue_question():
-                            # Get probe from interviewer (with spinner)
-                            with console.status("[bold cyan]Thinking...", spinner="dots"):
-                                probe = await interviewer.get_probe()
-
-                            # Check if satisfied - just show final response, no marker
-                            if interviewer.current_satisfied:
-                                if probe:
-                                    print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(probe)}")
-                                break
-
-                            # Show interviewer question
-                            print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET}")
-                            print(Colors.feedback(probe))
-
-                            # Get user's answer
-                            user_answer = await self.get_multiline_input("Your answer:")
-
-                            if user_answer == '/done':
-                                interviewer.finish_current_question()
-                                # Clear remaining questions
-                                while interviewer.has_more_questions():
-                                    interviewer.finish_current_question()
-                                break
-                            elif not user_answer:
-                                # Empty input moves to next question
-                                break
-
-                            # Add user response
-                            interviewer.add_user_response(user_answer)
-
-                        # Finish this question and move to next
-                        interviewer.finish_current_question()
-
-                        # Check if user ended early
-                        if not interviewer.has_more_questions():
+                    # Probing loop with learned stop policy
+                    while interviewer.should_continue():
+                        # Get current probe
+                        probe = interviewer.get_current_probe()
+                        if not probe:
                             break
 
-                    # Get all Q&A pairs
-                    followup_qa = interviewer.get_all_qa_pairs()
+                        # Show interviewer question
+                        print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET}")
+                        print(Colors.feedback(probe))
 
-                    # Generate improved answer and re-evaluate if user answered any questions
-                    if followup_qa:
-                        # Convert to dict format for improve_with_probing_answers
-                        probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
+                        # Get user's answer
+                        user_answer = await self.get_multiline_input("Your answer:")
 
-                        # Step 1: Rewrite the answer using user's probing answers
-                        print(f"\n{Colors.BOLD}Improved Answer:{Colors.RESET}")
-                        print("-" * 40)
-                        prompt = BQAnswer.improve_with_probing_answers(answer, feedback, probing_qa_dicts)
-                        result = await self.analyzer.customized_analyze(prompt, stream=True)
-                        improved_answer = await Colors.stream_and_print(result)
-                        print("-" * 40)
+                        if user_answer in ['/done', '/q']:
+                            print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} Thank you for your responses.")
+                            break
+                        elif not user_answer:
+                            # Empty input - skip this probe
+                            continue
 
-                        # Step 2: Blind evaluation of improved answer (same prompt as original)
-                        print(f"\n{BLUE}Evaluating improved answer...{Colors.RESET}\n")
+                        # Process response with stop policy (1 LLM call)
+                        with console.status("[bold cyan]Thinking...", spinner="dots"):
+                            decision = await interviewer.step(user_answer)
 
-                        self.print_header("Improved Answer Evaluation")
-                        prompt = (
-                            BQQuestions.real_interview(question, improved_answer, level, include_probing=False)
-                            + BQQuestions.bar_raiser(level)
-                        )
-                        result = await self.analyzer.customized_analyze(prompt, stream=True)
-                        feedback_followup = await Colors.stream_and_print(result)
+                        # Check if policy decided to stop
+                        if decision.get("action") == "STOP":
+                            stop_msg = decision.get("agent_message", "Thank you, I have enough information now.")
+                            print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(stop_msg)}")
+                            break
 
-                        # Extract rating from improved answer evaluation
-                        improved_rating = FeedbackParser.extract_rating(feedback_followup) or "Unknown"
+                        # Handle other actions (ANSWER_USER for clarification)
+                        if decision.get("action") == "ANSWER_USER":
+                            agent_msg = decision.get("agent_message", "")
+                            if agent_msg:
+                                print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(agent_msg)}")
 
-                        # Step 3: Blind calibration - compare both answers without bias
-                        print(f"\n{BLUE}Calibrating ratings...{Colors.RESET}\n")
+                # Get all Q&A pairs from the session
+                followup_qa = interviewer.get_qa_pairs()
 
-                        self.print_header("Rating Calibration")
-                        calibration_prompt = BQQuestions.blind_calibration(
-                            question=question,
-                            answer_a=answer,
-                            rating_a=original_rating,
-                            answer_b=improved_answer,
-                            rating_b=improved_rating
-                        )
-                        result = await self.analyzer.customized_analyze(calibration_prompt, stream=True)
-                        await Colors.stream_and_print(result)
+                # Generate improved answer and re-evaluate if user answered any questions
+                if followup_qa:
+                    # Convert to dict format for improve_with_probing_answers
+                    probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
 
-                        # Update answer to the improved version for saving
-                        answer = improved_answer
+                    # Step 1: Rewrite the answer using user's probing answers
+                    print(f"\n{Colors.BOLD}Improved Answer:{Colors.RESET}")
+                    print("-" * 40)
+                    prompt = BQAnswer.improve_with_probing_answers(answer, feedback, probing_qa_dicts)
+                    result = await self.analyzer.customized_analyze(prompt, stream=True)
+                    improved_answer = await Colors.stream_and_print(result)
+                    print("-" * 40)
+
+                    # Step 2: Blind evaluation of improved answer (same prompt as original)
+                    print(f"\n{BLUE}Evaluating improved answer...{Colors.RESET}\n")
+
+                    self.print_header("Improved Answer Evaluation")
+                    prompt = (
+                        BQQuestions.real_interview(question, improved_answer, level, include_probing=False)
+                        + BQQuestions.bar_raiser(level)
+                    )
+                    result = await self.analyzer.customized_analyze(prompt, stream=True)
+                    feedback_followup = await Colors.stream_and_print(result)
+
+                    # Extract rating from improved answer evaluation
+                    improved_rating = FeedbackParser.extract_rating(feedback_followup) or "Unknown"
+
+                    # Step 3: Blind calibration - compare both answers without bias
+                    print(f"\n{BLUE}Calibrating ratings...{Colors.RESET}\n")
+
+                    self.print_header("Rating Calibration")
+                    calibration_prompt = BQQuestions.blind_calibration(
+                        question=question,
+                        answer_a=answer,
+                        rating_a=original_rating,
+                        answer_b=improved_answer,
+                        rating_b=improved_rating
+                    )
+                    result = await self.analyzer.customized_analyze(calibration_prompt, stream=True)
+                    await Colors.stream_and_print(result)
+
+                    # Update answer to the improved version for saving
+                    answer = improved_answer
 
         # Save session
         session_id = self.storage.save_session(
@@ -924,113 +922,113 @@ class InterviewCLI:
         followup_qa = []
         original_draft = draft  # Save original draft before improvement
 
-        # Extract probing questions for conversational follow-up
-        probing_questions = FeedbackParser.extract_probing_questions(feedback)
+        followup_choice = (await self.prompt_session.prompt_async(
+            "\nImprove your answer interactively? (y/n): "
+        )).strip().lower()
 
-        if probing_questions:
-            followup_choice = (await self.prompt_session.prompt_async(
-                "\nImprove your answer interactively? (y/n): "
-            )).strip().lower()
+        if followup_choice == 'y':
+            original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
+            console = Console()
 
-            if followup_choice == 'y':
-                original_rating = FeedbackParser.extract_rating(feedback) or "Unknown"
-                console = Console()
+            # Initialize AgenticInterviewer with learned stop policy
+            interviewer = AgenticInterviewer(model="gpt-4o-mini", max_turns=8)
+            with console.status("[bold cyan]Analyzing your story...", spinner="dots"):
+                init_result = interviewer.initialize(
+                    question=question,
+                    answer=draft,
+                    evaluation=feedback,
+                    level=level
+                )
 
-                # Step 1: Plan - LLM selects top 3 questions (with spinner)
-                interviewer = ConversationalInterviewer()
-                with console.status("[bold cyan]Planning probing questions...", spinner="dots"):
-                    await interviewer.plan_questions(feedback, probing_questions)
-
+            # Check if probing is needed
+            if init_result["action"] == "STOP":
+                print(f"\n{Colors.GREEN}Your story is complete - no probing needed!{Colors.RESET}")
+            else:
                 print(f"\n{Colors.DIM}  ⎿ Tips: /done to finish, or ask for clarification{Colors.RESET}")
 
-                # Step 2: Execute - Probe each question
-                while interviewer.has_more_questions():
-                    # Start this question's probing session (silent)
-                    interviewer.start_question(question, draft, level)
-
-                    # Probe until satisfied or max rounds
-                    while interviewer.should_continue_question():
-                        # Get probe from interviewer (with spinner)
-                        with console.status("[bold cyan]Thinking...", spinner="dots"):
-                            probe = await interviewer.get_probe()
-
-                        # Check if satisfied - just show final response, no marker
-                        if interviewer.current_satisfied:
-                            if probe:
-                                print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(probe)}")
-                            break
-
-                        # Show interviewer question
-                        print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET}")
-                        print(Colors.feedback(probe))
-
-                        # Get user's answer
-                        user_answer = await self.get_multiline_input("Your answer:")
-
-                        if user_answer == '/done':
-                            interviewer.finish_current_question()
-                            while interviewer.has_more_questions():
-                                interviewer.finish_current_question()
-                            break
-                        elif not user_answer:
-                            # Empty input moves to next question
-                            break
-
-                        # Add user response
-                        interviewer.add_user_response(user_answer)
-
-                    # Finish this question and move to next
-                    interviewer.finish_current_question()
-
-                    if not interviewer.has_more_questions():
+                # Probing loop with learned stop policy
+                while interviewer.should_continue():
+                    # Get current probe
+                    probe = interviewer.get_current_probe()
+                    if not probe:
                         break
 
-                # Get all Q&A pairs
-                followup_qa = interviewer.get_all_qa_pairs()
+                    # Show interviewer question
+                    print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET}")
+                    print(Colors.feedback(probe))
 
-            if followup_qa:
-                # Convert to dict format for improve_with_probing_answers
-                probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
+                    # Get user's answer
+                    user_answer = await self.get_multiline_input("Your answer:")
 
-                # Step 1: Rewrite the answer using user's probing answers
-                print(f"\n{Colors.BOLD}Improved Story:{Colors.RESET}")
-                print("-" * 40)
-                prompt = BQAnswer.improve_with_probing_answers(draft, feedback, probing_qa_dicts)
-                result = await self.analyzer.customized_analyze(prompt, stream=True)
-                improved_draft = await Colors.stream_and_print(result)
-                print("-" * 40)
+                    if user_answer in ['/done', '/q']:
+                        print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} Thank you for your responses.")
+                        break
+                    elif not user_answer:
+                        # Empty input - skip this probe
+                        continue
 
-                # Step 2: Blind evaluation of improved answer (same prompt as original)
-                print(f"\n{BLUE}Evaluating improved story...{Colors.RESET}\n")
+                    # Process response with stop policy (1 LLM call)
+                    with console.status("[bold cyan]Thinking...", spinner="dots"):
+                        decision = await interviewer.step(user_answer)
 
-                self.print_header("Improved Story Evaluation")
-                improved_for_eval = strip_star_prefixes(improved_draft)
-                prompt = (
-                    BQQuestions.real_interview(question, improved_for_eval, level, include_probing=False)
-                    + BQQuestions.bar_raiser(level)
-                )
-                result = await self.analyzer.customized_analyze(prompt, stream=True)
-                feedback_followup = await Colors.stream_and_print(result)
+                    # Check if policy decided to stop
+                    if decision.get("action") == "STOP":
+                        stop_msg = decision.get("agent_message", "Thank you, I have enough information now.")
+                        print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(stop_msg)}")
+                        break
 
-                # Extract rating from improved answer evaluation
-                improved_rating = FeedbackParser.extract_rating(feedback_followup) or "Unknown"
+                    # Handle other actions (ANSWER_USER for clarification)
+                    if decision.get("action") == "ANSWER_USER":
+                        agent_msg = decision.get("agent_message", "")
+                        if agent_msg:
+                            print(f"\n{Colors.BOLD}Interviewer:{Colors.RESET} {Colors.feedback(agent_msg)}")
 
-                # Step 3: Blind calibration - compare both answers without bias
-                print(f"\n{BLUE}Calibrating ratings...{Colors.RESET}\n")
+            # Get all Q&A pairs from the session
+            followup_qa = interviewer.get_qa_pairs()
 
-                self.print_header("Rating Calibration")
-                calibration_prompt = BQQuestions.blind_calibration(
-                    question=question,
-                    answer_a=draft_for_eval,
-                    rating_a=original_rating,
-                    answer_b=improved_for_eval,
-                    rating_b=improved_rating
-                )
-                result = await self.analyzer.customized_analyze(calibration_prompt, stream=True)
-                await Colors.stream_and_print(result)
+        if followup_qa:
+            # Convert to dict format for improve_with_probing_answers
+            probing_qa_dicts = [{"q": fq, "a": fa} for fq, fa in followup_qa]
 
-                # Update draft to the improved version for saving
-                draft = improved_draft
+            # Step 1: Rewrite the answer using user's probing answers
+            print(f"\n{Colors.BOLD}Improved Story:{Colors.RESET}")
+            print("-" * 40)
+            prompt = BQAnswer.improve_with_probing_answers(draft, feedback, probing_qa_dicts)
+            result = await self.analyzer.customized_analyze(prompt, stream=True)
+            improved_draft = await Colors.stream_and_print(result)
+            print("-" * 40)
+
+            # Step 2: Blind evaluation of improved answer (same prompt as original)
+            print(f"\n{BLUE}Evaluating improved story...{Colors.RESET}\n")
+
+            self.print_header("Improved Story Evaluation")
+            improved_for_eval = strip_star_prefixes(improved_draft)
+            prompt = (
+                BQQuestions.real_interview(question, improved_for_eval, level, include_probing=False)
+                + BQQuestions.bar_raiser(level)
+            )
+            result = await self.analyzer.customized_analyze(prompt, stream=True)
+            feedback_followup = await Colors.stream_and_print(result)
+
+            # Extract rating from improved answer evaluation
+            improved_rating = FeedbackParser.extract_rating(feedback_followup) or "Unknown"
+
+            # Step 3: Blind calibration - compare both answers without bias
+            print(f"\n{BLUE}Calibrating ratings...{Colors.RESET}\n")
+
+            self.print_header("Rating Calibration")
+            calibration_prompt = BQQuestions.blind_calibration(
+                question=question,
+                answer_a=draft_for_eval,
+                rating_a=original_rating,
+                answer_b=improved_for_eval,
+                rating_b=improved_rating
+            )
+            result = await self.analyzer.customized_analyze(calibration_prompt, stream=True)
+            await Colors.stream_and_print(result)
+
+            # Update draft to the improved version for saving
+            draft = improved_draft
 
         # Save session
         session_id = self.storage.save_session(
