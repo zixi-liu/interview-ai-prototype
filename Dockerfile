@@ -12,6 +12,10 @@ COPY app.py .
 COPY utils.py .
 COPY interview_analyzer.py .
 COPY prompts.py .
+# Only copy necessary policy files (not training data)
+COPY policy/__init__.py ./policy/
+COPY policy/stop_policy.py ./policy/
+COPY policy/stop_policy_model.pkl ./policy/
 COPY static/ ./static/
 COPY templates/ ./templates/
 

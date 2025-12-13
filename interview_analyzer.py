@@ -11,7 +11,12 @@ from prompts import (
     SystemMessage,
     IntroductionPrompt,
     BQQuestions,
-    ConversationalInterview,
+)
+from policy.stop_policy import (
+    StateFeatures,
+    SessionLog,
+    HybridStopPolicy,
+    StopDecision,
 )
 
 load_dotenv()
@@ -266,229 +271,396 @@ class InterviewAnalyzer:
             return response.choices[0].message.content
 
 
-class ConversationalInterviewer:
+class AgenticInterviewer:
     """
-    Manages a conversational follow-up interview using plan-then-execute approach.
+    Agentic probing interviewer - LLM decides ASK or STOP at each step.
 
-    Step 1: Plan - Select top 3 questions to probe (JSON output)
-    Step 2: Execute - Probe each question one at a time (max 5 rounds each)
+    Key features:
+    - Uses EvaluationParser to extract gaps from real_interview() output (no extra LLM call)
+    - ONE LLM call per turn: evaluate response + decide + generate next probe
+    - Stops when all critical gaps addressed or diminishing returns
 
-    Full conversation history is maintained across all questions so LLM can
-    reference earlier answers (e.g., "You mentioned X earlier...").
+    Flow:
+    1. initialize(evaluation) → Parse gaps, get first probe (1 LLM call)
+    2. step(user_response) → Evaluate + decide + next probe (1 LLM call per turn)
+    3. Repeat until STOP
     """
 
-    SATISFIED_MARKER = "[SATISFIED]"
-
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = "gpt-4o-mini", max_turns: int = 8):
         self.model = model
-        self.max_rounds = ConversationalInterview.MAX_ROUNDS_PER_QUESTION
-        self.num_questions = ConversationalInterview.NUM_QUESTIONS
+        self.max_turns = max_turns
 
-        # Planning state
-        self.planned_questions: List[Dict[str, str]] = []
+        # State
+        self.question = ""
+        self.original_answer = ""
+        self.level = "Senior"
+        self.turn_count = 0
 
-        # Execution state (per question)
-        self.current_question_idx = 0
-        self.current_round = 0
-        self.current_satisfied = False
-        self._current_probe = ""
-        self._level = "Senior"  # Store level for system prompt updates
+        # Parsed evaluation data (from EvaluationParser)
+        self.parsed_eval = None
+        self.probing_questions: List[str] = []  # Pre-generated from evaluation
+        self.weak_competencies: List[str] = []
 
-        # Conversation history (maintained across ALL questions)
-        self.messages: List[Dict[str, str]] = []
-        self._initialized = False
+        # Conversation state
+        self.qa_pairs: List[tuple] = []  # (probe, response)
+        self.current_probe = ""  # Current question being asked
+        self.decisions: List[Dict] = []
 
-        # Overall state
-        self.all_qa_pairs: List[tuple] = []  # All (probe_q, user_answer) pairs
-        self.current_question_qa: List[tuple] = []  # Q&A for CURRENT question only (for signal checking)
-        self.question_answers: List[Dict] = []  # Per-question summary
+        # Final state
+        self.stopped = False
+        self.stop_reason = ""
 
-    async def plan_questions(
+        # Stop policy (learnable)
+        self.stop_policy = HybridStopPolicy()
+        self.session_log: SessionLog = None  # For training data collection
+
+    def initialize(
         self,
-        feedback: str,
-        probing_questions: list
-    ) -> List[Dict[str, str]]:
+        question: str,
+        answer: str,
+        evaluation: str,
+        level: str = "Senior",
+        session_id: str = None
+    ) -> Dict:
         """
-        Step 1: Plan which 3 questions to probe.
+        Initialize with parsed evaluation. NO LLM call needed.
+
+        Args:
+            question: The BQ question
+            answer: Candidate's answer
+            evaluation: Markdown output from real_interview()
+            level: Interview level
+            session_id: Optional session ID for logging (auto-generated if None)
 
         Returns:
-            List of dicts with 'question' and 'reason' keys
+            Dict with gaps, probing_questions, and first probe
         """
-        import json
+        from utils import EvaluationParser
+        import uuid
 
-        prompt = ConversationalInterview.planning_prompt(feedback, probing_questions)
-        messages = [{"role": "user", "content": prompt}]
+        self.question = question
+        self.original_answer = answer
+        self.level = level
+        self.turn_count = 0
+        self.qa_pairs = []
+        self.decisions = []
+        self.stopped = False
+
+        # Parse evaluation - NO LLM CALL
+        self.parsed_eval = EvaluationParser.parse(evaluation)
+        self.probing_questions = self.parsed_eval.probing_questions.copy()
+        self.weak_competencies = self.parsed_eval.weak_competencies.copy()
+
+        # Initialize session log for training data collection
+        self.session_log = SessionLog(
+            session_id=session_id or str(uuid.uuid4())[:8],
+            question=question,
+            original_answer=answer,
+            level=level,
+            initial_gaps=self.parsed_eval.areas_for_improvement.copy(),
+            initial_weak_competencies=self.weak_competencies.copy(),
+            initial_rating=self.parsed_eval.recommendation
+        )
+
+        # Get first probe from pre-generated questions
+        if self.probing_questions:
+            self.current_probe = self.probing_questions.pop(0)
+        else:
+            self.stopped = True
+            self.stop_reason = "No probing questions needed"
+            self.current_probe = ""
+
+        return {
+            "weak_competencies": self.weak_competencies,
+            "areas_for_improvement": self.parsed_eval.areas_for_improvement,
+            "probing_questions": self.parsed_eval.probing_questions,
+            "first_probe": self.current_probe,
+            "action": "STOP" if self.stopped else "ASK"
+        }
+
+    async def step(self, user_response: str) -> Dict:
+        """
+        Process user response and decide next action. ONE LLM call.
+
+        Flow:
+        1. Classify response type (ANSWER_GOOD, ASKS_QUESTION, etc.)
+        2. Apply policy based on type
+        3. Consult stop policy for STOP/CONTINUE decision
+        4. Generate appropriate output (probe, answer, redirect, etc.)
+
+        Args:
+            user_response: User's response to current probe
+
+        Returns:
+            Dict with response_type, action, agent_message, state_update
+        """
+        from prompts import ProbingAgent
+
+        # Record Q&A
+        self.qa_pairs.append((self.current_probe, user_response))
+        self.turn_count += 1
+
+        # Build state features for stop policy
+        state = self._build_state_features()
+
+        # Check stop policy (combines learned + zero-shot)
+        stop_decision, stop_reasoning, policy_used = self.stop_policy.should_stop(state)
+
+        if stop_decision == StopDecision.STOP:
+            self.stopped = True
+            self.stop_reason = stop_reasoning
+            decision = {
+                "response_type": "N/A",
+                "action": "STOP",
+                "agent_message": "Thank you for your responses. I have enough information now.",
+                "reasoning": f"{stop_reasoning} (policy: {policy_used})",
+                "policy_used": policy_used
+            }
+            self._log_step(state, decision)
+            return decision
+
+        # Single LLM call: classify → policy → generate
+        prompt = ProbingAgent.step_prompt(
+            question=self.question,
+            original_answer=self.original_answer,
+            evaluation_summary={
+                "weak_competencies": self.weak_competencies,
+                "areas_for_improvement": self.parsed_eval.areas_for_improvement,
+            },
+            conversation_history=self.qa_pairs,
+            remaining_probes=self.probing_questions,
+            turn_count=self.turn_count,
+            max_turns=self.max_turns,
+            level=self.level
+        )
 
         response = await acompletion(
             model=self.model,
-            messages=messages,
-            temperature=0.2,  # Low temp for consistent JSON
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
             response_format={"type": "json_object"}
         )
 
-        result = response.choices[0].message.content
-        try:
-            parsed = json.loads(result)
-            self.planned_questions = parsed.get("questions", [])[:self.num_questions]
-        except json.JSONDecodeError:
-            # Fallback: use first 3 probing questions
-            self.planned_questions = [
-                {"id": i+1, "question": q, "reason": "Selected from list"}
-                for i, q in enumerate(probing_questions[:self.num_questions])
-            ]
+        decision = ProbingAgent.parse_decision(response.choices[0].message.content)
+        self.decisions.append(decision)
 
-        return self.planned_questions
+        # Build state AFTER decision is added so features reflect current turn
+        state = self._build_state_features()
 
-    def start_question(
-        self,
-        original_question: str,
-        original_answer: str,
-        level: str = "Senior"
-    ):
-        """
-        Start probing the current planned question.
+        # Log step for training data
+        self._log_step(state, decision)
 
-        On first call: initializes conversation with system prompt and context.
-        On subsequent calls: appends new question directive to existing history.
-        """
-        if self.current_question_idx >= len(self.planned_questions):
-            return
+        # Handle different actions
+        action = decision.get("action", "STOP")
 
-        self._level = level  # Store level for system prompt updates
-        planned = self.planned_questions[self.current_question_idx]
-        probing_q = planned.get("question", "")
+        if action == "STOP":
+            self.stopped = True
+            self.stop_reason = decision.get("reasoning", "Sufficient information gathered")
+            self.current_probe = ""
 
-        if not self._initialized:
-            # First question: set up system prompt and full context
-            self.messages = [
-                {
-                    "role": "system",
-                    "content": ConversationalInterview.probe_system_prompt(level)
-                },
-                {
-                    "role": "user",
-                    "content": ConversationalInterview.probe_context(
-                        original_question,
-                        original_answer,
-                        probing_q,
-                        self.current_question_idx + 1,
-                        len(self.planned_questions)
-                    )
-                }
-            ]
-            self._initialized = True
+        elif action in ["PROBE_NEXT", "PROBE_SAME", "REDIRECT"]:
+            # Agent is asking a question - update current probe
+            self.current_probe = decision.get("agent_message", "")
+            if not self.current_probe and self.probing_questions:
+                self.current_probe = self.probing_questions.pop(0)
+
+        elif action == "ANSWER_USER":
+            # Agent is answering user's question
+            # Current probe stays the same (will re-ask after answering)
+            # agent_message contains the answer
+            pass
+
+        # Update state based on state_update
+        state_update = decision.get("state_update", {})
+        if state_update.get("gaps_resolved"):
+            for gap in state_update["gaps_resolved"]:
+                if gap in self.weak_competencies:
+                    self.weak_competencies.remove(gap)
+
+        return decision
+
+    def _build_state_features(self) -> StateFeatures:
+        """Build state features from current session state for stop policy."""
+        # Count response types from decisions
+        good = vague = partial = 0
+        idk = pushback = off_topic = questions = 0
+        response_types = []
+
+        for d in self.decisions:
+            classification = d.get("classification", {})
+            rt = classification.get("response_type", d.get("response_type", ""))
+            response_types.append(rt)
+
+            if rt == "ANSWER_GOOD":
+                good += 1
+            elif rt == "ANSWER_VAGUE":
+                vague += 1
+            elif rt == "ANSWER_PARTIAL":
+                partial += 1
+            elif rt == "SAYS_IDK":
+                idk += 1
+            elif rt == "PUSHBACK":
+                pushback += 1
+            elif rt == "OFF_TOPIC":
+                off_topic += 1
+            elif rt == "ASKS_QUESTION":
+                questions += 1
+
+        # Count gaps from state updates
+        gaps_resolved = 0
+        gaps_unresolvable = 0
+        for d in self.decisions:
+            state_update = d.get("state_update", {})
+            gaps_resolved += len(state_update.get("gaps_resolved", []))
+            gaps_unresolvable += len(state_update.get("gaps_unresolvable", []))
+
+        gaps_total = len(self.session_log.initial_gaps) if self.session_log else 0
+        gaps_remaining = max(0, gaps_total - gaps_resolved - gaps_unresolvable)
+
+        # Calculate friction
+        total_responses = len(self.decisions)
+        friction_signals = idk + pushback + off_topic
+        friction_ratio = friction_signals / max(total_responses, 1)
+
+        # Determine trend
+        if len(response_types) >= 4:
+            first_half = response_types[:len(response_types)//2]
+            second_half = response_types[len(response_types)//2:]
+            first_good = sum(1 for r in first_half if r == "ANSWER_GOOD")
+            second_good = sum(1 for r in second_half if r == "ANSWER_GOOD")
+            if second_good > first_good:
+                trend = "improving"
+            elif second_good < first_good:
+                trend = "declining"
+            else:
+                trend = "stable"
         else:
-            # Subsequent questions: append new question directive to history
-            # LLM can see all previous Q&A exchanges
-            self.messages.append({
-                "role": "user",
-                "content": f"=== MOVING TO PROBING QUESTION {self.current_question_idx + 1}/{len(self.planned_questions)} ===\n{probing_q}\n\nAsk this question now. You can reference the candidate's earlier answers if relevant."
-            })
+            trend = "stable"
 
-        self.current_round = 0
-        self.current_satisfied = False
-        self._current_probe = ""
-        self.current_question_qa = []  # Reset for new question
-
-    async def get_probe(self) -> str:
-        """Get the next probe question/hint from the interviewer."""
-        # Update system prompt with CURRENT question's Q&A only (for signal checking)
-        # LLM still sees full conversation in self.messages
-        current_qa_history = self._format_current_question_history()
-        self.messages[0] = {
-            "role": "system",
-            "content": ConversationalInterview.probe_system_prompt(self._level, current_qa_history)
-        }
-
-        response = await acompletion(
-            model=self.model,
-            messages=self.messages,
-            temperature=0.4,
-            stream=False
+        return StateFeatures(
+            gaps_total=gaps_total,
+            gaps_resolved=gaps_resolved,
+            gaps_unresolvable=gaps_unresolvable,
+            gaps_remaining=gaps_remaining,
+            turn_count=self.turn_count,
+            max_turns=self.max_turns,
+            recent_response_types=response_types[-3:],
+            good_responses=good,
+            vague_responses=vague,
+            partial_responses=partial,
+            idk_count=idk,
+            pushback_count=pushback,
+            off_topic_count=off_topic,
+            question_count=questions,
+            response_quality_trend=trend,
+            friction_ratio=friction_ratio,
+            level=self.level
         )
 
-        full_response = response.choices[0].message.content
-        self._process_response(full_response)
-        return self._current_probe
+    def _log_step(self, state: StateFeatures, decision: Dict):
+        """Log a step to the session log for training data collection."""
+        if self.session_log is None:
+            return
 
-    def _process_response(self, response: str):
-        """Process the LLM response, check for satisfied marker."""
-        self.messages.append({"role": "assistant", "content": response})
+        classification = decision.get("classification", {})
+        response_type = classification.get("response_type", decision.get("response_type", ""))
 
-        if self.SATISFIED_MARKER in response:
-            self.current_satisfied = True
-            # Remove marker from display
-            self._current_probe = response.replace(self.SATISFIED_MARKER, "").strip()
-        else:
-            self._current_probe = response.strip()
+        self.session_log.add_step(
+            state=state,
+            action=decision.get("action", ""),
+            response_type=response_type,
+            classification=classification
+        )
 
-        self.current_round += 1
+    def get_current_probe(self) -> str:
+        """Get the current probe question to ask user."""
+        return self.current_probe
 
-    def add_user_response(self, user_answer: str):
-        """Add user's answer to the conversation."""
-        if self._current_probe:
-            self.all_qa_pairs.append((self._current_probe, user_answer))
-            self.current_question_qa.append((self._current_probe, user_answer))
-        self.messages.append({"role": "user", "content": user_answer})
-
-    def _format_current_question_history(self) -> str:
-        """Format current question's Q&A for signal checking."""
-        if not self.current_question_qa:
-            return ""
-        lines = []
-        for i, (q, a) in enumerate(self.current_question_qa, 1):
-            lines.append(f"Q{i}: {q}")
-            lines.append(f"A{i}: {a}")
-        return "\n".join(lines)
-
-    def should_continue_question(self) -> bool:
-        """Check if we should continue probing the current question."""
-        if self.current_satisfied:
+    def should_continue(self) -> bool:
+        """Check if probing should continue."""
+        if self.stopped:
             return False
-        if self.current_round >= self.max_rounds:
+        if self.turn_count >= self.max_turns:
+            self.stop_reason = "Maximum turns reached"
             return False
         return True
 
-    def finish_current_question(self):
-        """Mark current question as done and prepare for next."""
-        if self.current_question_idx < len(self.planned_questions):
-            planned = self.planned_questions[self.current_question_idx]
-            self.question_answers.append({
-                "question": planned.get("question", ""),
-                "rounds": self.current_round,
-                "satisfied": self.current_satisfied
-            })
-        self.current_question_idx += 1
+    def get_qa_pairs(self) -> List[tuple]:
+        """Get all probe/response pairs."""
+        return self.qa_pairs
 
-    def has_more_questions(self) -> bool:
-        """Check if there are more planned questions to probe."""
-        return self.current_question_idx < len(self.planned_questions)
+    def get_decision_log(self) -> List[Dict]:
+        """Get log of all decisions for analysis."""
+        return self.decisions
 
-    def get_current_question_info(self) -> Dict[str, Any]:
-        """Get info about the current question being probed."""
-        if self.current_question_idx < len(self.planned_questions):
-            planned = self.planned_questions[self.current_question_idx]
-            return {
-                "num": self.current_question_idx + 1,
-                "total": len(self.planned_questions),
-                "question": planned.get("question", ""),
-                "reason": planned.get("reason", ""),
-                "round": self.current_round,
-                "max_rounds": self.max_rounds
-            }
-        return {}
+    def get_summary(self) -> Dict:
+        """Get summary of the probing session."""
+        return {
+            "question": self.question,
+            "level": self.level,
+            "turns": self.turn_count,
+            "max_turns": self.max_turns,
+            "stopped": self.stopped,
+            "stop_reason": self.stop_reason,
+            "qa_pairs": self.qa_pairs,
+        }
 
-    def get_all_qa_pairs(self) -> List[tuple]:
-        """Get all question-answer pairs from the session."""
-        return self.all_qa_pairs
+    def finalize_session(self, final_rating: str = None) -> SessionLog:
+        """
+        Finalize the session log with outcomes.
 
-    def get_conversation_summary(self) -> str:
-        """Get a formatted summary of the conversation."""
-        if not self.all_qa_pairs:
-            return ""
+        Call this after the session ends and you have the final rating
+        (e.g., after re-evaluating with probing Q&A included).
 
-        summary = "=== FOLLOW-UP Q&A ===\n"
-        for i, (q, a) in enumerate(self.all_qa_pairs, 1):
-            summary += f"\nQ{i}: {q}\nA{i}: {a}\n"
+        Args:
+            final_rating: The rating after probing (e.g., "Hire", "No Hire")
 
-        return summary
+        Returns:
+            The completed SessionLog for training
+        """
+        if self.session_log is None:
+            return None
+
+        # Set final Q&A pairs
+        self.session_log.final_qa_pairs = self.qa_pairs.copy()
+        self.session_log.final_rating = final_rating
+
+        # Determine if rating improved
+        if self.session_log.initial_rating and final_rating:
+            # Simple comparison - could be made more sophisticated
+            rating_order = ["No Hire", "Leaning No Hire", "Leaning Hire", "Hire", "Strong Hire"]
+            try:
+                initial_idx = next(
+                    i for i, r in enumerate(rating_order)
+                    if r.lower() in self.session_log.initial_rating.lower()
+                )
+                final_idx = next(
+                    i for i, r in enumerate(rating_order)
+                    if r.lower() in final_rating.lower()
+                )
+                self.session_log.rating_improved = final_idx > initial_idx
+            except StopIteration:
+                self.session_log.rating_improved = None
+
+        return self.session_log
+
+    def save_session_log(self, path: str = None) -> str:
+        """
+        Save the session log to a JSON file for training data.
+
+        Args:
+            path: Optional file path. If None, auto-generates based on session_id.
+
+        Returns:
+            The file path where the log was saved.
+        """
+        if self.session_log is None:
+            return None
+
+        import os
+        if path is None:
+            os.makedirs("session_logs", exist_ok=True)
+            path = f"session_logs/{self.session_log.session_id}.json"
+
+        self.session_log.save(path)
+        return path

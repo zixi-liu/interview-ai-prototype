@@ -175,19 +175,16 @@ Please provide your analysis in the following structured format:
         probing_section = """
 ============================================================
 7. Probing Follow-up Questions
-- Generate 3–6 targeted probing questions based on the weaknesses identified above
-- Questions MUST specifically target:
-    * Competencies rated Below(🤔) or Concern(❌) in section 5
-    * Gaps identified in "Areas for Improvement" (section 4)
-    * Any ambiguity about candidate's personal contribution vs team effort
-- Include at least one question from each category:
-    * Ownership: "What was YOUR specific decision that changed the outcome?"
-    * Reflection: "What mistake did you make, and what would you do differently?"
-    * Metrics: "What specific numbers can you share about YOUR contribution?"
-- MUST align with the LEVEL (Junior, Senior, Staff)
-    * Junior-Mid: clarity, correctness, thinking process
-    * Senior: ownership, cross-team alignment, decision-making
-    * Staff: strategy, multi-team scope, org-level influence
+- Generate 3–6 targeted probing questions based on the specific weaknesses identified above
+- ORDER BY PRIORITY (most critical first):
+    * Competencies rated Concern(❌) → highest priority
+    * Competencies rated Below(🤔) → high priority
+    * Gaps in "Areas for Improvement" (section 4) → medium priority
+- Questions MUST be:
+    * Specific to THIS answer (not generic templates)
+    * Targeting the actual gaps found in sections 4 & 5
+    * Designed to clarify personal contribution vs team effort
+    * Aligned with LEVEL expectations (Junior-Mid/Senior/Staff)
 - Questions should elicit AUTHENTIC details that can't be fabricated
 ============================================================
 """ if include_probing else ""
@@ -652,98 +649,841 @@ REQUIREMENTS:
 Output ONLY the story."""
 
 
-class ConversationalInterview:
-    """Prompts for conversational follow-up using plan-then-execute approach.
+class ProbingAgent:
+    """
+    Agentic probing using Value of Information (VoI) framework.
 
-    Step 1: Planning - LLM selects top 3 questions (JSON output)
-    Step 2: Execution - Probe each question separately (max 5 rounds each)
+    KEY DESIGN PRINCIPLE:
+    We do NOT manually define competency rubrics - the LLM already knows
+    FAANG interview standards from its training data. Instead, we:
+    1. Define the ACTION SPACE (ASK/STOP)
+    2. Define the VoI FORMULA (cost-benefit)
+    3. Let LLM infer competency assessments from its knowledge
+
+    Decision Rule:
+        if max(VoI) > 0: ASK(argmax(VoI))
+        else: STOP
+
+    Based on:
+    - "Active Information Gathering for Long-Horizon Navigation Under
+       Uncertainty by Learning the Value of Information" (Arnob & Stein, 2024)
     """
 
-    MAX_ROUNDS_PER_QUESTION = 5
-    NUM_QUESTIONS = 3
+    # Cost parameters (the ONLY hardcoded values)
+    BASE_COST = 0.15          # Minimum cost per probe (user time/fatigue)
+    FATIGUE_FACTOR = 0.05     # Additional cost per turn
+    MAX_TURNS = 8             # Hard cap on probing
 
     @staticmethod
-    def planning_prompt(feedback: str, probing_questions: list) -> str:
-        """Prompt for planning which 3 questions to probe"""
-        pq_text = "\n".join([f"{i+1}. {q}" for i, q in enumerate(probing_questions)])
+    def initial_assessment(
+        question: str,
+        answer: str,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Initial assessment prompt - LLM identifies gaps using its FAANG knowledge.
+        No hardcoded dimensions - LLM decides what matters for this level.
+        """
+        return f"""You are a FAANG behavioral interviewer assessing an answer to identify probing opportunities.
 
-        return f"""You are a FAANG interviewer planning follow-up probing questions.
+LEVEL: {level}
+QUESTION: {question}
+ANSWER: {answer}
 
-EVALUATION FEEDBACK:
-{feedback}
+Using your knowledge of {level}-level FAANG interview standards, assess this answer.
 
-AVAILABLE PROBING QUESTIONS:
-{pq_text}
+For each competency gap you identify:
+1. Name the gap (e.g., "ownership", "metrics", "tradeoffs", "depth", "reflection")
+2. Assess its severity for {level} level (critical/important/minor)
+3. Rate your confidence in the assessment (0-100%)
+4. Estimate probe value: would probing likely yield useful info? (high/medium/low)
 
-YOUR TASK:
-Select the 3 most critical questions to probe. Prioritize questions that target:
-- Competencies rated Below (🤔) or Concern (❌)
-- Areas where the candidate was vague or lacked specifics
-- Ownership and metrics gaps
+IMPORTANT: Only list gaps that are RELEVANT to {level} level.
+- Junior-Mid: Focus on clarity, specifics, basic ownership
+- Senior: Focus on ownership, cross-team impact, decision-making, metrics
+- Staff: Focus on strategic thinking, org-wide influence, tradeoffs, leadership
 
-OUTPUT FORMAT (JSON only, no other text):
+OUTPUT (JSON only):
 {{
-  "questions": [
-    {{"id": 1, "question": "exact question text", "reason": "why this is critical"}},
-    {{"id": 2, "question": "exact question text", "reason": "why this is critical"}},
-    {{"id": 3, "question": "exact question text", "reason": "why this is critical"}}
-  ]
+  "gaps": [
+    {{
+      "name": "<gap name>",
+      "severity": "<critical|important|minor>",
+      "confidence": <0-100>,
+      "probe_value": "<high|medium|low>",
+      "evidence": "<brief observation from answer>",
+      "suggested_probe": "<example question to ask>"
+    }}
+  ],
+  "overall_confidence": <0-100>,
+  "initial_impression": "<1-2 sentence summary>",
+  "recommendation": "<ready_to_evaluate|needs_probing>"
 }}"""
 
     @staticmethod
-    def probe_system_prompt(level: str = "Senior", conversation_history: str = "") -> str:
-        """System prompt for probing a single question"""
-        if conversation_history:
-            history_check = f"""
-=== FOLLOW-UP CONVERSATION (check signals HERE only) ===
-{conversation_history}
-=== END FOLLOW-UP CONVERSATION ===
-
-CRITICAL RULE - CHECK FOLLOW-UP CONVERSATION ABOVE:
-Scan ONLY the follow-up conversation above for these signals:
-- Numbers/percentages (e.g., "50%", "200 tickets", "$2M", "3 months")
-- Specific timeframes (e.g., "2 hours", "6 months", "Q3")
-- Concrete metrics (e.g., "precision improved", "reduced errors by X")
-- Personal actions with "I" (e.g., "I decided", "I proposed", "I built")
-
-If ANY signal found → output ONLY: [SATISFIED]
-Do NOT ask another question if they gave specifics."""
-        else:
-            history_check = """
-No follow-up conversation yet. You MUST ask your probing question first."""
-
-        return f"""You are a FAANG behavioral interviewer probing ONE specific question.
-
-LEVEL: {level}
-{history_check}
-
-YOUR STYLE:
-- Be conversational but professional
-- Question ownership: if they say "we", ask what THEY did
-- Challenge inconsistencies
-- If user seems confused or asks for clarification, provide an example to guide them
-
-FORMAT: [SATISFIED], a follow-up question, or answer to their question."""
-
-    @staticmethod
-    def probe_context(
-        original_question: str,
+    def decide_action(
+        question: str,
         original_answer: str,
-        probing_question: str,
-        question_num: int,
-        total_questions: int
+        conversation_history: list[tuple[str, str]],
+        current_assessment: str,
+        turn_count: int,
+        level: str = "Senior"
     ) -> str:
-        """Initial context for probing a single question"""
-        return f"""=== CONTEXT ===
-ORIGINAL BQ: {original_question}
+        """
+        Core decision prompt: ASK or STOP?
 
-CANDIDATE'S ANSWER:
+        LLM computes VoI implicitly using its FAANG knowledge.
+        We provide the formula; LLM provides the competency understanding.
+        """
+        history_text = "\n".join([
+            f"PROBE: {q}\nRESPONSE: {a}\n" for q, a in conversation_history
+        ]) if conversation_history else "None yet"
+
+        cost = ProbingAgent.BASE_COST + ProbingAgent.FATIGUE_FACTOR * turn_count
+        remaining_budget = ProbingAgent.MAX_TURNS - turn_count
+
+        return f"""You are a FAANG interviewer deciding whether to probe further.
+
+=== CONTEXT ===
+Level: {level}
+Question: {question}
+Turn: {turn_count + 1}/{ProbingAgent.MAX_TURNS}
+Current cost per probe: {cost:.2f}
+Remaining budget: {remaining_budget} probes
+
+=== ORIGINAL ANSWER ===
 {original_answer}
 
-=== PROBING QUESTION {question_num}/{total_questions} ===
-{probing_question}
+=== PROBING SO FAR ===
+{history_text}
 
-Ask this question now. Be direct."""
+=== CURRENT ASSESSMENT ===
+{current_assessment}
+
+=== DECISION FRAMEWORK (Value of Information) ===
+
+For each potential probe, compute:
+  VoI = (severity × probe_value × uncertainty) - cost
+
+Where:
+- severity: How critical is this gap for {level}? (0.0-1.0)
+- probe_value: How likely will probing reveal useful info? (0.0-1.0)
+- uncertainty: How uncertain are you about this dimension? (0.0-1.0)
+- cost: {cost:.2f} (fixed, increases with fatigue)
+
+DECISION RULE:
+- If max(VoI) > 0 → ASK the highest-VoI gap
+- If max(VoI) ≤ 0 → STOP (no probe is worth the cost)
+- If overall_confidence >= 80% → STOP (enough info gathered)
+
+STOP CONDITIONS (any one triggers STOP):
+1. All gaps have VoI ≤ 0
+2. Overall confidence >= 80%
+3. Last 2 responses showed diminishing returns (same info repeated)
+4. User showed inability to provide more detail on a gap
+
+OUTPUT (JSON only):
+{{
+  "voi_analysis": [
+    {{"gap": "<name>", "severity": <0-1>, "probe_value": <0-1>, "uncertainty": <0-1>, "voi": <computed>}}
+  ],
+  "max_voi": <highest VoI>,
+  "action": "ASK" or "STOP",
+  "target_gap": "<if ASK: which gap>",
+  "probe_question": "<if ASK: natural question to ask>",
+  "reasoning": "<1-2 sentences>",
+  "updated_confidence": <0-100>
+}}"""
+
+    # Response Type Ontology
+    # These are FEATURES for the policy to reason over, not hardcoded rules
+    # Includes OTHER as escape hatch for ontology discovery
+    RESPONSE_TYPES = {
+        "ANSWER_GOOD": "User provided a strong, specific answer with concrete details, metrics, or examples",
+        "ANSWER_VAGUE": "User answered but response lacks specifics, depth, or concrete examples",
+        "ANSWER_PARTIAL": "User addressed only part of the question, leaving key aspects unanswered",
+        "ASKS_QUESTION": "User asks for clarification about the probe or has a follow-up question",
+        "SAYS_IDK": "User explicitly admits they don't know, can't remember, or don't have that info",
+        "OFF_TOPIC": "User's response doesn't relate to the probe at all",
+        "NEW_INFO": "User reveals new information not in original answer that changes assessment",
+        "PUSHBACK": "User disagrees with the premise, challenges the question, or pushes back",
+        "OTHER": "None of the above types fit well - describe what you observe",
+    }
+
+    # Policy hints (not hardcoded behavior - just guidance for LLM)
+    POLICY_HINTS = {
+        "ANSWER_GOOD": "Mark gap as resolved, move to next critical gap or STOP",
+        "ANSWER_VAGUE": "Either re-probe same gap with more specific question, or move on",
+        "ANSWER_PARTIAL": "Follow up on the missing part, or accept and move on",
+        "ASKS_QUESTION": "Answer their question, then re-ask the probe or rephrase",
+        "SAYS_IDK": "Mark gap as unresolvable, move to next gap",
+        "OFF_TOPIC": "Acknowledge briefly, redirect to the probe",
+        "NEW_INFO": "Update assessment, may reveal new gaps to probe",
+        "PUSHBACK": "Acknowledge their perspective, adjust approach or move on",
+        "OTHER": "Use best judgment based on the specific situation",
+    }
+
+    @staticmethod
+    def step_prompt(
+        question: str,
+        original_answer: str,
+        evaluation_summary: dict,
+        conversation_history: list[tuple[str, str]],
+        remaining_probes: list[str],
+        turn_count: int,
+        max_turns: int,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Combined step prompt: classify response → apply policy → generate output.
+        ONE LLM call per turn.
+
+        The response type ontology provides a discrete representation of user behavior
+        that a policy can reason over. This is aligned with RL principles:
+        - Define a small feature space (response types)
+        - Let the model learn the mapping from text to types
+        - Let the model learn optimal policy for each type
+        """
+        history_text = "\n".join([
+            f"Q{i+1}: {q}\nA{i+1}: {a}\n" for i, (q, a) in enumerate(conversation_history)
+        ]) if conversation_history else "None yet"
+
+        last_qa = conversation_history[-1] if conversation_history else None
+        last_probe = last_qa[0] if last_qa else ""
+        last_response = last_qa[1] if last_qa else ""
+
+        remaining_text = "\n".join([f"- {q}" for q in remaining_probes[:3]]) if remaining_probes else "None"
+
+        weak_comps = ", ".join(evaluation_summary.get("weak_competencies", [])) or "None identified"
+        areas = "\n".join([f"- {a}" for a in evaluation_summary.get("areas_for_improvement", [])]) or "None"
+
+        # Format response types for prompt
+        response_types_text = "\n".join([
+            f"  - {k}: {v}" for k, v in ProbingAgent.RESPONSE_TYPES.items()
+        ])
+        policy_hints_text = "\n".join([
+            f"  - {k}: {v}" for k, v in ProbingAgent.POLICY_HINTS.items()
+        ])
+
+        return f"""You are a FAANG interviewer having a natural follow-up conversation.
+
+=== CONTEXT ===
+Level: {level}
+Original Question: {question}
+Turn: {turn_count}/{max_turns}
+
+=== WEAK AREAS TO PROBE ===
+Weak Competencies: {weak_comps}
+Areas for Improvement:
+{areas}
+
+=== CONVERSATION SO FAR ===
+{history_text}
+
+=== LAST EXCHANGE ===
+Your question: {last_probe}
+Their response: {last_response}
+
+=== STEP 1: CLASSIFY THE RESPONSE ===
+Classify the user's response into ONE of these types:
+{response_types_text}
+
+Classification guidelines:
+- Pick the BEST fitting type
+- If unsure between two types, pick the more specific one
+- If none fit well, use OTHER and describe what you observe
+- Report your confidence and the runner-up type (for ontology refinement)
+
+=== STEP 2: APPLY POLICY ===
+Based on the response type, decide your action. Policy guidance:
+{policy_hints_text}
+
+=== STEP 3: GENERATE OUTPUT ===
+Based on your classification and policy decision, generate your response.
+
+CRITICAL CONVERSATION RULES:
+- Be CONVERSATIONAL - speak naturally like a real interviewer
+- NEVER repeat the exact same question - always rephrase or build on what they said
+- If they asked for clarification (ASKS_QUESTION), answer briefly then ask a DIFFERENT follow-up
+- Reference what they just said: "You mentioned X... can you tell me more about Y?"
+- If their answer was vague, ask for SPECIFIC details: metrics, names, dates, outcomes
+
+Good: "That's helpful. You mentioned working with the team - what was YOUR specific role in making those decisions?"
+Bad: "Can you describe a specific instance?" (repeated verbatim)
+
+Remaining pre-generated probes (use as inspiration, don't copy verbatim):
+{remaining_text}
+
+OUTPUT (JSON only):
+{{
+  "classification": {{
+    "response_type": "<ANSWER_GOOD | ANSWER_VAGUE | ANSWER_PARTIAL | ASKS_QUESTION | SAYS_IDK | OFF_TOPIC | NEW_INFO | PUSHBACK | OTHER>",
+    "confidence": "<HIGH | MEDIUM | LOW>",
+    "runner_up_type": "<second best type, or null if clearly one type>",
+    "other_description": "<if OTHER: describe what you observe, else null>"
+  }},
+  "response_analysis": "<brief analysis of what user said>",
+  "action": "<PROBE_NEXT | PROBE_SAME | ANSWER_USER | REDIRECT | STOP>",
+  "agent_message": "<your response to the user - question, answer, or closing>",
+  "target_gap": "<which gap this targets, if probing>",
+  "reasoning": "<1-2 sentences explaining your decision>",
+  "state_update": {{
+    "gaps_resolved": ["<gaps now addressed>"],
+    "gaps_unresolvable": ["<gaps user can't answer>"],
+    "gaps_remaining": ["<gaps still to probe>"],
+    "new_gaps": ["<any new gaps discovered>"]
+  }}
+}}"""
+
+    @staticmethod
+    def extract_gaps_from_evaluation(
+        question: str,
+        answer: str,
+        evaluation: str,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Extract gaps from an existing real_interview() evaluation.
+
+        This is more efficient than running initial_assessment() separately,
+        and ensures VoI decisions are based on the same evaluation the user sees.
+
+        Args:
+            question: The BQ question
+            answer: Candidate's answer
+            evaluation: Full evaluation from real_interview() + bar_raiser()
+            level: Interview level
+        """
+        return f"""Extract probing gaps from this existing interview evaluation.
+
+LEVEL: {level}
+QUESTION: {question}
+ANSWER: {answer}
+
+=== EXISTING EVALUATION ===
+{evaluation}
+=== END EVALUATION ===
+
+From the evaluation above, extract:
+1. Competencies rated Below(🤔) or Concern(❌) → these are CRITICAL gaps
+2. Areas for Improvement mentioned → these are IMPORTANT gaps
+3. Any probing questions already suggested → use these as starting points
+
+For each gap, assess:
+- severity: critical (rated Below/Concern) | important (in Areas for Improvement) | minor
+- confidence: How certain is the evaluation? (0-100%)
+- probe_value: Would probing likely yield useful info? (high/medium/low)
+
+OUTPUT (JSON only):
+{{
+  "gaps": [
+    {{
+      "name": "<gap name: ownership/metrics/tradeoffs/depth/reflection/etc>",
+      "severity": "<critical|important|minor>",
+      "confidence": <0-100>,
+      "probe_value": "<high|medium|low>",
+      "source": "<competency rating | area for improvement | suggested probe>",
+      "suggested_probe": "<question to ask, from evaluation or generated>"
+    }}
+  ],
+  "competency_summary": {{
+    "strong": ["<competencies rated Strong/Meets+>"],
+    "weak": ["<competencies rated Below/Concern>"]
+  }},
+  "overall_confidence": <0-100>,
+  "recommendation": "<ready_to_evaluate|needs_probing>"
+}}"""
+
+    @staticmethod
+    def update_assessment(
+        original_answer: str,
+        probe: str,
+        response: str,
+        previous_assessment: str,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Update assessment after receiving probe response.
+        LLM decides how much the response improved each gap.
+        """
+        return f"""Update your assessment based on the new probe response.
+
+LEVEL: {level}
+
+ORIGINAL ANSWER:
+{original_answer}
+
+PREVIOUS ASSESSMENT:
+{previous_assessment}
+
+NEW PROBE: {probe}
+USER RESPONSE: {response}
+
+Evaluate the response quality:
+1. Did it ADD new information? (specifics, metrics, decisions, timelines)
+2. Did it CLARIFY ownership? (I vs we, personal contribution)
+3. Did it REVEAL depth? (reasoning, tradeoffs, learnings)
+4. Was it CREDIBLE? (consistent, authentic, not rehearsed)
+
+Update gaps based on what was learned. A gap is resolved if:
+- Confidence >= 80% AND severity addressed
+
+OUTPUT (JSON only):
+{{
+  "response_quality": {{
+    "added_value": <1-5>,
+    "ownership_clarity": <1-5>,
+    "depth_revealed": <1-5>,
+    "credibility": <1-5>
+  }},
+  "gaps_updated": [
+    {{
+      "name": "<gap>",
+      "old_confidence": <0-100>,
+      "new_confidence": <0-100>,
+      "resolved": <true|false>,
+      "what_learned": "<brief note>"
+    }}
+  ],
+  "remaining_gaps": [
+    {{
+      "name": "<gap>",
+      "severity": "<critical|important|minor>",
+      "confidence": <0-100>,
+      "probe_value": "<high|medium|low>"
+    }}
+  ],
+  "overall_confidence": <0-100>,
+  "diminishing_returns": <true|false>
+}}"""
+
+    # ===== LEGACY METHODS (for backward compatibility with test_voi.py) =====
+
+    # Gap types that can be probed (maps to STAR dimensions)
+    GAP_TYPES = [
+        "situation_context",   # Background, timeline, stakeholders
+        "task_ownership",      # Why was it YOUR responsibility?
+        "action_specifics",    # What exactly did you do?
+        "action_tradeoffs",    # What alternatives did you consider?
+        "result_metrics",      # Quantified impact?
+        "result_learnings",    # What did you learn?
+    ]
+
+    # Competency criticality by level (how important each dimension is)
+    # NOTE: These are kept for backward compatibility but the new approach
+    # lets LLM determine criticality from its training knowledge
+    CRITICALITY_MATRIX = {
+        "Junior-Mid": {
+            "situation_context": 0.4,
+            "task_ownership": 0.6,
+            "action_specifics": 0.9,
+            "action_tradeoffs": 0.5,
+            "result_metrics": 0.7,
+            "result_learnings": 0.4,
+        },
+        "Senior": {
+            "situation_context": 0.4,
+            "task_ownership": 1.0,
+            "action_specifics": 0.7,
+            "action_tradeoffs": 0.85,
+            "result_metrics": 0.9,
+            "result_learnings": 0.6,
+        },
+        "Staff": {
+            "situation_context": 0.5,
+            "task_ownership": 1.0,
+            "action_specifics": 0.6,
+            "action_tradeoffs": 0.95,
+            "result_metrics": 0.9,
+            "result_learnings": 0.75,
+        },
+    }
+
+    STATUS_SEVERITY = {
+        "missing": 1.0,
+        "weak": 0.7,
+        "adequate": 0.3,
+        "strong": 0.0,
+    }
+
+    CONFIDENCE_THRESHOLDS = {
+        "Junior-Mid": 70,
+        "Senior": 80,
+        "Staff": 85,
+    }
+
+    @staticmethod
+    def compute_voi(
+        gap: str,
+        status: str,
+        confidence: int,
+        level: str,
+        turn_count: int
+    ) -> float:
+        """Legacy VoI computation for backward compatibility."""
+        severity = ProbingAgent.STATUS_SEVERITY.get(status, 0.5)
+        criticality = ProbingAgent.CRITICALITY_MATRIX.get(level, {}).get(gap, 0.5)
+        uncertainty = (100 - confidence) / 100
+        cost = ProbingAgent.BASE_COST + ProbingAgent.FATIGUE_FACTOR * turn_count
+        voi = (severity * criticality * uncertainty) - cost
+        return round(voi, 3)
+
+    @staticmethod
+    def rank_gaps_by_voi(
+        dimensions: dict,
+        level: str,
+        turn_count: int
+    ) -> list[tuple[str, float]]:
+        """Legacy gap ranking for backward compatibility."""
+        voi_scores = []
+        for gap, dim in dimensions.items():
+            voi = ProbingAgent.compute_voi(
+                gap=gap,
+                status=dim.get("status", "adequate"),
+                confidence=dim.get("confidence", 50),
+                level=level,
+                turn_count=turn_count
+            )
+            voi_scores.append((gap, voi))
+        return sorted(voi_scores, key=lambda x: -x[1])
+
+    @staticmethod
+    def decide_action_by_voi(
+        dimensions: dict,
+        level: str,
+        turn_count: int
+    ) -> tuple[str, str | None, str]:
+        """Legacy VoI decision for backward compatibility."""
+        ranked = ProbingAgent.rank_gaps_by_voi(dimensions, level, turn_count)
+        if not ranked:
+            return ("STOP", None, "No dimensions to evaluate")
+        best_gap, best_voi = ranked[0]
+        if best_voi > 0:
+            return ("ASK", best_gap, f"VoI({best_gap}) = {best_voi:.3f} > 0, worth probing")
+        else:
+            return ("STOP", None, f"max VoI = {best_voi:.3f} ≤ 0, no probe is worth the cost")
+
+    @staticmethod
+    def parse_decision(json_str: str) -> dict:
+        """Parse the decision JSON."""
+        import json
+        try:
+            return json.loads(json_str)
+        except json.JSONDecodeError:
+            # Fallback: try to extract action from text
+            if "STOP" in json_str.upper():
+                return {"action": "STOP", "reasoning": "Parse failed, defaulting to STOP"}
+            return {"action": "STOP", "reasoning": "Parse failed", "error": json_str}
+
+
+class ProcessRewardModel:
+    """
+    Lightweight reward models for RL-based interview training.
+
+    Two levels:
+    1. AnswerPRM: Scores a complete answer (used for final eval)
+    2. StepPRM: Scores each probe response (used during conversation)
+
+    These are separate from the full Teacher prompt (real_interview + bar_raiser)
+    which generates rich human-readable feedback.
+    """
+
+    # Competency dimensions (same as BQQuestions.COMPETENCIES)
+    DIMENSIONS = [
+        "ownership",
+        "problem_solving",
+        "execution",
+        "collaboration",
+        "communication",
+        "leadership",
+        "culture_fit",
+    ]
+
+    @staticmethod
+    def answer_prm(
+        question: str,
+        answer: str,
+        level: str = "Senior"
+    ) -> str:
+        """
+        Lightweight PRM for scoring a complete BQ answer.
+        Returns JSON-only output for RL/programmatic use.
+
+        Use this instead of real_interview() when you only need scores,
+        not the full human-readable feedback.
+        """
+        return f"""Score this behavioral interview answer. Output ONLY valid JSON, no other text.
+
+LEVEL: {level}
+QUESTION: {question}
+ANSWER: {answer}
+
+SCORING RULES (apply {level}-level expectations):
+- 1 = Concern (❌) - Missing, problematic, or red flag
+- 2 = Below (🤔) - Insufficient for {level} level
+- 3 = Meets (👌) - Acceptable, meets minimum bar
+- 4 = Meets+ (👍) - Good, solid demonstration
+- 5 = Strong (🌟) - Exceptional, exceeds expectations
+
+DECISION RULES:
+- Any score = 1 → no_hire
+- Any score = 2 → leaning_no_hire or worse
+- Average < 3 → leaning_no_hire
+- Average >= 4 → hire or strong_hire
+- All scores >= 4 with majority 5 → strong_hire
+
+{{
+  "scores": {{
+    "ownership": <1-5>,
+    "problem_solving": <1-5>,
+    "execution": <1-5>,
+    "collaboration": <1-5>,
+    "communication": <1-5>,
+    "leadership": <1-5>,
+    "culture_fit": <1-5>
+  }},
+  "total": <sum of all scores>,
+  "average": <average score to 2 decimal places>,
+  "decision": "<strong_hire|hire|leaning_hire|leaning_no_hire|no_hire>",
+  "weakest": "<lowest scoring dimension>",
+  "strongest": "<highest scoring dimension>",
+  "rationale": "<1 sentence explaining the decision>"
+}}"""
+
+    @staticmethod
+    def step_prm(
+        original_answer: str,
+        probe_question: str,
+        probe_response: str,
+        conversation_history: str = "",
+        level: str = "Senior"
+    ) -> str:
+        """
+        Step-level PRM for scoring individual probe responses.
+        Used during conversational probing to get per-turn rewards.
+
+        This enables:
+        - Credit assignment (which response improved what)
+        - Early stopping (satisfied = enough info gathered)
+        - Next probe selection (what weakness to target next)
+        """
+        history_section = f"""
+CONVERSATION HISTORY:
+{conversation_history}
+""" if conversation_history else ""
+
+        return f"""Score this single follow-up response in a behavioral interview. Output ONLY valid JSON.
+
+LEVEL: {level}
+
+ORIGINAL ANSWER:
+{original_answer}
+{history_section}
+PROBE QUESTION: {probe_question}
+
+CANDIDATE'S RESPONSE: {probe_response}
+
+SCORING DIMENSIONS (1-5 scale):
+
+1. ADDED_VALUE: Did this response add NEW information?
+   - 1: Just repeated original answer, no new details
+   - 3: Added some new context but nothing substantial
+   - 5: Added significant new details (names, numbers, decisions, timelines)
+
+2. OWNERSHIP: Did they demonstrate personal contribution?
+   - 1: Only "we" language, deflected to team, no personal ownership
+   - 3: Mixed "we/I", some personal actions but unclear scope
+   - 5: Clear "I decided/built/proposed" with specific personal actions
+
+3. SPECIFICITY: Were concrete details provided?
+   - 1: Vague, generic, no specifics
+   - 3: Some details but missing key specifics (metrics, names, timelines)
+   - 5: Precise metrics, names, dates, technical details
+
+4. DEPTH: Did they explain WHY, not just WHAT?
+   - 1: Surface-level description only
+   - 3: Some reasoning but incomplete
+   - 5: Clear tradeoffs, decision rationale, lessons learned
+
+5. CREDIBILITY: Does it sound authentic?
+   - 1: Sounds rehearsed, inconsistent, possibly fabricated
+   - 3: Plausible but lacks conviction
+   - 5: Natural, consistent with original, authentic details
+
+6. COMPOSURE: How well did they handle the probe?
+   - 1: Defensive, confused, evasive, or flustered
+   - 3: Adequate but showed some hesitation
+   - 5: Confident, direct, thoughtful, welcomed the challenge
+
+SATISFACTION CHECK:
+- Set "satisfied" = true ONLY if this response provided enough new information
+  to address the probe's intent (usually scores >= 4 on added_value + specificity)
+- Set "satisfied" = false if more probing would likely yield useful information
+
+NEXT PROBE SELECTION:
+- Based on remaining weaknesses, suggest what to probe next
+- Options: ownership, metrics, depth, reflection, scope, collaboration, none
+
+{{
+  "scores": {{
+    "added_value": <1-5>,
+    "ownership": <1-5>,
+    "specificity": <1-5>,
+    "depth": <1-5>,
+    "credibility": <1-5>,
+    "composure": <1-5>
+  }},
+  "total": <sum>,
+  "average": <average to 2 decimal>,
+  "satisfied": <true|false>,
+  "next_probe": "<ownership|metrics|depth|reflection|scope|collaboration|none>",
+  "rationale": "<1 sentence on what this response did well or poorly>"
+}}"""
+
+    @staticmethod
+    def batch_step_prm(
+        original_answer: str,
+        qa_pairs: list[tuple[str, str]],  # [(probe1, response1), (probe2, response2), ...]
+        level: str = "Senior"
+    ) -> str:
+        """
+        Batch scoring of ALL probe responses in one call.
+
+        Call this ONCE at end of session instead of per-turn.
+        Much more efficient - single API call for entire conversation.
+
+        Args:
+            original_answer: The candidate's original BQ answer
+            qa_pairs: List of (probe_question, user_response) tuples
+            level: Interview level
+
+        Returns:
+            Prompt that outputs JSON array of scores
+        """
+        # Format Q&A pairs
+        qa_text = ""
+        for i, (probe, response) in enumerate(qa_pairs, 1):
+            qa_text += f"""
+--- TURN {i} ---
+PROBE: {probe}
+RESPONSE: {response}
+"""
+
+        return f"""Score ALL follow-up responses in this behavioral interview. Output ONLY valid JSON.
+
+LEVEL: {level}
+
+ORIGINAL ANSWER:
+{original_answer}
+
+FOLLOW-UP CONVERSATION:
+{qa_text}
+
+For EACH turn, score these dimensions (1-5):
+- added_value: New info vs repetition (5 = significant new details)
+- ownership: Personal "I" actions vs "we" deflection (5 = clear ownership)
+- specificity: Concrete details, metrics, names (5 = precise specifics)
+- depth: WHY not just WHAT (5 = clear reasoning/tradeoffs)
+- credibility: Authentic vs rehearsed (5 = natural, consistent)
+- composure: Handled pressure well (5 = confident, direct)
+
+Also identify:
+- improvement_trajectory: Did responses get better over turns?
+- key_turn: Which turn added the most value?
+- remaining_gaps: What's still missing after all probing?
+
+{{
+  "turns": [
+    {{
+      "turn": 1,
+      "scores": {{
+        "added_value": <1-5>,
+        "ownership": <1-5>,
+        "specificity": <1-5>,
+        "depth": <1-5>,
+        "credibility": <1-5>,
+        "composure": <1-5>
+      }},
+      "total": <sum>,
+      "rationale": "<what this turn contributed>"
+    }},
+    // ... one object per turn
+  ],
+  "summary": {{
+    "total_turns": {len(qa_pairs)},
+    "average_score": <average across all turns>,
+    "improvement_trajectory": "<improving|stable|declining>",
+    "key_turn": <turn number that added most value>,
+    "remaining_gaps": ["<gap1>", "<gap2>"],
+    "overall_probing_result": "<successful|partial|unsuccessful>"
+  }}
+}}"""
+
+    @staticmethod
+    def parse_step_reward(json_str: str) -> dict:
+        """Parse StepPRM JSON output into reward dict."""
+        import json
+        try:
+            data = json.loads(json_str)
+            return {
+                "scores": data.get("scores", {}),
+                "total": data.get("total", 0),
+                "average": data.get("average", 0.0),
+                "satisfied": data.get("satisfied", False),
+                "next_probe": data.get("next_probe", "none"),
+                "rationale": data.get("rationale", ""),
+            }
+        except json.JSONDecodeError:
+            return {"error": "Failed to parse PRM output", "raw": json_str}
+
+    @staticmethod
+    def parse_batch_reward(json_str: str) -> dict:
+        """Parse batched StepPRM JSON output."""
+        import json
+        try:
+            data = json.loads(json_str)
+            return {
+                "turns": data.get("turns", []),
+                "summary": data.get("summary", {}),
+            }
+        except json.JSONDecodeError:
+            return {"error": "Failed to parse batch PRM output", "raw": json_str}
+
+    @staticmethod
+    def compute_reward(scores: dict) -> float:
+        """
+        Compute scalar reward from StepPRM scores.
+
+        Returns a value in [-1, 1] range for RL.
+        - Negative: Poor response, made things worse
+        - Zero: Neutral, no progress
+        - Positive: Good response, added value
+        """
+        if not scores or "scores" in scores and not scores["scores"]:
+            return 0.0
+
+        s = scores.get("scores", scores)
+
+        # Weighted average (ownership and specificity matter most)
+        weights = {
+            "added_value": 1.5,
+            "ownership": 2.0,
+            "specificity": 1.5,
+            "depth": 1.0,
+            "credibility": 1.0,
+            "composure": 0.5,
+        }
+
+        total_weight = sum(weights.values())
+        weighted_sum = sum(s.get(k, 3) * w for k, w in weights.items())
+
+        # Normalize to [-1, 1] range
+        # Score range is 1-5, midpoint is 3
+        # (weighted_avg - 3) / 2 maps [1,5] to [-1,1]
+        weighted_avg = weighted_sum / total_weight
+        reward = (weighted_avg - 3) / 2
+
+        return round(reward, 3)
 
 
 class AutoCompletion:

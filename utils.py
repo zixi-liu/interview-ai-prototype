@@ -8,6 +8,7 @@ import os
 import asyncio
 import subprocess
 import textwrap
+from dataclasses import dataclass, asdict
 from datetime import datetime
 
 from interview_analyzer import AUDIO_TARGET_FORMAT
@@ -214,6 +215,161 @@ class StreamProcessor:
             text += chunk
         return text
 
+
+
+@dataclass
+class ParsedEvaluation:
+    """Structured evaluation data parsed from markdown output."""
+    raw_notes: list[str]
+    summary: str
+    strengths: list[str]
+    areas_for_improvement: list[str]
+    competency_ratings: dict[str, str]
+    weak_competencies: list[str]
+    recommendation: str
+    recommendation_justification: str
+    probing_questions: list[str]
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+class EvaluationParser:
+    """Parse real_interview() markdown output to structured JSON."""
+
+    @staticmethod
+    def parse(evaluation: str) -> ParsedEvaluation:
+        """
+        Parse markdown evaluation to structured data.
+        Uses simple string splitting on "====" delimiters.
+        """
+        sections = evaluation.split("=" * 60)
+
+        raw_notes = []
+        summary = ""
+        strengths = []
+        areas_for_improvement = []
+        competency_ratings = {}
+        weak_competencies = []
+        recommendation = ""
+        recommendation_justification = ""
+        probing_questions = []
+
+        for section in sections:
+            section = section.strip()
+            if not section:
+                continue
+
+            if "1. Real-Time Raw Notes" in section:
+                raw_notes = EvaluationParser._extract_bullets(section)
+
+            elif "2. Formal Interview Summary" in section:
+                lines = section.split('\n')
+                content_lines = [l.strip() for l in lines[1:] if l.strip()]
+                summary = ' '.join(content_lines)
+
+            elif "3. Strengths" in section:
+                strengths = EvaluationParser._extract_bullets(section)
+
+            elif "4. Areas for Improvement" in section:
+                areas_for_improvement = EvaluationParser._extract_bullets(section)
+
+            elif "5. Competency Ratings" in section:
+                competency_ratings, weak_competencies = EvaluationParser._extract_ratings(section)
+
+            elif "6. Final Overall Recommendation" in section:
+                recommendation, recommendation_justification = EvaluationParser._extract_recommendation(section)
+
+            elif "7. Probing Follow-up Questions" in section:
+                probing_questions = EvaluationParser._extract_probing_questions(section)
+
+        return ParsedEvaluation(
+            raw_notes=raw_notes,
+            summary=summary,
+            strengths=strengths,
+            areas_for_improvement=areas_for_improvement,
+            competency_ratings=competency_ratings,
+            weak_competencies=weak_competencies,
+            recommendation=recommendation,
+            recommendation_justification=recommendation_justification,
+            probing_questions=probing_questions
+        )
+
+    @staticmethod
+    def _extract_bullets(section: str) -> list[str]:
+        """Extract bullet points (lines starting with - or •)."""
+        bullets = []
+        for line in section.split('\n'):
+            line = line.strip()
+            if line.startswith('-') or line.startswith('•'):
+                bullets.append(line[1:].strip())
+        return bullets
+
+    @staticmethod
+    def _extract_ratings(section: str) -> tuple[dict[str, str], list[str]]:
+        """Extract competency ratings and identify weak ones."""
+        ratings = {}
+        weak = []
+
+        for line in section.split('\n'):
+            line = line.strip()
+            if line.startswith('-') and ':' in line:
+                parts = line[1:].split(':', 1)
+                if len(parts) == 2:
+                    name = parts[0].strip()
+                    rating = parts[1].strip()
+                    ratings[name] = rating
+
+                    if 'Below' in rating or 'Concern' in rating or '🤔' in rating or '❌' in rating:
+                        weak.append(name)
+
+        return ratings, weak
+
+    @staticmethod
+    def _extract_recommendation(section: str) -> tuple[str, str]:
+        """Extract recommendation and justification."""
+        recommendation = ""
+        justification_lines = []
+        found_rec = False
+
+        for line in section.split('\n'):
+            line = line.strip()
+            if any(emoji in line for emoji in ['🌟', '👍', '🤔', '🤨', '❌']):
+                if 'Hire' in line:
+                    recommendation = line.lstrip('- ')
+                    found_rec = True
+            elif found_rec and line and not line.startswith('STRICT') and not line.startswith('Choose'):
+                justification_lines.append(line)
+
+        justification = ' '.join(justification_lines).strip()
+        return recommendation, justification
+
+    @staticmethod
+    def _extract_probing_questions(section: str) -> list[str]:
+        """Extract probing questions from bullet points or numbered lists."""
+        import re
+        questions = []
+        for line in section.split('\n'):
+            line = line.strip()
+            # Skip header line
+            if 'Probing' in line and 'Question' in line:
+                continue
+
+            # Match bullet points (-) or numbered lists (1., 2., etc.)
+            if line.startswith('-'):
+                q = line[1:].strip()
+            elif re.match(r'^\d+[\.\)]\s*', line):
+                q = re.sub(r'^\d+[\.\)]\s*', '', line).strip()
+            else:
+                continue
+
+            # Clean up if there's a label like "Ownership: \"question\""
+            if ':' in q and '"' in q:
+                q = q.split(':', 1)[1].strip().strip('"')
+
+            if q:
+                questions.append(q)
+        return questions
 
 
 class FeedbackParser:
