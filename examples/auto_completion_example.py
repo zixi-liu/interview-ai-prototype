@@ -26,6 +26,7 @@ async def example_self_intro():
     # Partial self-introduction text
     partial_text = """Hi, I'm John, and I'm a software engineer with 5 years of experience. 
     I've worked on several projects involving distributed systems and microservices."""
+    partial_text = "I'm a "
     
     print(f"\nPartial Input:\n{partial_text}\n")
     print("Getting completion suggestions...\n")
@@ -43,9 +44,21 @@ async def example_self_intro():
         print(f"\n✅ {result['message']}")
     else:
         print("\n📝 Completion Suggestions:")
-        for i, comp in enumerate(result.get("completions", []), 1):
+        completions = result.get("completions", [])
+        
+        # Concurrently check fluency for all completions
+        fluency_results = await asyncio.gather(*[
+            engine.check_fluency(partial_text, comp['text'])
+            for comp in completions
+        ])
+        
+        # Print results
+        for i, (comp, fluency_result) in enumerate(zip(completions, fluency_results), 1):
             print(f"\n{i}. {comp['text']}")
-            print(f"   Reason: {comp['reason']}")
+            # print(f"   Reason: {comp['reason']}")
+            print(f"   Fluency: {fluency_result['is_fluent']}")
+            print(f"   Fluency Reason: {fluency_result['reason']}")
+            print(f"   Fluency Confidence: {fluency_result['confidence']}")
 
 
 async def example_bq_answer():
@@ -126,8 +139,8 @@ async def example_complete_answer():
 async def main():
     """Run all examples"""
     await example_self_intro()
-    await example_bq_answer()
-    await example_complete_answer()
+    # await example_bq_answer()
+    # await example_complete_answer()
 
 
 if __name__ == "__main__":

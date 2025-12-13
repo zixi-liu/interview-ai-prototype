@@ -160,3 +160,42 @@ class AutoCompletionEngine:
             level=level
         )
 
+    async def check_fluency(
+        self,
+        partial_text: str,
+        completion: str
+    ) -> Dict[str, Any]:
+        """
+        Check if the completion is fluent and natural-sounding
+
+        Args:
+            partial_text: Partial text input from user
+            completion: Completion text to check
+
+        Returns:
+            Dict containing fluency information
+            - is_fluent: True/False
+            - reason: Reason for the fluency
+            - confidence: Confidence in the fluency
+        """
+        prompt = AutoCompletion.check_fluency(
+            partial_text=partial_text,
+            completion=completion
+        )
+        result = await self.analyzer.customized_analyze(prompt, stream=True)
+        response_text = await StreamProcessor.get_text(result)
+        try:
+            return json.loads(response_text)
+        except json.JSONDecodeError as e:
+            return {
+                "is_fluent": False,
+                "reason": f"Failed to parse LLM response as JSON: {str(e)}",
+                "confidence": 0
+            }
+        except Exception as e:
+            return {
+                "is_fluent": False,
+                "reason": f"Error processing response: {str(e)}",
+                "confidence": 0
+            }
+

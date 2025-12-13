@@ -775,36 +775,122 @@ TASK:
    - If ALL elements are present and well-structured (1-2 minutes when spoken), output: {{"is_complete": true, "message": "Your self-introduction is already complete and strong."}}
    - DO NOT provide completions if the introduction is already complete.
    
-2. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+3. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+   - GENERATION PROCESS (think through this implicitly before generating each option):
+     Step 1: Deeply analyze the partial input's QUALITY and CURRENT LEVEL:
+       * Assess the partial input's strength level: Is it weak/vague, solid, or already strong?
+       * Identify what STRONG elements already exist in partial_text:
+         - Clear ownership statements? (I led, I designed, I implemented)
+         - Quantified metrics/impact? (numbers, percentages, scale)
+         - Technical depth? (specific technologies, architectures, solutions)
+         - Cross-functional impact? (collaboration, influence beyond own team)
+         - Clear connection to role/company? (why this role matters)
+       * Identify CRITICAL GAPS that prevent Strong Hire rating:
+         - Missing ownership (too vague, "we" instead of "I")
+         - No metrics or quantifiable impact
+         - Lacks technical depth or specificity
+         - Missing connection to target role/company
+         - Insufficient demonstration of impact or scope
+       * Note the writing style and quality level to match in completions
+       * Identify the last character(s): punctuation, space, or mid-word
+       * Determine if the last sentence is complete or incomplete
+       * Note the grammatical structure and context at the end
+     
+     Step 2: Design each completion to ELEVATE to Strong Hire level:
+       * Base completions on the gaps identified in Step 1
+       * If partial_text is weak/vague: Generate completions that ADD strong elements (ownership, metrics, technical depth)
+       * If partial_text is already solid: Generate completions that ADD missing Strong Hire elements (specific metrics, cross-functional impact, clear connection)
+       * If partial_text is already strong: Generate completions that REINFORCE and AMPLIFY existing strengths
+       * Each completion should address at least ONE critical gap that would prevent Strong Hire
+       * Match the quality and style of existing content - don't create jarring quality jumps
+       * Prioritize completions that add the MOST VALUE toward Strong Hire rating
+     
+     Step 3: For each potential completion option, think about fluency AND Strong Hire impact BEFORE finalizing:
+       * Mentally combine the partial input with each potential completion (partial_input + " " + completion)
+       * Read the combined text aloud in your mind to check naturalness and flow
+       * Verify grammatical correctness of the combined sentence/paragraph
+       * Ensure proper punctuation, capitalization, spacing, and word flow
+       * Check for awkward transitions, redundant words, or grammatical errors
+       * EVALUATE: Would the combined text meet Strong Hire criteria?
+         - Does it show clear ownership? (I statements, personal impact)
+         - Does it include quantifiable metrics/impact? (numbers, scale, measurable outcomes)
+         - Does it demonstrate technical depth? (specific tech, architecture, solutions)
+         - Does it connect to the target role/company? (clear alignment, motivation)
+         - Does it show appropriate scope/impact for the role level?
+       * If the combined text reads awkwardly OR doesn't strengthen toward Strong Hire, revise the completion
+       * Only proceed with completions that create seamless, fluent combined text AND elevate toward Strong Hire
+     
+     Step 4: Finalize only options that pass BOTH fluency test AND Strong Hire enhancement test:
+       * Each completion MUST create fluent, natural-sounding text when appended to partial input
+       * Each completion MUST add value that moves the combined text toward Strong Hire rating
+       * Prioritize options that seamlessly integrate AND address critical Strong Hire gaps
+       * Reject or revise any option that would create awkward text OR doesn't strengthen the answer
+       * Ensure the combined text reads as if written as one continuous, coherent paragraph that demonstrates Strong Hire qualities
+
+   - STRONG HIRE COMPLETION STRATEGY: Each completion option should be designed to help achieve Strong Hire rating by:
+     * Adding specific, quantifiable metrics and impact (e.g., "reducing latency by 40%", "serving 10M+ users", "improving team velocity by 25%")
+     * Demonstrating clear ownership with "I" statements and personal impact (e.g., "I led", "I designed and implemented", "I owned the end-to-end")
+     * Showing technical depth and specificity (e.g., "using microservices architecture", "implementing Redis caching layer", "building event-driven systems")
+     * Connecting explicitly to the target role/company (e.g., "I'm excited about Meta's scale", "aligns with Google's focus on", "leverages Amazon's infrastructure")
+     * Demonstrating appropriate scope for {role} level (cross-functional impact for Senior+, strategic thinking for Staff)
+     * Maintaining consistency with partial_text's quality level and style
+   
+   - COMPLETION LENGTH CONSTRAINT: Each completion option MUST be ≤ 1 complete sentence.
+     * If the last sentence in partial_text is incomplete: Complete that sentence only (do not start a new sentence)
+     * If the last sentence in partial_text is complete: Generate exactly 1 complete sentence that adds the next logical element
+     * DO NOT generate multiple sentences or paragraph-length completions
+     * Keep completions concise and focused on adding one key Strong Hire element per option
+   
    - Each option should be a natural continuation that:
-     * Completes the current incomplete sentence if the last sentence is incomplete, OR
-     * Adds the next logical missing element if the last sentence is complete
-   - Options should follow FAANG interview best practices:
-     * Be specific and concrete (avoid vague statements)
-     * Show ownership and impact
-     * Demonstrate technical depth
-     * Connect to the target role/company
-     * Be concise and professional
+     * Completes the current incomplete sentence if the last sentence is incomplete (finish within that one sentence), OR
+     * Adds exactly 1 complete sentence with the next logical missing element if the last sentence is complete, prioritizing elements that move toward Strong Hire
+   
+   - CRITICAL FLUENCY REQUIREMENT: Each completion MUST create a grammatically correct and fluent sentence when appended to the partial input.
+     * Analyze the LAST CHARACTER of the partial input to determine how to start the completion:
+       - If it ends with a period (.), exclamation (!), or question mark (?): Start the completion with a space and capital letter to begin a new sentence (e.g., ". I have..." or ". With over...")
+       - If it ends with a comma (,), semicolon (;), or colon (:): Continue the sentence naturally after the punctuation (e.g., ", specializing in..." or "; I've worked on...")
+       - If it ends with a space or no punctuation but the sentence is complete: Start with a period and space, then continue (e.g., ". I have..." or ". With...")
+       - If it ends mid-word or mid-sentence (no punctuation, sentence clearly incomplete): Continue seamlessly without adding punctuation (e.g., if input is "I am a software engin", complete as "eer with...")
+     * ALWAYS mentally verify the combined text (partial_input + " " + completion) reads as ONE fluent, grammatically correct paragraph before finalizing
+     * Example GOOD: Input "I am a software engineer" → Completion " with over five years of experience building scalable systems that serve millions of users..." (fluent AND adds Strong Hire elements: experience, scale, impact)
+     * Example GOOD: Input "I am a software engineer," → Completion " and I've led multiple projects that reduced system latency by 40%..." (fluent AND adds ownership + metrics)
+     * Example BAD: Input "I am a software engineer" → Completion "I have over five years..." (would create "I am a software engineer I have..." - grammatically incorrect! REJECT)
+     * Example BAD: Input "I am a software engineer" → Completion " and I like coding" (grammatically correct but too vague/weak - doesn't move toward Strong Hire! REJECT)
+   
+   - Options should follow FAANG Strong Hire interview best practices:
+     * Be specific and concrete with quantifiable impact (avoid vague statements like "worked on", "helped", "involved in")
+     * Show clear ownership and personal impact (use "I" statements, demonstrate direct contribution)
+     * Demonstrate technical depth and specificity (name technologies, architectures, design decisions)
+     * Include metrics and measurable outcomes (numbers, percentages, scale, user impact)
+     * Connect explicitly to the target role/company (show understanding and alignment)
+     * Demonstrate appropriate scope for {role} level (technical leadership, cross-functional work, strategic impact)
+     * Be concise, professional, and authentic
    - Output format:
      {{
-       "is_complete": false,
+       "is_complete": true/false,
        "reason": "why the introduction is completed or not",
        "confidence": "[0-100%]",
        "completions": [
          {{
            "text": "completion option 1",
            "reason": "why this is recommended",
-           "confidence": "[0-100%]"
+           "confidence": "[0-100%]",
+           "fluency": "[0-100%]",
+           "red_flag": "N/A or specific red flag"
          }},
          {{
            "text": "completion option 2",
            "reason": "why this is recommended",
-           "confidence": "[0-100%]"
+           "confidence": "[0-100%]",
+           "fluency": "[0-100%]",
+           "red_flag": "N/A or specific red flag"
          }},
          {{
            "text": "completion option 3",
            "reason": "why this is recommended",
-           "confidence": "[0-100%]"
+           "confidence": "[0-100%]",
+           "fluency": "[0-100%]",
+           "red_flag": "N/A or specific red flag"
          }}
        ]
      }}
@@ -813,7 +899,12 @@ CRITICAL RULES:
 - PRIORITY 1: If the last sentence clearly ends the introduction (closing statement), return is_complete: true immediately
 - PRIORITY 2: If all content elements are present, return is_complete: true
 - Only generate completions if the introduction is NOT structurally complete (no clear ending) AND missing content
-- All completions must be realistic, authentic, and follow FAANG standards
+- STRONG HIRE FOCUS: All completions must be designed to elevate the combined text toward Strong Hire rating
+  * Analyze partial_text quality first, then generate completions that fill critical gaps
+  * Prioritize completions that add ownership, metrics, technical depth, and role connection
+  * Ensure completions match and enhance the quality level of existing content
+- LENGTH CONSTRAINT: Each completion MUST be ≤ 1 complete sentence (never multiple sentences or paragraphs)
+- All completions must be realistic, authentic, and follow FAANG Strong Hire standards
 - Output ONLY valid JSON, no additional text"""
 
     @staticmethod
@@ -852,21 +943,108 @@ TASK:
    - If ALL required elements are present and well-structured, output: {{"is_complete": true, "message": "Your answer is already complete and follows STAR format well."}}
    - DO NOT provide completions if the answer is already complete.
    
-2. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+3. ONLY if NOT complete, analyze what's missing and generate the TOP 3 most recommended completion options.
+   - GENERATION PROCESS (think through this implicitly before generating each option):
+     Step 1: Deeply analyze the partial input's QUALITY and CURRENT LEVEL:
+       * Assess the partial input's strength level: Is it weak/vague (Leaning No Hire), solid (Hire), or already strong (Strong Hire)?
+       * Identify what STRONG elements already exist in partial_text:
+         - Clear STAR structure? (Situation, Task, Action, Result)
+         - Unambiguous ownership? (I led, I designed, I decided - not "we did")
+         - Quantified metrics/impact? (numbers, percentages, scale, measurable outcomes)
+         - Technical depth and specificity? (specific technologies, architectures, solutions, trade-offs)
+         - Cross-functional impact? (for Senior+: collaboration, influence beyond own team)
+         - Problem-solving and decision-making? (how decisions were made, why, trade-offs considered)
+         - Reflection/learnings? (what was learned, how it improved future work)
+       * Identify CRITICAL GAPS that prevent Strong Hire rating:
+         - Missing or weak STAR elements (which sections are incomplete/weak?)
+         - Lack of ownership (too vague, "we" instead of "I", executor-style contributions)
+         - No metrics or quantifiable impact (missing numbers, scale, measurable outcomes)
+         - Lacks technical depth or specificity (vague descriptions, no trade-offs)
+         - Missing {level}-level scope (insufficient cross-functional impact for Senior+, no strategic thinking for Staff)
+         - No reflection or learnings (missing meta-cognition)
+       * Note the writing style and quality level to match in completions
+       * Identify the last character(s): punctuation, space, or mid-word
+       * Determine if the last sentence is complete or incomplete
+       * Note the grammatical structure and context at the end
+     
+     Step 2: Design each completion to ELEVATE to Strong Hire level:
+       * Base completions on the gaps identified in Step 1
+       * If partial_text is weak/vague (Leaning No Hire level): Generate completions that ADD strong STAR elements, ownership, metrics, technical depth
+       * If partial_text is solid (Hire level): Generate completions that ADD missing Strong Hire elements (specific metrics, cross-functional impact, reflection, {level}-appropriate scope)
+       * If partial_text is already strong (Strong Hire level): Generate completions that REINFORCE and AMPLIFY existing strengths
+       * Each completion should address at least ONE critical gap that would prevent Strong Hire
+       * Match the quality and style of existing content - don't create jarring quality jumps
+       * Prioritize completions that add the MOST VALUE toward Strong Hire rating for {level} level
+     
+     Step 3: For each potential completion option, think about fluency AND Strong Hire impact BEFORE finalizing:
+       * Mentally combine the partial input with each potential completion (partial_input + " " + completion)
+       * Read the combined text aloud in your mind to check naturalness and flow
+       * Verify grammatical correctness of the combined sentence/paragraph
+       * Ensure proper punctuation, capitalization, spacing, and word flow
+       * Check for awkward transitions, redundant words, or grammatical errors
+       * EVALUATE: Would the combined text meet Strong Hire criteria for {level} level?
+         - Does it have complete STAR structure? (all sections present and well-developed)
+         - Does it show unambiguous ownership? (I statements, personal decisions, direct impact - not facilitator/executor style)
+         - Does it include quantifiable metrics/impact? (specific numbers, percentages, scale, measurable outcomes)
+         - Does it demonstrate technical depth? (specific tech, architecture, design decisions, trade-offs)
+         - Does it show {level}-appropriate scope? (cross-functional for Senior+, strategic for Staff)
+         - Does it show problem-solving and decision-making? (how/why decisions were made)
+         - Does it include reflection/learnings? (meta-cognition, improvement)
+       * If the combined text reads awkwardly OR doesn't strengthen toward Strong Hire, revise the completion
+       * Only proceed with completions that create seamless, fluent combined text AND elevate toward Strong Hire
+     
+     Step 4: Finalize only options that pass BOTH fluency test AND Strong Hire enhancement test:
+       * Each completion MUST create fluent, natural-sounding text when appended to partial input
+       * Each completion MUST add value that moves the combined text toward Strong Hire rating for {level} level
+       * Prioritize options that seamlessly integrate AND address critical Strong Hire gaps
+       * Reject or revise any option that would create awkward text OR doesn't strengthen the answer
+       * Ensure the combined text reads as if written as one continuous, coherent STAR-formatted answer that demonstrates Strong Hire qualities
+
+   - STRONG HIRE COMPLETION STRATEGY: Each completion option should be designed to help achieve Strong Hire rating for {level} level by:
+     * Adding specific, quantifiable metrics and impact (e.g., "reduced latency by 40%", "served 10M+ users", "improved team velocity by 25%", "decreased error rate from 2% to 0.1%")
+     * Demonstrating clear ownership with "I" statements and personal impact (e.g., "I led the design", "I decided to", "I owned the end-to-end", "I made the trade-off to")
+     * Showing technical depth and specificity (e.g., "using microservices architecture", "implementing Redis caching layer", "chose X over Y because", "considered trade-offs between")
+     * Demonstrating {level}-appropriate scope (for Senior+: cross-functional collaboration, influence beyond own team; for Staff: strategic thinking, multi-team impact)
+     * Including problem-solving and decision-making reasoning (e.g., "I analyzed", "I considered", "The key trade-off was", "I decided because")
+     * Adding reflection/learnings when appropriate (e.g., "This taught me", "The key takeaway was", "I learned that")
+     * Completing STAR elements that are missing or weak (ensure all STAR sections are well-developed)
+     * Maintaining consistency with partial_text's quality level and style
+   
+   - COMPLETION LENGTH CONSTRAINT: Each completion option MUST be ≤ 1 complete sentence.
+     * If the last sentence in partial_text is incomplete: Complete that sentence only (do not start a new sentence)
+     * If the last sentence in partial_text is complete: Generate exactly 1 complete sentence that adds the next logical STAR element or Strong Hire component
+     * DO NOT generate multiple sentences or paragraph-length completions
+     * Keep completions concise and focused on adding one key Strong Hire element per option
+   
    - Each option should be a natural continuation that:
-     * Completes the current incomplete sentence if the last sentence is incomplete, OR
-     * Moves to the next logical STAR section if current section is complete, OR
-     * Adds missing critical elements (metrics, ownership, impact, reflection)
-   - Options should follow FAANG interview best practices:
-     * Use STAR method structure
-     * Show unambiguous ownership and personal contribution
-     * Include specific metrics and quantifiable results
-     * Demonstrate {level}-level scope and impact
-     * Show problem-solving and decision-making
-     * Include reflection/learnings when appropriate
+     * Completes the current incomplete sentence if the last sentence is incomplete (finish within that one sentence), OR
+     * Moves to the next logical STAR section with exactly 1 complete sentence if current section is complete, OR
+     * Adds exactly 1 complete sentence with missing critical Strong Hire elements (metrics, ownership, impact, reflection, {level}-appropriate scope), prioritizing elements that move toward Strong Hire
+   
+   - CRITICAL FLUENCY REQUIREMENT: Each completion MUST create a grammatically correct and fluent sentence when appended to the partial input.
+     * Analyze the LAST CHARACTER of the partial input to determine how to start the completion:
+       - If it ends with a period (.), exclamation (!), or question mark (?): Start the completion with a space and capital letter to begin a new sentence (e.g., ". This resulted in..." or ". The key takeaway...")
+       - If it ends with a comma (,), semicolon (;), or colon (:): Continue the sentence naturally after the punctuation (e.g., ", which led to..." or "; I decided to...")
+       - If it ends with a space or no punctuation but the sentence is complete: Start with a period and space, then continue (e.g., ". I then..." or ". The outcome...")
+       - If it ends mid-word or mid-sentence (no punctuation, sentence clearly incomplete): Continue seamlessly without adding punctuation
+     * ALWAYS mentally verify the combined text (partial_input + " " + completion) reads as ONE fluent, grammatically correct paragraph before finalizing
+     * Example GOOD: Input "I was working on a project" → Completion ". My task was to reduce system latency, and I implemented a caching layer using Redis that decreased response time by 40%..." (fluent AND adds Strong Hire elements: task clarity, ownership, technical depth, metrics)
+     * Example GOOD: Input "I led the team," → Completion " and I made the decision to use microservices architecture, which improved our deployment frequency by 3x..." (fluent AND adds ownership + decision-making + metrics)
+     * Example BAD: Input "I was working on a project" → Completion "My task was to..." (would create "I was working on a project My task was to..." - grammatically incorrect! REJECT)
+     * Example BAD: Input "I was working on a project" → Completion " and it went well" (grammatically correct but too vague/weak - doesn't move toward Strong Hire! REJECT)
+   
+   - Options should follow FAANG Strong Hire interview best practices for {level} level:
+     * Use complete STAR method structure with all sections well-developed
+     * Show unambiguous ownership and personal contribution (use "I" statements, avoid "we", demonstrate direct impact, not facilitator/executor style)
+     * Include specific metrics and quantifiable results (numbers, percentages, scale, measurable outcomes - required for Strong Hire)
+     * Demonstrate {level}-level scope and impact (for Senior+: cross-functional collaboration; for Staff: strategic, multi-team influence)
+     * Show problem-solving and decision-making (explain how decisions were made, trade-offs considered, reasoning)
+     * Include reflection/learnings when appropriate (meta-cognition, what was learned, how it improved future work)
+     * Demonstrate technical depth and specificity (name technologies, architectures, design decisions, trade-offs)
+     * Be concise, professional, and authentic
    - Output format:
      {{
-       "is_complete": false,
+       "is_complete": true/false,
        "reason": "why the introduction is completed or not",
        "confidence": "[0-100%]",
        "completions": [
@@ -892,5 +1070,27 @@ CRITICAL RULES:
 - PRIORITY 1: If the last sentence clearly ends the answer (closing statement), return is_complete: true immediately
 - PRIORITY 2: If all STAR elements are present, return is_complete: true
 - Only generate completions if the answer is NOT structurally complete (no clear ending) AND missing STAR elements
-- All completions must be realistic, authentic, and demonstrate {level}-level competency
+- STRONG HIRE FOCUS: All completions must be designed to elevate the combined text toward Strong Hire rating for {level} level
+  * Analyze partial_text quality first (assess current rating level: Leaning No Hire, Hire, or Strong Hire)
+  * Identify existing strong elements and critical gaps that prevent Strong Hire
+  * Generate completions that fill critical gaps (ownership, metrics, technical depth, {level}-appropriate scope, reflection)
+  * Prioritize completions that add the most value toward Strong Hire rating
+  * Ensure completions match and enhance the quality level of existing content
+- LENGTH CONSTRAINT: Each completion MUST be ≤ 1 complete sentence (never multiple sentences or paragraphs)
+- All completions must be realistic, authentic, and demonstrate {level}-level competency that meets Strong Hire standards
 - Output ONLY valid JSON, no additional text"""
+
+    @staticmethod
+    def check_fluency(partial_text: str, completion: str) -> str:
+        """Check if the completion is fluent and natural-sounding"""
+        return f"""You are a FAANG interviewer checking the fluency of the sentence.
+
+        INPUT:
+        - SENTENCE: {partial_text}{completion}
+
+        OUTPUT (follow this structure exactly):
+        {{
+            "is_fluent": true/false,
+            "reason": "why the completion is fluent or not",
+            "confidence": "[0-100%]"
+        }}"""

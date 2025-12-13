@@ -258,7 +258,7 @@ class InterviewCLI:
                 tab_pressed = [False]  # Use list to allow modification in nested function
                 captured_text = [""]  # Store captured text from buffer
                 
-                @kb.add(Keys.Tab)
+                @kb.add(Keys.Tab, eager=True)
                 def handle_tab(event):
                     """Handle Tab key press for autocomplete"""
                     tab_pressed[0] = True
