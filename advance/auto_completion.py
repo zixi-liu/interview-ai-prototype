@@ -25,7 +25,7 @@ class AutoCompletionEngine:
     Supports two scenarios: "self-intro" and "bq answer"
     """
 
-    def __init__(self, model: str = "gpt-4o-mini"):
+    def __init__(self, model: str = "gpt-4o"):
         """
         Initialize the auto-completion engine.
 

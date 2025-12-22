@@ -34,7 +34,7 @@ YOUR_ANSWER = """In my previous role, I was part of a team responsible for devel
 
 
 async def solve_conflict():
-    analyzer = InterviewAnalyzer()
+    analyzer = InterviewAnalyzer(model="gpt-4o")
     question = QUESTION
     print("=" * 80)
     print(f"Question: {question}")
@@ -53,7 +53,7 @@ async def solve_conflict():
     red_flag_feedback = await Colors.stream_and_print(red_flag_result)
 
     feedback_recorder = FeedbackRecorder()
-    feedback_recorder.save_feedback(question, answer, feedback, red_flag_feedback)
+    await feedback_recorder.save_feedback(question, answer, feedback, red_flag_feedback)
 
 async def main():
     await solve_conflict()

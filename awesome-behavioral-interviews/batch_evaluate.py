@@ -110,9 +110,19 @@ async def evaluate_single_qa(analyzer: InterviewAnalyzer, qa_id: int, question: 
     try:
         prompt = BQQuestions.real_interview(question, answer, level) + BQQuestions.bar_raiser(level)
         result = await analyzer.customized_analyze(prompt, stream=True)
-        feedback_text = await StreamProcessor.get_text(result)
-        rating = extract_overall_rating(feedback_text)
-        return EvaluationResult(qa_id, question, answer, feedback_text, rating)
+        feedback = await StreamProcessor.get_text(result)
+        rating = extract_overall_rating(feedback)
+
+        red_flag_prompt = BQQuestions.red_flag(question, answer, level) + BQQuestions.bar_raiser(level)
+        red_flag_result = await analyzer.customized_analyze(red_flag_prompt, stream=True)
+        red_flag_feedback = await StreamProcessor.get_text(red_flag_result)
+        feedback_recorder = FeedbackRecorder()
+        script_dir = Path(__file__).parent
+        feedback_path = script_dir / f"feedbacks/{qa_id}-{rating}.md"
+        await feedback_recorder.save_feedback(
+            question, answer, feedback, red_flag_feedback, feedback_path)
+
+        return EvaluationResult(qa_id, question, answer, feedback, rating)
     except Exception as e:
         print(f"Error evaluating Q&A {qa_id}: {e}", file=sys.stderr)
         return EvaluationResult(qa_id, question, answer, f"Error: {str(e)}", "Error")
@@ -195,8 +205,8 @@ def format_statistics(stats: dict, include_header: bool = True) -> str:
         "Summary by Category:",
         SUBSECTION,
         f"  Pass/Hire/Strong Hire:     {stats['pass_count']:3d} ({stats['pass_percentage']:5.1f}%)",
-        f"  Borderline/Weak/Leaning:     {stats['borderline_count']:3d} ({stats['borderline_percentage']:5.1f}%)",
-        f"  No-Pass/No Hire:            {stats['no_pass_count']:3d} ({stats['no_pass_percentage']:5.1f}%)",
+        f"  Borderline/Weak/Leaning Hire:     {stats['borderline_count']:3d} ({stats['borderline_percentage']:5.1f}%)",
+        f"  No-Pass/No Hire/Leaning No Hire:            {stats['no_pass_count']:3d} ({stats['no_pass_percentage']:5.1f}%)",
     ])
     
     if stats['error_count'] > 0:
@@ -223,7 +233,7 @@ def save_statistics(stats: dict, results: list[EvaluationResult], output_file: P
 async def main():
     """Main function."""
     script_dir = Path(__file__).parent
-    toml_file = script_dir / 'questions_answers.toml'
+    toml_file = script_dir / 'answers.toml'
     output_file = script_dir / 'evaluation_statistics.txt'
     
     if not toml_file.exists():

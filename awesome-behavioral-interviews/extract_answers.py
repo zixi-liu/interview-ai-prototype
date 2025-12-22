@@ -27,7 +27,7 @@ def clean_html_text(html_text):
     
     return text
 
-def extract_questions_answers(md_file_path):
+def extract_answers(md_file_path):
     """Extract questions and answers from the markdown file."""
     with open(md_file_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -90,7 +90,7 @@ def main():
     # Script is in the same directory as README.md
     script_dir = Path(__file__).parent
     md_file = script_dir / 'README.md'
-    output_file = script_dir / 'questions_answers.toml'
+    output_file = script_dir / 'answers.toml'
     
     if not md_file.exists():
         print(f"Error: {md_file} not found!")
@@ -99,7 +99,7 @@ def main():
     print(f"Reading from: {md_file}")
     
     # Extract questions and answers
-    qa_data = extract_questions_answers(md_file)
+    qa_data = extract_answers(md_file)
     
     print(f"Found {len(qa_data)} questions and answers")
     

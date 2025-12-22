@@ -69,11 +69,11 @@ BETER_ANSWER = """
     """
 
 async def solve_conflict():
-    analyzer = InterviewAnalyzer()
+    analyzer = InterviewAnalyzer(model="gpt-4o")
     question = BQQuestions.SOLVED_CONFLICT
     print("=" * 80)
     print(f"Question: {question}")
-    answer = GOOD_ANSWER
+    answer = BETER_ANSWER
 
     print("=" * 80)
     print("Answer:")
@@ -88,7 +88,7 @@ async def solve_conflict():
     red_flag_feedback = await Colors.stream_and_print(red_flag_result)
 
     feedback_recorder = FeedbackRecorder()
-    feedback_recorder.save_feedback(question, answer, feedback, red_flag_feedback)
+    await feedback_recorder.save_feedback(question, answer, feedback, red_flag_feedback)
 
 async def main():
     await solve_conflict()

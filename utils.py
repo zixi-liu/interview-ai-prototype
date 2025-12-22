@@ -472,12 +472,13 @@ class FeedbackRecorder:
             counter += 1
         return candidate
 
-    def save_feedback(
+    async def save_feedback(
         self, 
         question: str, 
         answer: str, 
         feedback: str,
-        red_flag: str | None = None) -> str:
+        red_flag: str | None = None,
+        path: str | None = None) -> str:
         """
         Save a single interview feedback record as a markdown file.
 
@@ -497,7 +498,7 @@ class FeedbackRecorder:
 
         filename = f"{date_str}-{rating}.md"
         directory = self._ensure_feedback_dir()
-        filepath = self._unique_filepath(directory, filename)
+        filepath = path or self._unique_filepath(directory, filename)
 
         # Normalize blocks to avoid extra indentation in markdown
         norm_question = textwrap.dedent(question).strip()

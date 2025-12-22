@@ -89,11 +89,12 @@ class StorySelfImprove:
             print("The answer is not perfect, need to improve.")
             self.iterate_times += 1
             feedback_recorder = FeedbackRecorder()
-            feedback_filepath = feedback_recorder.save_feedback(
+            feedback_filepath = await feedback_recorder.save_feedback(
                 question=await self.question(),
                 answer=await self.improved_answer(),
                 feedback=await self.feedback(),
-                red_flag=await self.red_flag_feedback()
+                red_flag=await self.red_flag_feedback(),
+                path=str(self.feedback_file),
             )
             self.feedback_file = Path(feedback_filepath)
             # Reset cached values for next iteration
@@ -280,7 +281,7 @@ class HumanInLoopImprove:
 
             # Save feedback for reference
             feedback_recorder = FeedbackRecorder()
-            feedback_recorder.save_feedback(
+            await feedback_recorder.save_feedback(
                 question=question,
                 answer=current_answer,
                 feedback=feedback,
@@ -369,7 +370,7 @@ class HumanInLoopImprove:
 
             # Save feedback
             feedback_recorder = FeedbackRecorder()
-            feedback_recorder.save_feedback(
+            await feedback_recorder.save_feedback(
                 question=question,
                 answer=current_answer,
                 feedback=feedback,
