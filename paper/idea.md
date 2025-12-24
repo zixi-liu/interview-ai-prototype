@@ -8,17 +8,17 @@
 
 ## 核心发现
 
-### Finding 1: Human-in-the-Loop显著提升训练效果和定制化
+### Finding 1: Human-in-the-Loop的机制、价值与适用场景探索
 
-**发现类型：** Idea + 实证发现
+**发现类型：** Idea + 待实证验证
 
 **核心观察：**
 - Story-Improve使用CoT Prompting进行面试答案改进
-- **对比发现**：Human-in-the-loop方式（`HumanInLoopImprove`）比纯自动化CoT（`StorySelfImprove`）效果更好
-- **关键优势**：
-  - ✅ **培训意义**：能真正起到培训作用，帮助候选人反思真实经历
-  - ✅ **定制化**：可以根据个人背景和经验水平定制答案
-  - ✅ **真实性**：使用候选人的真实经历细节，而非LLM生成的虚构内容
+- **对比探索**：Human-in-the-loop方式（`HumanInLoopImprove`）与纯自动化CoT（`StorySelfImprove`）在机制和价值上存在差异
+- **潜在优势**（需实验验证）：
+  - 🔍 **培训意义**：可能帮助候选人反思真实经历，提供学习价值
+  - 🔍 **定制化**：可以根据个人背景和经验水平定制答案
+  - 🔍 **真实性**：使用候选人的真实经历细节，而非LLM生成的虚构内容
 
 **技术实现：**
 - 自动化方式：`advance/self_improve.py:14-107` (`StorySelfImprove`)
@@ -26,8 +26,10 @@
 - 关键方法：`BQAnswer.improve_with_probing_answers()` - 使用用户真实回答而非LLM生成
 
 **研究价值：**
-- 证明在面试培训场景中，human-in-the-loop比纯自动化更有价值
-- 为面试培训系统设计提供实证依据
+- **探索**在面试培训场景中，human-in-the-loop与纯自动化的机制差异和价值定位
+- **识别**两种方法的适用场景和trade-offs
+- **为**面试培训系统设计提供机制分析和设计参考
+- **注意**：效果可能受参与者质量、投入程度等因素影响，需要定量实验验证
 
 ---
 
@@ -85,14 +87,14 @@
 
 **研究价值：**
 - 揭示LLM评估系统需要domain-specific的adversarial机制
-- 证明negativity bias在面试评估中的必要性
+- 探索negativity bias在面试评估中的作用和必要性
 - 为真实评估系统设计提供机制参考
 
 ---
 
 ## 研究贡献总结
 
-1. **Human-in-the-Loop增强**：实证证明human-in-the-loop在面试培训场景中的优势
+1. **Human-in-the-Loop机制探索**：探索human-in-the-loop在面试培训场景中的机制、价值定位和适用场景（需定量实验验证）
 2. **收敛行为分析**：揭示CoT在结构化评估任务中的快速收敛特性
 3. **Adversarial机制**：提出并验证negativity bias模型对真实评估的必要性
 

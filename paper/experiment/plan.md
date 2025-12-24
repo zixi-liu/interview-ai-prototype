@@ -20,7 +20,7 @@ This plan addresses the critical gaps identified in the review:
 ## Experiment 1: Finding 1 - Human-in-the-Loop Effectiveness
 
 ### 1.1 Objective
-Quantitatively compare `StorySelfImprove` (automated CoT) vs `HumanInLoopImprove` (CoT + human input) to validate that human-in-the-loop significantly enhances training effectiveness and customization.
+Quantitatively compare `StorySelfImprove` (automated CoT) vs `HumanInLoopImprove` (CoT + human input) to explore the mechanisms, value propositions, and trade-offs of human-in-the-loop approaches. The experiment investigates whether and under what conditions human-in-the-loop provides advantages in training effectiveness and customization, with effectiveness potentially depending on participant quality and context.
 
 ### 1.2 Experimental Design
 
@@ -121,11 +121,68 @@ Quantitatively compare `StorySelfImprove` (automated CoT) vs `HumanInLoopImprove
 - **Figure 1**: Rating improvement distribution
 - **Statistical tests**: t-test, effect size (Cohen's d)
 
-### 1.5 Success Criteria
+### 1.5 Success Criteria (Tiered)
+
+**Tier 1 (Ideal - if results support hypothesis):**
 - **Statistically significant** difference in rating improvement (p < 0.05)
 - **Effect size** ≥ 0.5 (medium effect)
 - **Training effectiveness**: ≥70% participants report improved confidence
 - **Customization**: ≥80% answers show unique personal details
+
+**Tier 2 (Acceptable - if results are directionally consistent):**
+- Directionally consistent difference (p < 0.10) OR no significant difference but effect size ≥ 0.3
+- **Effect size** ≥ 0.3 (small to medium effect)
+- **Training effectiveness**: ≥50% participants report improved confidence
+- **Customization**: ≥60% answers show unique personal details
+- Qualitative evidence supports value proposition
+
+**Tier 3 (Exploratory - if results differ from hypothesis):**
+- No significant difference or opposite direction, but:
+  - Mechanism analysis reveals valuable insights
+  - Trade-offs and value propositions are clearly identified
+  - Case studies demonstrate context-dependent effectiveness
+  - Results inform when to use each approach
+
+**Interpretation Strategy:**
+- If Tier 1: Report full quantitative evidence supporting human-in-the-loop advantages
+- If Tier 2: Report quantitative evidence with emphasis on mechanisms and value dimensions
+- If Tier 3: Shift focus to mechanism analysis, trade-offs, and context-dependent recommendations
+
+**Note:** All outcomes are valuable. The experiment aims to understand mechanisms and trade-offs, not just prove superiority.
+
+### 1.6 Risk Mitigation and Contingency Plans
+
+**Major Risks:**
+1. **Participant Quality Variability**: Human participants may provide varying quality of input, affecting Group B results
+2. **Non-Significant Results**: Results may not show statistically significant differences between groups
+3. **Opposite Results**: Automated approach may outperform human-in-the-loop in rating improvement
+4. **Sample Size Limitations**: 50 answers may not provide sufficient statistical power for all comparisons
+
+**Mitigation Strategies:**
+1. **Participant Screening**: 
+   - Require participants with interview experience or relevant background
+   - Set quality thresholds for participant responses
+   - Provide training and guidance on providing detailed, authentic answers
+
+2. **Quality Control**:
+   - Score each response for quality (detail level, authenticity, specificity)
+   - Exclude obviously low-quality responses from analysis
+   - Implement multi-round validation for critical responses
+
+3. **Sample Size Management**:
+   - Conduct pilot study first (10 answers, 5-10 participants)
+   - Adjust sample size based on pilot results and power analysis
+   - Use power analysis to determine required sample size for desired effect size
+
+4. **Result Interpretation Strategy**:
+   - **If significant (Tier 1)**: Report full quantitative evidence supporting human-in-the-loop advantages
+   - **If directionally consistent but not significant (Tier 2)**: Report effect size, confidence intervals, and qualitative analysis; discuss sample size limitations
+   - **If opposite or no difference (Tier 3)**: 
+     - Analyze reasons (participant quality, answer types, etc.)
+     - Discuss limitations honestly
+     - Emphasize mechanism insights and value dimensions beyond rating improvement
+     - Provide context-dependent recommendations
+   - **All outcomes provide valuable contributions** to understanding mechanisms, trade-offs, and when to use each approach
 
 ---
 
@@ -495,10 +552,17 @@ paper/experiment/
 ## Success Metrics Summary
 
 ### Experiment 1 (Human-in-the-Loop)
-- ✅ Statistically significant difference (p < 0.05)
-- ✅ Effect size ≥ 0.5
-- ✅ ≥70% participants report improved confidence
-- ✅ ≥80% answers show unique personal details
+
+**Primary Metrics (to be determined by results):**
+- **Statistical significance**: p-value from independent t-test (target: p < 0.05, but accept p < 0.10 if directionally consistent)
+- **Effect size**: Cohen's d (report regardless of significance; target: ≥ 0.5, acceptable: ≥ 0.3)
+- **Training effectiveness**: % participants reporting improved confidence (target: ≥70%, acceptable: ≥50%)
+- **Customization**: % answers showing unique personal details (target: ≥80%, acceptable: ≥60%)
+
+**Interpretation:**
+- Results will determine whether findings support, partially support, or differ from initial hypothesis
+- All outcomes (including non-significant or opposite results) provide valuable insights into mechanisms and trade-offs
+- Focus on understanding **when and why** each approach is effective, not just proving superiority
 
 ### Experiment 2 (Convergence)
 - ✅ No significant difference iteration 1 vs 100 (p > 0.05)

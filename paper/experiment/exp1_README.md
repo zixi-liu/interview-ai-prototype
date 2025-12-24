@@ -1,6 +1,6 @@
-# Experiment 1: Human-in-the-Loop Effectiveness
+# Experiment 1: Human-in-the-Loop Mechanisms and Value Exploration
 
-This directory contains the implementation for Experiment 1, which quantitatively compares `StorySelfImprove` (automated CoT) vs `HumanInLoopImprove` (CoT + human input) to validate that human-in-the-loop significantly enhances training effectiveness and customization.
+This directory contains the implementation for Experiment 1, which quantitatively compares `StorySelfImprove` (automated CoT) vs `HumanInLoopImprove` (CoT + human input) to explore the mechanisms, value propositions, and trade-offs of human-in-the-loop approaches. The experiment investigates whether and under what conditions human-in-the-loop provides advantages in training effectiveness and customization, with effectiveness potentially depending on participant quality and context.
 
 ## Directory Structure
 
@@ -165,11 +165,27 @@ Visualization showing:
 
 ## Success Criteria
 
-According to the experimental plan, success is defined as:
-- **Statistically significant** difference in rating improvement (p < 0.05)
-- **Effect size** ≥ 0.5 (medium effect)
-- **Training effectiveness**: ≥70% participants report improved confidence
-- **Customization**: ≥80% answers show unique personal details
+According to the experimental plan, success is defined using a tiered approach:
+
+**Tier 1 (Ideal - if results support hypothesis):**
+- Statistically significant difference (p < 0.05)
+- Effect size ≥ 0.5 (medium effect)
+- ≥70% participants report improved confidence
+- ≥80% answers show unique personal details
+
+**Tier 2 (Acceptable - if results are directionally consistent):**
+- Directionally consistent (p < 0.10) OR effect size ≥ 0.3
+- ≥50% participants report improved confidence
+- ≥60% answers show unique personal details
+- Qualitative evidence supports value proposition
+
+**Tier 3 (Exploratory - if results differ from hypothesis):**
+- No significant difference or opposite direction, but:
+  - Mechanism analysis provides insights
+  - Trade-offs are clearly identified
+  - Context-dependent recommendations are possible
+
+**Note:** All outcomes are valuable. The experiment aims to understand mechanisms and trade-offs, not just prove superiority. Results will inform when to use each approach based on system objectives and constraints.
 
 ## Data Collection Notes
 
@@ -195,6 +211,13 @@ The code includes comments (`# TODO:`, `# NOTE:`) where data may be missing:
 3. **Customization Metrics**: Current uniqueness metric is simple. Could be enhanced with BLEU scores, embedding similarity, etc.
 
 4. **Visualization**: Requires matplotlib/seaborn. Falls back gracefully if not available.
+
+5. **Experimental Uncertainty**:
+   - Results may vary depending on participant quality, engagement level, and answer types
+   - Statistical significance is not guaranteed; results may be non-significant or directionally opposite to hypothesis
+   - Sample size (50 answers) may limit statistical power
+   - Participant quality significantly impacts Group B results; low-quality input may lead to different conclusions
+   - All outcomes (including non-significant or opposite results) provide valuable insights into mechanisms and trade-offs
 
 ## Troubleshooting
 
