@@ -14,78 +14,80 @@ Situation: At my previous job as a software developer at a tech company, we foun
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Overlapping projects, 2 teams
-- Automation tools for customer service
-- Joint meeting to discuss scope
-- Proposed collaboration, integration
-- Coordinated integration efforts
-- Successful outcome, robust tool
-- Lessons: collaboration, communication, flexibility
+- Overlapping projects
+- Joint meeting suggestion
+- Collaboration proposal
+- Coordinated integration
+- Successful outcome
+- Increased efficiency
+- Lessons in collaboration, communication
+============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a situation where their team and another were developing overlapping customer service automation tools. To address the duplication, they organized a joint meeting to discuss each project's scope and proposed a collaborative integration approach. The candidate coordinated the integration efforts, resulting in a more robust tool that was well-received by end-users. While the candidate demonstrated structured thinking and collaboration, the impact of their individual contributions could be clearer.
+The candidate described a situation where their team and another team were developing similar tools for customer service automation. They proposed a joint meeting to discuss the overlapping functionalities, which led to a collaborative integration of both projects. The candidate coordinated the integration efforts, resulting in a more robust tool that improved efficiency. While the candidate demonstrated initiative and communication skills, the impact and ownership were somewhat limited to coordination rather than driving the project vision or strategy.
 
 ============================================================
 3. Strengths (Interviewer perspective)
 - Clear articulation of the situation and actions taken
 - Demonstrated structured thinking in problem-solving
-- Effective communication skills in organizing meetings
-- Ability to work collaboratively with other teams
+- Effective communication and collaboration skills
+- Ability to facilitate teamwork and integration efforts
 
 ============================================================
 4. Areas for Improvement
-- Need to clarify individual contributions versus team efforts; some ambiguity in ownership
-- Lack of quantifiable metrics to demonstrate the impact of the integrated tool
-- More emphasis on personal initiative in the integration process
+- Need to demonstrate stronger ownership of the project vision and outcomes
+- Provide more specific metrics or data to quantify the impact of the integrated tool
+- Clarify personal contributions versus team efforts in achieving the results
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: Meets(👌)
-- Problem Solving: Meets+(👍)
-- Execution: Meets(👌)
+- Ownership: Below(🤔)
+- Problem Solving: Meets(👌)
+- Execution: Meets+(👍)
 - Collaboration: Strong(🌟)
 - Communication: Strong(🌟)
-- Leadership / Influence: Meets(👌)
-- Culture Fit: Strong(🌟)
+- Leadership / Influence: Below(🤔)
+- Culture Fit: Meets(👌)
 
 ============================================================
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate demonstrated solid collaboration and communication skills, but there were ambiguities regarding their individual ownership and impact. The lack of quantifiable results and clarity in personal contributions raises concerns about their readiness for a Junior-Mid level role in a competitive environment.
+The candidate showed good collaboration and communication skills but lacked clear ownership of the project and did not provide sufficient metrics to demonstrate the impact of their contributions. Given the competitive hiring landscape, the candidate did not meet the expectations for a Junior-Mid level role.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific examples of your contributions during the integration process? What tasks did you lead?
-2. How did you measure the success of the integrated tool? Were there any metrics you tracked?
-3. What challenges did you face during the integration, and how did you personally address them?
-4. Can you describe a time when you had to advocate for your team's approach in the joint meeting? What was the outcome?
-5. How did you ensure that both teams felt valued and heard during the collaboration process?
+1. Can you provide specific metrics or data that demonstrate the efficiency improvements achieved by the integrated tool?
+2. What specific actions did you take to ensure that your team's unique features were effectively integrated into the final product?
+3. How did you handle any disagreements or differing opinions during the joint meetings with the other team?
+4. Can you describe a situation where you took the lead on a project or initiative? What was the outcome?
+5. How do you prioritize tasks when coordinating efforts between multiple teams?
+6. What strategies do you use to ensure clear communication and alignment among team members during a collaborative project?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" (the candidate primarily describes actions taken by the team rather than their individual contributions)
-  - "lack of reflection" (the candidate does not reflect on personal growth or specific lessons learned from the experience)
-  - "ambiguity avoidance" (the candidate does not provide specific metrics or data to quantify the success of the integrated tool)
+  - "lack of reflection" (the candidate does not discuss personal learnings or how they would apply this experience in future situations)
+  - "overclaiming contribution" (the candidate's role in the integration process is presented as central without clear evidence of individual impact)
+  - "ambiguity avoidance" (the description lacks specific metrics or data to quantify the success of the integrated tool)
 
 =====================
 2. Red Flag Severity Rating
-- "executor-style contribution" - ★★★☆☆
-- "lack of reflection" - ★★☆☆☆
-- "ambiguity avoidance" - ★★★☆☆
+- "lack of reflection": ★★☆☆☆
+- "overclaiming contribution": ★★☆☆☆
+- "ambiguity avoidance": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's role in the integration process is unclear, suggesting a lack of ownership.
-- There is insufficient reflection on personal contributions or lessons learned, limiting insight into growth.
+- The candidate demonstrates initiative by suggesting a joint meeting but lacks clarity on personal contributions and outcomes.
+- There is insufficient reflection on personal growth or future application of the experience.
 - The absence of quantifiable metrics undermines the impact of the project.
 
 =====================
 4. Improvement Suggestions
-- Clearly articulate individual contributions and responsibilities in collaborative projects.
-- Include specific metrics or outcomes to quantify the success of projects.
-- Reflect on personal growth and lessons learned from experiences to demonstrate self-awareness.
+- Include specific metrics or data to quantify the success of the integrated tool.
+- Reflect on personal contributions and learnings from the experience to demonstrate growth.
+- Clearly delineate individual actions taken during the integration process to avoid ambiguity in ownership.

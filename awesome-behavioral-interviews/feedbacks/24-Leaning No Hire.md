@@ -14,34 +14,34 @@ Situation: At my previous job as a software developer, we were developing a new 
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Situation: explained ML to non-technical stakeholder
-- Task: simplify complex concept
-- Action: prepared presentation, avoided jargon, used analogy (child & fruits)
-- Visual aids used, connected to marketing impact
+- Situation: explained ML to non-tech stakeholder
+- Task: simplify complex concept for marketing
+- Action: presentation, avoided jargon, used analogy (child & fruits)
+- Visual aids to demonstrate data processing
 - Result: stakeholder understood, appreciated clarity
-- Importance of communication skills emphasized
+- Importance of communication, cross-departmental collaboration
 ============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a scenario where they needed to explain machine learning algorithms to a non-technical stakeholder in the marketing department. They prepared a presentation that simplified the concept using an analogy and visual aids, successfully making the information accessible and relevant. The stakeholder left with a better understanding of the technology's application in their marketing strategies. While the candidate demonstrated effective communication skills, the scope of their impact was limited to a single meeting, which may not fully reflect the ownership expected at this level.
+The candidate described a scenario where they needed to explain machine learning algorithms to a non-technical stakeholder in the marketing department. They prepared a presentation that avoided technical jargon and used an analogy to simplify the concept, which helped the stakeholder understand its relevance to their work. The candidate's actions resulted in a positive reception from the stakeholder, highlighting the importance of effective communication in technical roles. Overall, the candidate demonstrated a solid ability to convey complex ideas simply, which is crucial for a Junior-Mid level position.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear communication of complex concepts
+- Clear communication skills
+- Ability to simplify complex concepts
+- Structured approach to presenting information
 - Effective use of analogies and visual aids
-- Ability to relate technical information to stakeholder needs
 - Demonstrated understanding of cross-departmental collaboration
 
 ============================================================
 4. Areas for Improvement
-- Need to demonstrate more ownership of the project beyond a single meeting
-- Provide metrics or data to quantify the impact of their explanation
-- Explore deeper engagement with stakeholders to enhance collaboration
+- Could provide more specific metrics or data on the impact of the explanation on the stakeholder's understanding or the project's success.
+- Limited scope of ownership; more emphasis on personal contribution versus team effort would strengthen the response.
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: Below(🤔)
+- Ownership: Meets(👌)
 - Problem Solving: Meets(👌)
 - Execution: Meets(👌)
 - Collaboration: Meets(👌)
@@ -53,37 +53,36 @@ The candidate described a scenario where they needed to explain machine learning
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate demonstrated strong communication skills but lacked sufficient ownership and impact in their example. The limited scope of their contribution and absence of metrics to quantify success suggest they may not meet the expectations for a Junior-Mid level role in a highly competitive environment.
+The candidate demonstrated strong communication skills and the ability to simplify complex concepts, which are essential for a Junior-Mid level role. However, the lack of specific metrics regarding the impact of their explanation and the limited scope of ownership raise concerns about their overall effectiveness and contribution to the project.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you describe any follow-up actions you took after the meeting to ensure the stakeholder fully understood the machine learning feature?
-2. How did you measure the effectiveness of your explanation in terms of the stakeholder's subsequent decisions or actions?
-3. Were there any challenges you faced while preparing your presentation, and how did you overcome them?
-4. Can you provide an example of how you have engaged with stakeholders in a more ongoing capacity beyond a single meeting?
-5. How do you typically gather feedback from non-technical team members to improve your communication of technical concepts?
+1. Can you provide specific feedback or metrics from the stakeholder that demonstrated their understanding after your explanation?
+2. How did you ensure that your presentation was tailored to the stakeholder's specific needs or concerns?
+3. What role did you play in the development of the machine learning feature beyond the explanation, and how did that impact the project?
+4. Were there any challenges you faced while preparing your presentation, and how did you overcome them?
+5. How would you approach explaining another complex technical concept to a different non-technical audience?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "lack of reflection" (the candidate does not discuss any lessons learned or how they would apply this experience in future situations)
-  - "vagueness" (the impact of the explanation on the marketing campaign is not quantified or detailed)
+  - "lack of reflection" - The candidate does not reflect on how they could improve their communication skills further or what challenges they faced during the explanation.
+  - "ambiguity avoidance" - While the candidate explains the situation, the impact of their explanation on the marketing campaign is not quantified or detailed, leading to a lack of clarity on the significance of their contribution.
 
 =====================
 2. Red Flag Severity Rating
 - "lack of reflection": ★★☆☆☆
-- "vagueness": ★★☆☆☆
+- "ambiguity avoidance": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate demonstrates a basic understanding of effective communication but lacks depth in reflecting on the experience.
-- The impact of the explanation on the marketing campaign is not clearly articulated, limiting the perceived scope of the contribution.
-- Overall, the example does not fully meet the expectations for Junior-Mid-level ownership and impact.
+- The candidate demonstrates a basic understanding of effective communication but lacks depth in reflecting on their learning and growth from the experience.
+- The impact of their actions is not clearly defined, making it difficult to assess the significance of their contribution to the overall project.
 
 =====================
-4. Improvement Suggestions (very concise)
-- Include specific metrics or outcomes that resulted from the explanation to demonstrate impact.
-- Reflect on what was learned from the experience and how it could be applied in future scenarios.
-- Provide more detail on the collaboration process with the marketing department to illustrate cross-departmental engagement.
+4. Improvement Suggestions
+- Include specific metrics or outcomes that resulted from the stakeholder's understanding of the machine learning feature.
+- Reflect on any challenges faced during the explanation and how they were overcome.
+- Provide more detail on how the explanation directly influenced the marketing campaign's success or strategy.

@@ -14,65 +14,62 @@ When given a task to design a system, my approach involves several key steps to 
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Requirement gathering first
-- Stakeholder discussions
-- Detailed questions for clarity
-- Feasibility study, research tech stack
-- Initial design proposal: architecture, data flow
-- Review meetings for feedback
-- Detailed documentation for dev team
-- Emphasis on communication, collaboration
-- Good structure, but lacks metrics
-============================================================
+- Requirement gathering → stakeholder discussions
+- Detailed questions for scope/functional clarity
+- Feasibility study → tech stack, constraints
+- Initial design proposal → architecture, data flow, wireframes
+- Review meetings for feedback → resolving ambiguity
+- Documentation for dev team → specs, user stories
+- Focus on communication, collaboration, feedback
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate outlined a structured approach to system design, starting with requirement gathering and stakeholder discussions. They emphasized the importance of clarifying ambiguities through review meetings and feedback sessions. While the candidate demonstrated a solid understanding of the design process and the need for documentation, they did not provide specific metrics or examples of the impact of their designs. Overall, the response reflects a foundational understanding of the design process but lacks depth in ownership and measurable outcomes.
+The candidate outlined a structured approach to system design, emphasizing requirement gathering through stakeholder discussions and detailed questioning. They demonstrated an understanding of the importance of feasibility studies and initial design proposals, including architecture and wireframes. While they mentioned resolving ambiguity through review meetings and documentation, the candidate's examples lacked specific metrics or quantifiable outcomes, limiting the demonstration of ownership and impact. Overall, the response reflects a solid understanding of the design process but falls short of showcasing clear, individual contributions.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear, structured approach to system design
-- Effective communication with stakeholders
-- Good understanding of requirement gathering
-- Focus on documentation and collaboration
+- Clear structured approach to system design
+- Good emphasis on stakeholder communication and collaboration
+- Understanding of design documentation importance
+- Ability to identify and address ambiguity in requirements
 
 ============================================================
 4. Areas for Improvement
-- Provide specific examples or metrics to demonstrate impact of designs
-- Clarify personal contributions vs. team efforts in previous projects
+- Need to provide specific examples of personal contributions and impacts in past projects
+- Lack of quantifiable metrics or outcomes to support claims of effectiveness
+- Could enhance clarity on how they prioritize conflicting requirements or feedback
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: Meets(👌)
+- Ownership: Below(🤔)
 - Problem Solving: Meets(👌)
-- Execution: Below(🤔)
-- Collaboration: Meets(👌)
-- Communication: Meets(👌)
-- Leadership / Influence: Meets(👌)
+- Execution: Meets(👌)
+- Collaboration: Meets+(👍)
+- Communication: Meets+(👍)
+- Leadership / Influence: Below(🤔)
 - Culture Fit: Meets(👌)
 
 ============================================================
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate demonstrates a foundational understanding of system design but lacks specific metrics and clear ownership of outcomes. Given the competitive hiring landscape, the absence of measurable impact and the vague nature of contributions lead to a recommendation of leaning no hire.
+The candidate demonstrated a solid understanding of system design processes and collaboration but lacked clear ownership and measurable impact in their examples. The absence of specific contributions and metrics raises concerns about their readiness for a Junior-Mid level role, particularly in a competitive hiring environment.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide a specific example of a project where your design had a measurable impact? What metrics did you use to evaluate success?
-2. In your previous projects, how did you ensure that your contributions were clearly defined and recognized within the team?
-3. Can you describe a situation where you faced significant ambiguity in requirements? How did you handle it, and what was the outcome?
-4. What specific feedback did you receive from stakeholders during your review meetings, and how did you incorporate that feedback into your design?
-5. How do you prioritize features or requirements when gathering information from stakeholders? Can you give an example?
-6. Have you ever had to pivot your design based on stakeholder feedback? What was the situation, and how did you manage that change?
+1. Can you provide a specific example of a project where you took ownership of a particular aspect of the system design? What was your role, and what impact did it have?
+2. In your previous projects, how did you measure the success of your design decisions? Can you share any metrics or outcomes?
+3. How do you prioritize conflicting feedback from stakeholders during the design process? Can you give an example?
+4. Can you describe a time when you faced ambiguity in requirements? What specific steps did you take to resolve it, and what was the outcome?
+5. How do you ensure that your documentation is effectively utilized by the development team? Can you provide an example of feedback you received on your documentation?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" - The candidate describes a process but lacks clear ownership of specific outcomes or decisions made during the design process.
-  - "vagueness" - The answer does not provide specific metrics or examples of how the design impacted the project or stakeholders.
+  - "executor-style contribution" - The candidate describes processes but lacks clear ownership of specific actions or decisions.
+  - "vagueness" - The answer does not provide concrete examples of how ambiguity was resolved or specific metrics used in the design process.
 
 =====================
 2. Red Flag Severity Rating
@@ -81,12 +78,12 @@ The candidate demonstrates a foundational understanding of system design but lac
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate outlines a systematic approach but fails to demonstrate clear ownership of the design decisions.
-- Lacks specific examples of metrics or outcomes that resulted from the design process.
-- Overall, the response is more descriptive than demonstrative of individual impact.
+- The candidate outlines a structured approach but does not demonstrate clear ownership of the design process.
+- Lacks specific examples of metrics or outcomes that validate the effectiveness of their approach.
+- Ambiguity resolution is mentioned but not detailed, raising concerns about their ability to navigate unclear requirements.
 
 =====================
 4. Improvement Suggestions (very concise)
-- Include specific examples of past projects where the candidate took ownership of design decisions and their outcomes.
-- Provide quantifiable metrics that demonstrate the impact of the design on stakeholders or project success.
-- Clarify individual contributions versus team contributions to highlight personal accountability.
+- Provide specific examples of past projects where you took ownership of design decisions and their outcomes.
+- Include metrics or data that demonstrate the impact of your design choices on project success.
+- Clarify how you personally resolved ambiguity in previous projects, with specific instances and actions taken.

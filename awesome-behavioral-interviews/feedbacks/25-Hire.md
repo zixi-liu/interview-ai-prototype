@@ -14,31 +14,31 @@ Situation: At my previous job as a software developer, we were working on a larg
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Disagreement on DB design (NoSQL vs SQL)
+- Disagreement on DB design (SQL vs NoSQL)
+- Importance of data integrity
 - Proposed meeting to discuss
-- Emphasized data integrity
+- Listening to Jake’s perspective
 - Suggested prototypes for both approaches
-- Consulted team for insights
-- SQL chosen after testing
+- Team consultation for insights
+- SQL approach chosen after testing
 - Positive outcome, strengthened relationship
-============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a situation where they disagreed with a colleague on the database design for a web application. They took the initiative to propose a dedicated meeting to discuss their differing viewpoints and emphasized the importance of data integrity. By suggesting the creation of prototypes for both approaches and involving the team for additional insights, they were able to reach a consensus that favored the SQL approach. This collaborative effort not only led to a technically sound decision but also improved their working relationship with the colleague.
+The candidate described a situation where they disagreed with a colleague over database design for a web application. They took the initiative to propose a meeting to discuss their differing viewpoints and suggested creating prototypes for both SQL and NoSQL approaches. This collaborative effort led to a decision favoring the SQL approach, which was deemed more suitable for the project's requirements. The candidate effectively demonstrated structured thinking and communication skills, resulting in a positive outcome and improved team dynamics.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear communication of technical viewpoints
-- Structured approach to resolving conflict
-- Demonstrated collaboration with team members
+- Clear communication of technical perspectives
+- Structured approach to resolving conflicts
+- Willingness to collaborate and seek team input
 - Ability to listen and incorporate feedback
-- Focus on data integrity and evidence-based decision-making
+- Focus on data integrity and project requirements
 
 ============================================================
 4. Areas for Improvement
-- More explicit metrics or data to support decision-making
-- Greater emphasis on personal ownership in the resolution process
+- Provide more specific metrics or outcomes from the prototypes to quantify impact.
+- Clarify personal contributions versus team efforts to highlight individual ownership.
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
@@ -54,37 +54,37 @@ The candidate described a situation where they disagreed with a colleague on the
 6. Final Overall Recommendation
 - 👍Hire
 
-The candidate demonstrated solid collaboration and communication skills, effectively resolving a technical disagreement. However, there is room for improvement in articulating personal ownership and providing data-driven decision-making metrics. Overall, they meet the expectations for a Junior-Mid level candidate.
+The candidate demonstrated solid collaboration and communication skills, effectively managing a disagreement and leading a constructive resolution. However, there is room for improvement in quantifying the impact of their actions and clarifying their individual contributions, which slightly lowers the overall impression of ownership.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific metrics or data that influenced your decision to prefer SQL over NoSQL?
-2. In the meeting with Jake, what specific arguments did you present to advocate for your perspective?
-3. How did you ensure that your contributions were recognized in the collaborative process of resolving the disagreement?
-4. Can you describe a situation where you had to take ownership of a project or decision that did not go as planned?
-5. How do you typically measure the success of the technical decisions made in your projects?
+1. Can you provide specific metrics or outcomes from the prototypes you created? How did you measure their effectiveness?
+2. What was your individual contribution to the prototypes, and how did you ensure your perspective was represented in the final decision?
+3. How did you handle any pushback from Jake or other team members during the discussion? Can you give an example?
+4. In retrospect, would you approach the disagreement differently? Why or why not?
+5. How do you typically ensure that your technical decisions align with project requirements? Can you share an example?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" (the candidate primarily describes collaborative actions without clear ownership of the decision-making process)
-  - "lack of reflection" (the candidate does not reflect on personal learning or growth from the disagreement)
+  - "executor-style contribution" (the candidate primarily describes collaboration without clear ownership of the decision-making process)
+  - "lack of reflection" (the candidate does not reflect on what they learned from the disagreement or how they might handle similar situations in the future)
 
 =====================
 2. Red Flag Severity Rating
-- executor-style contribution: ★★★☆☆
-- lack of reflection: ★★☆☆☆
+- "executor-style contribution": ★★★☆☆
+- "lack of reflection": ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's role in resolving the disagreement is described more as a facilitator than a decision-maker, indicating limited ownership.
-- There is no explicit reflection on personal growth or lessons learned beyond the technical outcome, which is essential for a Junior-Mid level candidate.
-- The example lacks metrics or quantifiable impact, making it difficult to assess the significance of the decision.
+- The candidate's role in the resolution process is unclear, suggesting a lack of ownership.
+- The response lacks personal reflection on lessons learned or future application of this experience.
+- The example does not demonstrate a significant impact on the project or team beyond the immediate disagreement.
 
 =====================
 4. Improvement Suggestions
-- Clearly articulate personal contributions and decision-making processes in collaborative situations.
-- Include specific metrics or outcomes that demonstrate the impact of decisions made.
-- Reflect on personal learnings or skills gained from experiences to show growth and self-awareness.
+- Clearly articulate personal contributions and decision-making in collaborative situations.
+- Include reflections on lessons learned and how they would apply them in future scenarios.
+- Provide specific metrics or outcomes from the prototypes to demonstrate data-driven decision-making.

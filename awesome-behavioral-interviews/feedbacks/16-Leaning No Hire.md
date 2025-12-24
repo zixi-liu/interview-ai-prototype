@@ -16,37 +16,37 @@ Situation: At my previous job as a software developer in a growing tech company,
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Short-staffed team, heavy workload
 - Prioritized tasks, organized schedule
-- Mini-deadlines, broke down tasks
+- Mini-deadlines for larger projects
 - Communicated with manager about capacity
-- Took breaks to avoid burnout
+- Regular breaks to avoid burnout
 - Automated routine tasks with scripts
 - Met all deadlines, maintained quality
 - Learning experience, acknowledged by team
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a situation where they faced a heavy workload due to being short-staffed. They prioritized tasks based on deadlines and importance, organized their schedule effectively, and communicated transparently with their manager about their capacity. The candidate implemented strategies like breaking down larger projects into manageable tasks and automating routine processes, which allowed them to meet all project deadlines while maintaining quality. Overall, they demonstrated structured thinking and reliability in managing their workload.
+The candidate described a situation where they faced an increased workload due to being short-staffed at their previous job. They prioritized tasks, organized their schedule, and communicated transparently with their manager about their capacity. The candidate also implemented automation to improve efficiency. As a result, they met all project deadlines while maintaining quality. While the candidate demonstrated structured thinking and effective time management, the overall impact and ownership of the projects were somewhat limited.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear prioritization and task management
+- Clear prioritization of tasks
+- Structured approach to workload management
 - Effective communication with management
-- Structured approach to workload handling
-- Proactive in seeking efficiency through automation
-- Ability to maintain quality under pressure
+- Ability to adapt and maintain productivity under pressure
 
 ============================================================
 4. Areas for Improvement
-- More specific metrics or data on impact of automation and task management
-- Greater emphasis on personal contributions versus team efforts in achieving results
+- Need to demonstrate clearer ownership of projects and outcomes
+- More emphasis on quantifiable results or metrics to showcase impact
+- Explore deeper collaboration with team members to enhance project delivery
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: Meets(👌)
+- Ownership: Below(🤔)
 - Problem Solving: Meets(👌)
-- Execution: Meets(👌)
+- Execution: Meets+(👍)
 - Collaboration: Meets(👌)
-- Communication: Meets(👌)
+- Communication: Meets+(👍)
 - Leadership / Influence: Below(🤔)
 - Culture Fit: Meets(👌)
 
@@ -54,23 +54,23 @@ The candidate described a situation where they faced a heavy workload due to bei
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate demonstrated adequate task management and communication skills but lacked clear metrics to quantify their impact. Additionally, the ownership of results was somewhat ambiguous, indicating a need for stronger personal contributions. Given the competitive hiring landscape, this raises concerns about their immediate productivity and effectiveness in a Junior-Mid role.
+The candidate showed potential in managing their workload and communicating effectively, but there was a lack of clear ownership and measurable impact in their contributions. Given the competitive hiring landscape, the candidate did not sufficiently demonstrate the level of initiative and influence expected at this stage.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific examples of how your automation impacted your team's efficiency? What metrics did you track?
-2. How did you ensure that your prioritization aligned with the overall team goals during this busy period?
-3. Can you clarify your individual contributions to meeting project deadlines? How did your actions specifically influence the team's success?
-4. What feedback did you receive from your manager regarding your communication about workload, and how did you implement any suggestions?
-5. Were there any challenges you faced in maintaining quality while managing your increased workload? How did you address them?
+1. Can you provide specific examples of how your actions directly impacted the success of the projects during this busy period?
+2. What metrics or data did you use to measure the effectiveness of the automation you implemented?
+3. How did you collaborate with your team during this time, and what role did you play in ensuring team success?
+4. Were there any challenges you faced while prioritizing tasks, and how did you address them?
+5. Can you describe a situation where you had to adjust your approach based on feedback from your manager or team?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" - The candidate's actions appear to be reactive rather than proactive, focusing on managing tasks rather than driving project outcomes.
-  - "lack of reflection" - The candidate does not demonstrate a clear understanding of the impact of their actions beyond meeting deadlines, lacking insight into broader team dynamics or project contributions.
+  - "executor-style contribution" (the candidate's actions primarily reflect task execution rather than strategic ownership)
+  - "lack of reflection" (the candidate does not demonstrate insight into how this experience will inform future work or decision-making)
 
 =====================
 2. Red Flag Severity Rating
@@ -79,12 +79,12 @@ The candidate demonstrated adequate task management and communication skills but
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's response suggests a focus on task management rather than strategic impact.
-- There is insufficient evidence of ownership over project outcomes or team collaboration.
-- The lack of metrics or quantifiable results diminishes the overall effectiveness of the example.
+- The candidate's response primarily details task execution without demonstrating strategic ownership or initiative.
+- There is a lack of reflection on how this experience will influence future performance or decision-making.
+- The example does not clearly articulate impact beyond immediate task management.
 
 =====================
 4. Improvement Suggestions
-- Include specific metrics or outcomes to quantify the impact of your contributions.
-- Highlight instances of proactive leadership or initiative taken during the workload increase.
-- Reflect on lessons learned regarding team dynamics or collaboration to demonstrate deeper insight.
+- Provide specific metrics or outcomes to quantify the impact of workload management (e.g., percentage of deadlines met, quality improvements).
+- Highlight instances of proactive problem-solving or initiative beyond task execution.
+- Reflect on lessons learned and how they will apply to future challenges in similar situations.

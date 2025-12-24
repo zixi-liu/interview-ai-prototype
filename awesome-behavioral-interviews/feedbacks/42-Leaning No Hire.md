@@ -15,7 +15,7 @@ In the field of software development, being assigned tasks that involve unfamili
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Unfamiliar tasks common in dev
-- Systematic approach
+- Systematic, proactive approach
 - Assess requirements first
 - Research phase: docs, tutorials, courses
 - Use Stack Overflow, GitHub, Medium
@@ -23,23 +23,23 @@ In the field of software development, being assigned tasks that involve unfamili
 - Hands-on experimentation
 - Keep manager/team informed
 - Positive attitude towards challenges
-- Opportunity for growth
+- Opportunity for growth emphasized
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a structured approach to handling unfamiliar tasks in software development. They emphasized assessing task requirements, conducting thorough research, and leveraging resources such as documentation and mentorship. The candidate also highlighted the importance of hands-on experimentation and maintaining communication with their team. While the approach is methodical, it lacks specific examples of past experiences or measurable outcomes, which are critical for demonstrating Junior-Mid level ownership and impact.
+The candidate provided a structured approach to handling unfamiliar tasks in software development. They emphasized assessing task requirements, conducting thorough research, and leveraging community resources. The candidate also highlighted the importance of collaboration with colleagues and hands-on experimentation to solidify their understanding. While they demonstrated a positive attitude towards learning, the response lacked specific examples of past experiences or measurable outcomes, which would have strengthened their case for ownership and impact.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear, systematic approach to problem-solving
-- Proactive in seeking resources and mentorship
-- Emphasizes communication with team and manager
-- Positive attitude towards learning and growth
+- Clear and structured thinking in problem-solving
+- Proactive in seeking resources and support
+- Positive attitude towards learning and challenges
+- Willingness to collaborate and communicate with team members
 
 ============================================================
 4. Areas for Improvement
-- Need to provide specific examples of past experiences to demonstrate ownership and impact.
-- Could improve on articulating measurable outcomes from their learning process or task completion.
+- Provide specific examples of past experiences where they successfully learned a new technology or methodology.
+- Demonstrate measurable outcomes or impacts from their learning process to showcase ownership and effectiveness.
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
@@ -48,45 +48,47 @@ The candidate described a structured approach to handling unfamiliar tasks in so
 - Execution: Meets(👌)
 - Collaboration: Meets+(👍)
 - Communication: Meets(👌)
-- Leadership / Influence: Below(🤔)
+- Leadership / Influence: N/A (not applicable for Junior-Mid)
 - Culture Fit: Meets(👌)
 
 ============================================================
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate demonstrates a solid understanding of how to approach unfamiliar tasks but lacks specific examples of ownership and measurable impact. Given the competitive hiring landscape, the absence of concrete experiences and outcomes does not meet the expectations for a Junior-Mid level candidate.
+The candidate's response demonstrated some structured thinking and a proactive approach, but they fell short in showcasing ownership and measurable impact. The lack of specific examples and quantifiable outcomes raises concerns about their ability to take initiative and drive results in unfamiliar situations, which is critical for a Junior-Mid level role.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide a specific example of a time when you faced an unfamiliar task? What was the outcome?
-2. How did you measure your success or progress while learning a new technology or methodology?
-3. Can you describe a situation where you collaborated with a colleague or mentor? What was your contribution to that collaboration?
-4. What challenges did you encounter during your research phase, and how did you overcome them?
-5. How do you prioritize tasks when you have multiple unfamiliar areas to learn about simultaneously?
-6. Can you share an instance where your approach to learning something new led to a significant impact on a project or team?
+1. Can you provide a specific example of a time when you had to learn a new technology or methodology? What was the outcome?
+2. How did you measure your success in that situation? What metrics or results did you achieve?
+3. Can you describe a challenge you faced while learning something new and how you overcame it?
+4. In your experience, how do you prioritize which resources to use when researching a new topic?
+5. Have you ever had to teach someone else a technology you learned? What was that experience like?
+6. How do you ensure that your learning translates into tangible contributions to your team or projects?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" (the candidate primarily describes actions that are reactive rather than proactive)
-  - "lack of reflection" (no mention of lessons learned or how to apply this experience in future tasks)
+  - "executor-style contribution" (the answer focuses on general approaches rather than specific actions taken by the candidate)
+  - "lack of reflection" (no mention of past experiences or lessons learned from similar situations)
+  - "vagueness" (the answer lacks specific examples or metrics to demonstrate effectiveness)
 
 =====================
 2. Red Flag Severity Rating
 - "executor-style contribution": ★★★☆☆
 - "lack of reflection": ★★☆☆☆
+- "vagueness": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's response lacks clear ownership of the learning process, focusing more on seeking help rather than demonstrating initiative.
-- There is no reflection on how this experience could influence future tasks or improve problem-solving skills.
-- The approach described is more about following a process than showcasing independent critical thinking or innovation.
+- The candidate describes a systematic approach but does not provide specific examples of ownership or past experiences.
+- The response lacks depth in reflecting on previous challenges faced and lessons learned.
+- Overall, the answer is too vague and does not demonstrate clear impact or metrics.
 
 =====================
 4. Improvement Suggestions
-- Include specific examples of past experiences where the candidate successfully learned a new technology independently.
-- Reflect on how the candidate would apply lessons learned from this task to future challenges.
-- Emphasize proactive problem-solving strategies rather than relying on external resources.
+- Provide a specific example of a past task where you faced a similar challenge and detail your actions and outcomes.
+- Include metrics or measurable results from your learning process or project to demonstrate effectiveness.
+- Reflect on lessons learned from previous experiences to show growth and adaptability in similar situations.

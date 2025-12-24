@@ -247,7 +247,7 @@ async def main():
     print("\nStarting batch evaluation (this may take a while)...")
     print("Using async concurrent processing (max 50 concurrent requests)\n")
     
-    results = await batch_evaluate(questions_answers, level="Junior-Mid", max_concurrent=50)
+    results = await batch_evaluate(questions_answers, level="Junior-Mid", max_concurrent=5)
     stats = generate_statistics(results)
     
     print_statistics(stats)

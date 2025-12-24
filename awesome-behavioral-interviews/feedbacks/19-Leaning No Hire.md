@@ -15,76 +15,77 @@ Situation: In my previous role as a software developer at a mid-sized tech compa
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Conflict: John vs. Sarah on implementation
-- Task: Resolve conflict, restore morale
-- Actions: Individual meetings, team discussion, prototype both methods
-- Result: Chose Sarah's approach, John's method for future, improved morale
-- Prevention: Team-building activities, open forums
-- Good facilitation, empathy shown
-- Lacks metrics on impact, vague on personal contribution
+- Team morale impacted
+- Candidate: senior member, tasked with resolution
+- Individual meetings for understanding
+- Organized team meeting for discussion
+- Prototyping both approaches
+- Result: chose Sarah's method, John's for future
+- Team-building activities proposed
+- Improved morale, effective communication
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a conflict between two team members regarding implementation approaches for a product update. They facilitated individual discussions to understand perspectives and organized a team meeting to foster constructive dialogue, leading to a decision to prototype both methods. Ultimately, the team chose a proven approach while agreeing to explore the innovative method later. The candidate proposed team-building activities to prevent future conflicts. While they demonstrated good facilitation and empathy, the lack of clear metrics on the impact of their actions and ambiguity regarding their personal contribution to the resolution limits the overall assessment.
+The candidate described a situation where a conflict arose between two team members regarding the implementation of a feature. As a senior member, they facilitated individual discussions to understand both perspectives and organized a team meeting to foster constructive dialogue. The resolution involved prototyping both approaches, leading to a decision that balanced innovation with stability. While the candidate demonstrated structured thinking and collaboration, the impact of their actions was primarily limited to conflict resolution without clear metrics or broader influence on team dynamics.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Demonstrated empathy and active listening skills
-- Structured approach to conflict resolution
-- Effective facilitation of team discussions
-- Initiated proactive measures for team cohesion
+- Clear understanding of conflict resolution
+- Structured approach to facilitating discussions
+- Empathetic listening skills
+- Proactive in proposing team-building activities
+- Ability to restore team morale
 
 ============================================================
 4. Areas for Improvement
-- Need to clarify personal contributions vs. team efforts in conflict resolution
-- Should provide more specific metrics or outcomes to quantify impact
-- Enhance focus on ownership of the resolution process
+- Limited metrics or data-driven decision-making in the resolution process
+- Scope of impact primarily on immediate team dynamics; lacked broader influence
+- Need for clearer ownership in driving team initiatives beyond conflict resolution
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: Below(🤔)
-- Problem Solving: Meets(👌)
+- Ownership: Meets(👌)
+- Problem Solving: Meets+(👍)
 - Execution: Meets(👌)
-- Collaboration: Meets+(👍)
-- Communication: Meets(👌)
+- Collaboration: Strong(🌟)
+- Communication: Meets+(👍)
 - Leadership / Influence: Below(🤔)
-- Culture Fit: Meets+(👍)
+- Culture Fit: Meets(👌)
 
 ============================================================
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
-The candidate showed potential in conflict resolution and team dynamics but lacked clear ownership and quantifiable impact in their example. The ambiguity in their personal contributions and insufficient metrics raise concerns about their readiness for a Junior-Mid level role in a competitive environment.
+
+The candidate demonstrated adequate conflict resolution skills and collaboration but fell short in showcasing broader ownership and influence within the team. The lack of data-driven decision-making and limited impact scope raises concerns about their readiness for a Junior-Mid level role in a competitive environment.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide a specific example of how your actions directly influenced the outcome of the conflict resolution?
-2. What metrics or feedback did you use to assess the effectiveness of the team-building activities you proposed?
-3. How did you ensure that both John and Sarah felt equally valued in the decision-making process during the team meeting?
-4. Can you describe a situation where you took ownership of a project or task that had a measurable impact on your team or company?
-5. What steps would you take if a similar conflict arose in the future, and how would you ensure your role is clearly defined in that process?
+1. Can you provide specific metrics or outcomes that resulted from the prototyping exercise? How did you measure success?
+2. What steps did you take to ensure that the team-building activities were effective in preventing future conflicts?
+3. How did you ensure that your role as a facilitator was perceived as neutral by both John and Sarah during the discussions?
+4. Can you describe a situation where you took initiative beyond conflict resolution to improve team dynamics or processes?
+5. How would you handle a similar conflict if it involved more than two team members with differing opinions?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
-- Red Flags: 
-  - "executor-style contribution" (the candidate primarily facilitated discussions rather than driving a resolution)
-  - "lack of reflection" (no personal learning or growth mentioned beyond the team-building activities)
-  - "vagueness in impact" (no specific metrics or quantifiable outcomes provided for the team-building activities or conflict resolution)
+- Overclaiming contribution: The candidate describes actions taken as a senior member but does not clarify their specific role in the resolution process, which raises questions about ownership.
+- Lack of reflection: The candidate does not reflect on personal learnings or how they might apply these experiences in future situations, which is critical for growth.
 
 =====================
 2. Red Flag Severity Rating
-- "executor-style contribution": ★★☆☆☆
-- "lack of reflection": ★★☆☆☆
-- "vagueness in impact": ★★★☆☆
+- Overclaiming contribution: ★★☆☆☆
+- Lack of reflection: ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's role in conflict resolution appears more facilitative than ownership-driven, lacking clear personal impact.
-- There is insufficient reflection on personal growth or lessons learned from the experience.
-- The absence of specific metrics or outcomes diminishes the perceived effectiveness of the proposed solutions.
+- The candidate's role in conflict resolution lacks clarity, making it difficult to assess true ownership.
+- There is insufficient personal reflection on the experience, which is important for demonstrating growth and adaptability.
+- The resolution process described is somewhat vague, lacking specific metrics or outcomes tied to the candidate's actions.
 
 =====================
 4. Improvement Suggestions
-- Clearly define personal contributions and outcomes in conflict resolution scenarios.
-- Include specific metrics or measurable impacts of actions taken to demonstrate effectiveness.
-- Reflect on personal learnings and how they can be applied to future situations.
+- Clearly define personal contributions and actions taken in team situations to demonstrate ownership.
+- Include specific metrics or outcomes that resulted from conflict resolution efforts to show impact.
+- Reflect on personal learnings from experiences to illustrate growth and adaptability in future scenarios.

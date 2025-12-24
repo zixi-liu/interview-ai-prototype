@@ -15,78 +15,78 @@ Situation: In my previous role as a software developer at a SaaS company, our te
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - SaaS company, performance improvement task
-- Team majority: complete rewrite of legacy code
-- Candidate: targeted optimization, less risky
-- Voiced opinion in meeting, detailed presentation
-- Performance analysis, bottlenecks identified
-- Proof of concept: refactored code, metrics improved
-- Team agreed to refactor, project ahead of schedule
-- Learned: data-backed opinions, communication, initiative
+- Team wanted complete rewrite of legacy code
+- Candidate disagreed, proposed targeted optimization
+- Voiced opinion in meeting, prepared detailed presentation
+- Included performance analysis, risks of rewrite
+- Proof of concept: refactored code, shared metrics
+- Team agreed on refactoring approach
+- Project completed ahead of schedule, under budget
+- Learned value of data-driven opinions, communication
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a situation in their previous role as a software developer where they disagreed with the majority of their team about the approach to improve product performance. While the team favored a complete rewrite of the legacy code, the candidate advocated for targeted optimizations, presenting a detailed analysis and a proof of concept that demonstrated significant performance improvements. As a result, the team adopted the refactoring approach, completing the project ahead of schedule and under budget. This response reflects a commendable ability to communicate effectively and support opinions with data, aligning with expectations for a Junior-Mid level.
+The candidate described a situation where they disagreed with their team's approach to improving product performance, which involved rewriting legacy code. They effectively communicated their perspective by preparing a detailed presentation that included performance analysis and a proof of concept demonstrating the benefits of targeted refactoring. As a result, the team adopted their approach, leading to successful project completion ahead of schedule and under budget. This response reflects a solid understanding of structured thinking and communication, which aligns with expectations for a Junior-Mid level candidate.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear communication of technical concepts
-- Structured approach to problem-solving
-- Ability to back up opinions with data
-- Initiative in demonstrating proof of concept
-- Positive team outcome and project success
+- Clear articulation of differing opinion
+- Structured approach to presenting analysis
+- Initiative in creating proof of concept
+- Effective communication with team
+- Demonstrated ability to influence team decision
 
 ============================================================
 4. Areas for Improvement
-- Could provide more specific metrics on performance improvements to strengthen data-driven decision-making.
-- Need to clarify personal contributions versus team efforts to better demonstrate ownership.
+- More explicit metrics on performance improvements needed
+- Greater emphasis on personal ownership in the project outcome
+- Clarification on how they handled team pushback initially
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
 - Ownership: Meets(👌)
 - Problem Solving: Meets+(👍)
 - Execution: Meets(👌)
-- Collaboration: Meets(👌)
+- Collaboration: Meets+(👍)
 - Communication: Strong(🌟)
 - Leadership / Influence: Meets(👌)
 - Culture Fit: Meets+(👍)
 
 ============================================================
 6. Final Overall Recommendation
-- 👍Hire
-
-The candidate demonstrated solid problem-solving skills and effective communication, which are essential for a Junior-Mid level position. However, there is room for improvement in quantifying impact and clarifying personal contributions, which could enhance their overall effectiveness in future roles.
+👍 Hire  
+The candidate demonstrated a solid ability to communicate effectively and influence team decisions, which is essential for a Junior-Mid level role. While there are areas for improvement in metrics and personal ownership, their structured thinking and initiative indicate they would be a valuable addition to the team.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific metrics or data points that illustrate the performance improvements achieved through your refactoring efforts?
-2. How did you ensure that your contributions were recognized by the team, and what steps did you take to clarify your role in the project?
-3. Were there any challenges you faced when presenting your alternative approach, and how did you address them?
-4. In retrospect, would you have approached the situation differently, and if so, how?
-5. How do you typically handle disagreements with team members in a collaborative environment?
+1. Can you provide specific metrics on the performance improvements achieved through your refactoring? 
+2. How did you initially address the team's pushback when presenting your differing opinion?
+3. What steps did you take to ensure your proof of concept was aligned with the team's overall goals?
+4. Can you elaborate on your role in the project beyond the presentation and proof of concept?
+5. How did you handle any resistance from team members after your presentation? 
+6. What would you do differently if faced with a similar situation in the future?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "communication breakdown" (the candidate does not mention how they ensured the team was aligned after presenting their alternative solution)
-  - "lack of reflection" (the candidate does not reflect on how they could have better engaged the team or addressed their concerns beyond the presentation)
-  - "overclaiming contribution" (the impact of the candidate's actions on the team's decision is not clearly delineated, suggesting potential exaggeration of their influence)
+  - "executor-style contribution" - The candidate's actions, while positive, primarily reflect supporting the team's decision rather than leading or owning the direction of the project.
+  - "lack of reflection" - The candidate does not demonstrate any personal learning or growth from the situation beyond the immediate technical outcome.
 
 =====================
 2. Red Flag Severity Rating
-- "communication breakdown": ★★☆☆☆
+- "executor-style contribution": ★★☆☆☆
 - "lack of reflection": ★★☆☆☆
-- "overclaiming contribution": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate demonstrates initiative and data-driven decision-making but lacks clarity on team engagement post-presentation.
-- There is insufficient reflection on personal growth or team dynamics, which is critical for collaboration.
-- The impact of the candidate's contribution to the team's decision appears overstated without clear metrics.
+- The candidate's contribution appears supportive rather than leading, indicating a potential lack of ownership.
+- There is insufficient reflection on personal development or lessons learned beyond the technical success.
+- Overall impact seems limited to a specific task rather than a broader influence on team dynamics or project direction.
 
 =====================
 4. Improvement Suggestions
-- Clearly articulate how you ensured team alignment and buy-in after presenting your solution.
-- Reflect on how you could have engaged with team members who disagreed with your approach to foster collaboration.
-- Provide specific metrics or outcomes that directly resulted from your actions to substantiate your contributions.
+- Emphasize personal ownership of outcomes and decisions in future examples.
+- Include reflections on how the experience shaped future work or decision-making processes.
+- Highlight broader team dynamics and how the candidate influenced or led discussions beyond technical contributions.
