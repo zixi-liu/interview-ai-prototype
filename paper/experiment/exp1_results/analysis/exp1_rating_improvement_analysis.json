@@ -10,4 +10,52 @@
     "std_b": 1.1426929274467312,
     "n_a": 20,
     "n_b": 30,
-    "significant": 
+    "significant": false
+  },
+  "group_a_stats": {
+    "n": 20,
+    "mean_improvement": 0.5,
+    "std_improvement": 1.1002392084403616,
+    "median_improvement": 0.0,
+    "improved_count": 6,
+    "no_change_count": 13,
+    "degraded_count": 1,
+    "improvement_rate": 30.0,
+    "reached_strong_hire": 0,
+    "reached_strong_hire_rate": 0.0
+  },
+  "group_b_stats": {
+    "n": 30,
+    "mean_improvement": 0.26666666666666666,
+    "std_improvement": 1.1426929274467312,
+    "median_improvement": 0.0,
+    "improved_count": 7,
+    "no_change_count": 20,
+    "degraded_count": 3,
+    "improvement_rate": 23.333333333333332,
+    "reached_strong_hire": 0,
+    "reached_strong_hire_rate": 0.0
+  },
+  "group_a_descriptive": {
+    "mean": 0.5,
+    "median": 0.0,
+    "std": 1.1002392084403616,
+    "min": -2.0,
+    "max": 2.0,
+    "q25": 0.0,
+    "q75": 2.0,
+    "n": 20
+  },
+  "group_b_descriptive": {
+    "mean": 0.26666666666666666,
+    "median": 0.0,
+    "std": 1.1426929274467312,
+    "min": -2.0,
+    "max": 2.0,
+    "q25": 0.0,
+    "q75": 0.0,
+    "n": 30
+  },
+  "group_a_n": 20,
+  "group_b_n": 30
+}

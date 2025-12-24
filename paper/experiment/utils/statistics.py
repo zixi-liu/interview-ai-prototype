@@ -69,7 +69,7 @@ def independent_ttest(group_a_scores: List[float], group_b_scores: List[float]) 
         'std_b': float(np.std(group_b, ddof=1)),
         'n_a': len(group_a),
         'n_b': len(group_b),
-        'significant': p_value < 0.05,
+        'significant': bool(p_value < 0.05),
     }
 
 
@@ -114,7 +114,7 @@ def paired_ttest(before_scores: List[float], after_scores: List[float]) -> Dict:
         'mean_difference': float(mean_diff),
         'std_difference': float(std_diff),
         'n': len(before),
-        'significant': p_value < 0.05,
+        'significant': bool(p_value < 0.05),
     }
 
 

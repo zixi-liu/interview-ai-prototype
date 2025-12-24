@@ -1,0 +1,57 @@
+{
+  "pre_confidence": {
+    "mean": 3.2666666666666666,
+    "median": 3.0,
+    "std": 0.6914918072835209,
+    "min": 2.0,
+    "max": 4.0,
+    "q25": 3.0,
+    "q75": 4.0,
+    "n": 30
+  },
+  "pre_authenticity": {
+    "mean": 2.8,
+    "median": 3.0,
+    "std": 0.5508613944197479,
+    "min": 2.0,
+    "max": 4.0,
+    "q25": 2.25,
+    "q75": 3.0,
+    "n": 30
+  },
+  "post_confidence": {
+    "mean": 4.266666666666667,
+    "median": 4.0,
+    "std": 0.6914918072835209,
+    "min": 3.0,
+    "max": 5.0,
+    "q25": 4.0,
+    "q75": 5.0,
+    "n": 30
+  },
+  "post_authenticity": {
+    "mean": 4.533333333333333,
+    "median": 5.0,
+    "std": 0.6288102248298566,
+    "min": 3.0,
+    "max": 5.0,
+    "q25": 4.0,
+    "q75": 5.0,
+    "n": 30
+  },
+  "confidence_improvement": {
+    "mean_pre": 3.2666666666666666,
+    "mean_post": 4.266666666666667,
+    "improvement": 1.0,
+    "p_value": 6.13770889538426e-07,
+    "significant": true
+  },
+  "authenticity_improvement": {
+    "mean_pre": 2.8,
+    "mean_post": 4.533333333333333,
+    "improvement": 1.7333333333333334,
+    "p_value": 2.2572167062131286e-16,
+    "significant": true
+  },
+  "recall_test_count": 30
+}

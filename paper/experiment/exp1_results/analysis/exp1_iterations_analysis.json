@@ -1,0 +1,37 @@
+{
+  "ttest": {
+    "t_statistic": Infinity,
+    "p_value": 0.0,
+    "degrees_of_freedom": 48,
+    "cohens_d": 0.0,
+    "mean_a": 5.0,
+    "mean_b": 1.0,
+    "std_a": 0.0,
+    "std_b": 0.0,
+    "n_a": 20,
+    "n_b": 30,
+    "significant": true
+  },
+  "group_a_mean_iterations": 5.0,
+  "group_b_mean_iterations": 1.0,
+  "group_a_stats": {
+    "mean": 5.0,
+    "median": 5.0,
+    "std": 0.0,
+    "min": 5.0,
+    "max": 5.0,
+    "q25": 5.0,
+    "q75": 5.0,
+    "n": 20
+  },
+  "group_b_stats": {
+    "mean": 1.0,
+    "median": 1.0,
+    "std": 0.0,
+    "min": 1.0,
+    "max": 1.0,
+    "q25": 1.0,
+    "q75": 1.0,
+    "n": 30
+  }
+}

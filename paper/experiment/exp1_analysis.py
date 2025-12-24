@@ -404,6 +404,7 @@ def main():
         
         # Save analysis
         analysis_file = output_dir / 'exp1_rating_improvement_analysis.json'
+        print(improvement_analysis)
         with open(analysis_file, 'w', encoding='utf-8') as f:
             json.dump(improvement_analysis, f, indent=2, ensure_ascii=False)
         print(f"\nAnalysis saved to: {analysis_file}")
