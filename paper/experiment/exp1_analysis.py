@@ -22,7 +22,7 @@ if _project_root not in sys.path:
 # Add utils to path
 sys.path.insert(0, str(Path(__file__).parent / 'utils'))
 
-from utils.statistics import (
+from paper.experiment.utils.statistics import (
     independent_ttest,
     rating_improvement_stats,
     descriptive_stats,

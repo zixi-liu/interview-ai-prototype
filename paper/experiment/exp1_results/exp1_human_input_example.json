@@ -1,0 +1,59 @@
+[
+  {
+    "qa_id": 1,
+    "question": "Tell me about yourself.",
+    "original_answer": "I am a software developer with over five years of experience in the tech industry, specializing in full-stack development. My journey in software development began with a bachelor's degree in Computer Science, which laid a solid foundation in programming and problem-solving skills.  Throughout my career, I have worked with various technologies and programming languages, including JavaScript, Python, and Java. I have a strong background in developing web applications, and I am particularly passionate about creating user-friendly, efficient, and scalable solutions. My most recent role was with XYZ Tech, where I was part of a team that developed a cloud-based logistics management system. This project not only honed my technical skills but also improved my abilities in teamwork and communication.  I am always eager to learn and grow. Apart from my project work, I regularly engage in professional development activities. This includes taking online courses to stay updated with the latest technological trends, participating in coding challenges, and contributing to open-source projects.  In my free time, I enjoy attending tech meetups and seminars, which helps me stay connected with the tech community and continuously learn from my peers. I also have a keen interest in AI and machine learning, and I am currently working on a personal project that utilizes machine learning algorithms to analyze and predict user behavior.  I am excited about the opportunity to bring my diverse skill set, passion for technology, and collaborative spirit to your team. I look forward to contributing to innovative projects and being a part of the dynamic and forward-thinking environment that your company is known for.",
+    "initial_rating": "Leaning No Hire",
+    "probing_questions": [
+      "Can you provide a specific example of a challenge you faced while working on the cloud-based logistics management system and how you addressed it?",
+      "What was your individual contribution to the team project at XYZ Tech? How did you ensure your work aligned with the team's goals?",
+      "Can you share any metrics or outcomes from your personal project in AI/machine learning that demonstrate its effectiveness?",
+      "How do you prioritize your learning activities, and can you give an example of how a recent course or coding challenge has directly influenced your work?",
+      "In your experience with open-source contributions, what specific role did you play, and what was the impact of your contributions on the project?"
+    ],
+    "participant_id": "EXAMPLE_PARTICIPANT_001",
+    "participant_answers": [
+      "EXAMPLE ANSWER: This is a sample answer to probing question 1...",
+      "EXAMPLE ANSWER: This is a sample answer to probing question 2..."
+    ],
+    "collection_timestamp": "2025-12-24T13:28:18.613493",
+    "pre_survey": {
+      "confidence": 3,
+      "authenticity": 4
+    },
+    "post_survey": {
+      "confidence": 4,
+      "authenticity": 5,
+      "recall_test": "EXAMPLE: After 1 week, I can recall..."
+    }
+  },
+  {
+    "qa_id": 2,
+    "question": "Tell me about a time you had a disagreement with your manager.",
+    "original_answer": "Situation: At my previous job as a software engineer, I once found myself in disagreement with my manager over the approach to a new feature in our software application. My manager wanted to implement the feature using a certain technology stack that I believed was not the best choice for our long-term goals.  Task: My task was to effectively communicate my concerns and suggest an alternative approach that I believed was more beneficial for the project.  Action: I requested a one-on-one meeting with my manager to discuss this issue in detail. Before the meeting, I prepared a comprehensive comparison of the two technology stacks, highlighting aspects like long-term maintainability, performance, compatibility with our existing systems, and overall impact on the project timeline. During the meeting, I presented my findings in a respectful and concise manner, emphasizing my commitment to the project's success and the team's efficiency. I also made it clear that I respected his experience and perspective and was open to further discussion and compromise.  Result: My manager appreciated the thorough analysis and was impressed with the initiative I had taken to research the alternatives. After further discussion and consultation with the team, we decided to adopt a hybrid approach, incorporating elements from both our suggestions. This incident not only led to a more robust solution for our project but also strengthened my relationship with my manager. It taught me the importance of open communication, thorough preparation, and respect for different viewpoints in resolving professional disagreements.",
+    "initial_rating": "Leaning No Hire",
+    "probing_questions": [
+      "Can you provide specific metrics or data that supported your analysis of the technology stacks?",
+      "How did you ensure that your approach would benefit the project in the long term, and what factors did you consider?",
+      "Can you describe a situation where you took ownership of a project outcome beyond just your immediate tasks?",
+      "How did you follow up after the meeting to ensure the hybrid approach was effectively implemented?",
+      "What feedback did you receive from your team regarding the decision to adopt a hybrid approach, and how did you address any concerns?",
+      "In retrospect, what would you have done differently to enhance your influence in this situation?"
+    ],
+    "participant_id": "EXAMPLE_PARTICIPANT_001",
+    "participant_answers": [
+      "EXAMPLE ANSWER: This is a sample answer to probing question 1...",
+      "EXAMPLE ANSWER: This is a sample answer to probing question 2..."
+    ],
+    "collection_timestamp": "2025-12-24T13:28:18.613516",
+    "pre_survey": {
+      "confidence": 3,
+      "authenticity": 4
+    },
+    "post_survey": {
+      "confidence": 4,
+      "authenticity": 5,
+      "recall_test": "EXAMPLE: After 1 week, I can recall..."
+    }
+  }
+]

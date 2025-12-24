@@ -1,0 +1,95 @@
+# Red Flag Evaluation (20251224)
+
+**Rating**: Hire
+
+## Question
+
+Tell me about a project that didn’t go according to plan.
+
+## Answer
+
+Situation: In my previous role as a software developer at a tech company, we embarked on a project to develop a new customer relationship management (CRM) system. The goal was to streamline our sales process and improve customer interactions.  Task: My responsibility was to lead the backend development team and ensure our components integrated seamlessly with the front-end system and the database.  Action: We followed an agile methodology and had regular sprints. However, partway through the development cycle, we encountered significant issues. The project was falling behind schedule due to unexpected technical challenges and integration problems with third-party services. Realizing the gravity of the situation, I took the initiative to re-evaluate our project plan. I organized a series of meetings with my team, the front-end team, and stakeholders to reassess our approach. We identified key bottlenecks and realized that our initial technical assessment underestimated the complexity of integrating various APIs. I advocated for a revised plan that included a shift in technology stack for certain components and allocated additional resources to tackle the integration challenges.  Result: This strategic pivot was a turning point. Although the project was initially delayed, the new approach allowed us to overcome the technical hurdles and deliver a more robust CRM system. In the end, the project was considered a success, with the CRM system enhancing our sales team's efficiency by 25%. The experience taught me valuable lessons in project management, the importance of agility in problem-solving, and proactive communication with all stakeholders.
+
+## Feedback
+
+============================================================
+1. Real-Time Raw Notes (Interviewer's scratch notes)
+- CRM system project
+- Backend lead
+- Agile methodology
+- Delays due to tech challenges
+- Re-evaluated project plan
+- Meetings with teams/stakeholders
+- Shift in tech stack
+- Additional resources allocated
+- Project success: 25% efficiency gain
+- Lessons learned: project management, agility, communication
+
+============================================================
+2. Formal Interview Summary (for hiring committee)
+The candidate described a project involving the development of a CRM system where they faced significant delays due to unforeseen technical challenges. They took the initiative to reassess the project plan, organized meetings to identify bottlenecks, and advocated for a revised strategy that included changing the technology stack and reallocating resources. Ultimately, the project was completed successfully, resulting in a 25% increase in sales team efficiency. The candidate demonstrated structured thinking and problem-solving skills, which are essential for a Junior-Mid level role.
+
+============================================================
+3. Strengths (Interviewer perspective)
+- Clear articulation of the project and challenges faced
+- Demonstrated structured thinking in problem assessment
+- Proactive in organizing team discussions and stakeholder engagement
+- Effective in advocating for necessary changes to the project plan
+- Result-oriented mindset with measurable impact (25% efficiency gain)
+
+============================================================
+4. Areas for Improvement
+- Need to clarify personal contributions vs. team efforts in problem-solving
+- More explicit metrics on the initial project timeline and delays
+- Could provide more detail on the decision-making process for technology stack changes
+
+============================================================
+5. Competency Ratings (use FAANG rubric)
+- Ownership: Meets(👌)
+- Problem Solving: Meets+(👍)
+- Execution: Meets(👌)
+- Collaboration: Meets+(👍)
+- Communication: Meets(👌)
+- Leadership / Influence: Meets(👌)
+- Culture Fit: Meets+(👍)
+
+============================================================
+6. Final Overall Recommendation
+- 👍Hire
+
+The candidate demonstrated adequate ownership and problem-solving capabilities for a Junior-Mid level role, with a clear impact on project outcomes. However, there are areas for improvement in clarifying personal contributions and providing more explicit metrics, which slightly lowers the overall impression.
+
+============================================================
+7. Probing Follow-up Questions
+1. Can you specify what your individual contributions were in the meetings with the team and stakeholders? How did you ensure your voice was heard?
+2. What specific metrics did you use to assess the initial project timeline, and how did you quantify the delays?
+3. Can you elaborate on the decision-making process for shifting the technology stack? What factors did you consider?
+4. How did you handle any resistance from team members or stakeholders regarding the changes you proposed?
+5. What steps did you take to ensure the new plan was effectively communicated and executed across all teams involved?
+
+## Red Flag
+
+=====================
+1. Red Flag Detection
+- Red Flags: 
+  - "executor-style contribution" - The candidate describes actions taken by the team and stakeholders without clearly delineating their personal contributions.
+  - "lack of reflection" - The candidate does not reflect on personal learnings or how they would approach similar challenges in the future beyond general lessons.
+  - "vagueness" - The description of the technical challenges and integration problems lacks specific details, making it unclear how significant these issues were.
+
+=====================
+2. Red Flag Severity Rating
+- "executor-style contribution": ★★★☆☆
+- "lack of reflection": ★★☆☆☆
+- "vagueness": ★★★☆☆
+
+=====================
+3. Short Justification (Interviewer Tone)
+- The candidate's role in the project lacks clear ownership, making it difficult to assess individual impact.
+- There is insufficient reflection on personal growth or future application of lessons learned.
+- The technical challenges described are vague, which diminishes the perceived complexity of the situation.
+
+=====================
+4. Improvement Suggestions
+- Clearly articulate personal contributions and decisions made during the project.
+- Provide specific examples of challenges faced and how they were addressed, including metrics where applicable.
+- Reflect on personal learnings and how they would apply them to future projects to demonstrate growth.

@@ -93,7 +93,7 @@ async def evaluate_single_qa(
         # Red flag evaluation
         red_flag_prompt = BQQuestions.red_flag(question, answer, level) + BQQuestions.bar_raiser(level)
         red_flag_result = await analyzer.customized_analyze(red_flag_prompt, stream=True)
-        red_flag_feedback = await StreamProcessor.get_text(result)
+        red_flag_feedback = await StreamProcessor.get_text(red_flag_result)
 
         # Extract probing questions
         probing_questions = FeedbackParser.extract_probing_questions(feedback)
@@ -199,7 +199,7 @@ def stratify_by_rating(results: list[dict]) -> dict:
     return stratified
 
 
-def save_results(results: list[dict], stratified: dict, output_dir: Path):
+async def save_results(results: list[dict], stratified: dict, output_dir: Path):
     """Save evaluation results and stratified groups."""
     output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -220,16 +220,18 @@ def save_results(results: list[dict], stratified: dict, output_dir: Path):
     feedback_dir.mkdir(exist_ok=True)
     
     feedback_recorder = FeedbackRecorder()
+    tasks = []
     for result in results:
         if result.get('rating') not in ['Error', 'Unknown']:
             feedback_path = feedback_dir / f"{result['qa_id']}-{result['rating']}.md"
-            asyncio.run(feedback_recorder.save_feedback(
+            tasks.append(feedback_recorder.save_feedback(
                 question=result['question'],
                 answer=result['answer'],
                 feedback=result.get('feedback', ''),
                 red_flag=result.get('red_flag_feedback', ''),
                 path=str(feedback_path)
             ))
+    await asyncio.gather(*tasks)
     
     print(f"Saved feedback files to: {feedback_dir}")
     
@@ -271,15 +273,15 @@ async def main():
     print(f"Loaded {len(questions_answers)} questions and answers")
     
     print("\nStarting initial evaluation (this may take a while)...")
-    print("Using async concurrent processing (max 5 concurrent requests)\n")
+    print("Using async concurrent processing (max 50 concurrent requests)\n")
     
-    results = await batch_evaluate(questions_answers, level="Junior-Mid", max_concurrent=5)
+    results = await batch_evaluate(questions_answers, level="Junior-Mid", max_concurrent=50)
     
     # Stratify by rating
     stratified = stratify_by_rating(results)
     
     # Save results
-    save_results(results, stratified, output_dir)
+    await save_results(results, stratified, output_dir)
     
     print("\nDataset preparation complete!")
     print(f"Results saved to: {output_dir}")

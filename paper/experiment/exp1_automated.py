@@ -165,27 +165,36 @@ async def process_group_a(
     for rating, count in sorted(rating_counts.items()):
         print(f"  {rating}: {count}")
     
-    # Process each answer
-    results = []
-    for i, item in enumerate(group_a_answers, 1):
+    # Process each answer concurrently
+    semaphore = asyncio.Semaphore(5)  # Limit concurrent processing
+    
+    async def process_with_progress(item, index, total):
         qa_id = item['qa_id']
         feedback_file = feedback_dir / f"{qa_id}-{item['rating']}.md"
         
         if not feedback_file.exists():
             print(f"Warning: Feedback file not found for Q&A {qa_id}, skipping")
-            continue
+            return None
         
-        print(f"\n[{i}/{len(group_a_answers)}] Processing Q&A {qa_id}...")
-        result = await process_single_answer(feedback_file, qa_id, level)
-        results.append(result)
-        
-        # Print progress
-        if result.get('error'):
-            print(f"  Error: {result['error']}")
-        else:
-            print(f"  {result['initial_rating']} -> {result['final_rating']} "
-                  f"({result['iterations']} iterations, "
-                  f"{result['rating_improvement']:+d} improvement)")
+        async with semaphore:
+            print(f"\n[{index}/{total}] Processing Q&A {qa_id}...")
+            result = await process_single_answer(feedback_file, qa_id, level)
+            
+            # Print progress
+            if result.get('error'):
+                print(f"  [{index}/{total}] Q&A {qa_id} Error: {result['error']}")
+            else:
+                print(f"  [{index}/{total}] Q&A {qa_id}: {result['initial_rating']} -> {result['final_rating']} "
+                      f"({result['iterations']} iterations, "
+                      f"{result['rating_improvement']:+d} improvement)")
+            return result
+    
+    tasks = [
+        process_with_progress(item, i+1, len(group_a_answers))
+        for i, item in enumerate(group_a_answers)
+    ]
+    results = await asyncio.gather(*tasks)
+    results = [r for r in results if r is not None]  # Filter out None (skipped items)
     
     # Save results
     output_file = output_dir / 'exp1_automated_results.json'

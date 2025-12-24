@@ -11,7 +11,7 @@ paper/experiment/
 ├── exp1_prepare_dataset.py           # Step 1: Prepare dataset and initial evaluation
 ├── exp1_automated.py                 # Step 2: Run automated group (Group A)
 ├── exp1_collect_human_input.py       # Step 3: Create template for human input collection
-├── exp1_human_in_loop.py            # Step 4: Run human-in-loop group (Group B)
+├── exp1_human_in_loop.py             # Step 4: Run human-in-loop group (Group B)
 ├── exp1_analysis.py                  # Step 5: Statistical analysis and visualization
 ├── utils/
 │   ├── statistics.py                 # Statistical analysis utilities

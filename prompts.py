@@ -254,7 +254,7 @@ Dimensions:
 6. Final Overall Recommendation
 Choose:
 - 🌟 Strong Hire
-- 👍Hire
+- 👍 Hire
 - 🤔 Leaning Hire
 - 🤨 Leaning No Hire
 - ❌ No Hire

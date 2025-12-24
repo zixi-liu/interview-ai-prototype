@@ -1,0 +1,91 @@
+# Red Flag Evaluation (20251224)
+
+**Rating**: Hire
+
+## Question
+
+Tell me a time when you linked two or more problems together and identified an underlying issue.
+
+## Answer
+
+Situation: In my previous role as a software developer at a healthcare technology company, we were experiencing recurring issues with our patient data management system. Two main problems kept surfacing: first, there were intermittent errors in patient data synchronization across different modules, and second, users reported occasional system slowdowns, particularly during data retrieval processes.  Task: My task was to investigate and resolve these issues. While they initially appeared to be separate problems, I had a hunch that they might be interconnected and symptomatic of a deeper, underlying issue within the system.  Action: To investigate, I started by reviewing the system logs and analyzing the error patterns. I noticed that the synchronization errors and system slowdowns occurred around the same times. This led me to hypothesize that the problems might be related to the way data was being handled and stored. Diving deeper, I performed a thorough review of the database operations, particularly focusing on the processes that ran during data synchronization and retrieval. I discovered that an inefficient database query was causing a lock-up in the system, which not only slowed down data retrieval but also intermittently disrupted the synchronization process. Result: After deploying the fix, we observed a significant improvement in system performance. The synchronization errors ceased, and the system's overall speed and reliability increased. By linking the two problems together and identifying the root cause, I was able to devise a solution that not only resolved the immediate issues but also improved the system’s long-term efficiency. This experience reinforced the importance of looking beyond symptoms to find the root cause of problems and the value of a holistic approach to problem-solving in software development.
+
+## Feedback
+
+============================================================
+1. Real-Time Raw Notes (Interviewer's scratch notes)
+- Healthcare tech co.
+- Recurring patient data issues
+- Sync errors + slowdowns
+- Investigate/resolve
+- Hypothesis: interconnected issues
+- Analyzed logs, error patterns
+- Inefficient query causing lock-up
+- Fixed, improved performance
+- Root cause focus, holistic approach
+
+============================================================
+2. Formal Interview Summary (for hiring committee)
+The candidate described a situation where they addressed recurring issues in a patient data management system at a healthcare technology company. They identified two problems—intermittent synchronization errors and system slowdowns—and hypothesized a connection between them. Through log analysis, they discovered an inefficient database query causing both issues and implemented a fix that significantly improved system performance. While the candidate demonstrated structured thinking and problem-solving skills, the scope of their ownership and impact could be more clearly defined.
+
+============================================================
+3. Strengths (Interviewer perspective)
+- Clear identification of problems and systematic approach to investigation
+- Ability to link seemingly separate issues to find root cause
+- Demonstrated structured thinking in problem-solving
+- Effective communication of the situation and actions taken
+
+============================================================
+4. Areas for Improvement
+- Need to clarify personal ownership of the solution versus team contributions
+- Provide more specific metrics or data to quantify the impact of the fix
+- Explore more about the collaborative aspects of the investigation process
+
+============================================================
+5. Competency Ratings (use FAANG rubric)
+- Ownership: Meets(👌)
+- Problem Solving: Strong(🌟)
+- Execution: Meets+(👍)
+- Collaboration: Meets(👌)
+- Communication: Strong(🌟)
+- Leadership / Influence: Meets(👌)
+- Culture Fit: Meets(👌)
+
+============================================================
+6. Final Overall Recommendation
+- 👍Hire
+
+The candidate demonstrated strong problem-solving skills and structured thinking, which are essential for a Junior-Mid level role. However, there is a need for clearer ownership and quantifiable impact metrics. Overall, they show potential to contribute effectively to the team.
+
+============================================================
+7. Probing Follow-up Questions
+1. Can you elaborate on your specific role in the investigation process? What actions did you take independently versus collaboratively?
+2. What metrics did you use to measure the improvement in system performance after your fix? Can you provide specific numbers?
+3. How did you communicate the findings and proposed solution to your team or stakeholders? What was their response?
+4. Were there any challenges or resistance you faced while implementing the fix? How did you address them?
+5. Can you discuss any lessons learned from this experience that you would apply to future problem-solving scenarios?
+
+## Red Flag
+
+=====================
+1. Red Flag Detection
+- Red Flags: 
+  - "executor-style contribution" (the candidate describes actions taken but lacks clarity on personal ownership of the solution)
+  - "vagueness" (the explanation of how the problems were linked lacks specific metrics or data-driven results)
+
+=====================
+2. Red Flag Severity Rating
+- "executor-style contribution": ★★★☆☆
+- "vagueness": ★★☆☆☆
+
+=====================
+3. Short Justification (Interviewer Tone)
+- The candidate describes a situation where they identified issues but does not clearly articulate their personal ownership of the solution.
+- The lack of specific metrics or data to support the impact of their actions raises concerns about the depth of their contribution.
+- Overall, the example does not convincingly demonstrate Junior-Mid-level ownership or impact.
+
+=====================
+4. Improvement Suggestions
+- Clearly articulate personal contributions and decisions made during the problem-solving process.
+- Include specific metrics or data to quantify the impact of the solution implemented.
+- Provide more detail on the thought process behind linking the problems to demonstrate analytical skills.

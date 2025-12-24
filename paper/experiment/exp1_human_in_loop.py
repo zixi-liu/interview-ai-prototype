@@ -246,9 +246,9 @@ async def process_group_b(
     else:
         print(f"Loaded human input for {len(human_inputs)} Q&A pairs")
         
-        # Process each answer
-        results = []
-        processed_count = 0
+        # Prepare tasks for concurrent processing
+        tasks = []
+        task_info = []  # Store (index, qa_id) for progress tracking
         
         for i, item in enumerate(group_b_answers, 1):
             qa_id = item['qa_id']
@@ -265,16 +265,32 @@ async def process_group_b(
                 print(f"[{i}/{len(group_b_answers)}] Q&A {qa_id}: No human input available, skipping")
                 continue
             
-            print(f"\n[{i}/{len(group_b_answers)}] Processing Q&A {qa_id} "
-                  f"({len(qa_human_inputs)} participant(s))...")
-            
-            qa_results = await process_single_answer_with_human_input(
+            # Create task with progress info
+            task = process_single_answer_with_human_input(
                 feedback_file,
                 qa_id,
                 qa_human_inputs,
                 level=level,
                 max_iterations=3
             )
+            tasks.append(task)
+            task_info.append((i, qa_id, len(qa_human_inputs)))
+        
+        # Process all tasks concurrently
+        print(f"\nProcessing {len(tasks)} Q&A pairs concurrently...")
+        all_results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Collect and print results
+        results = []
+        processed_count = 0
+        
+        for (i, qa_id, num_participants), qa_results in zip(task_info, all_results):
+            if isinstance(qa_results, Exception):
+                print(f"\n[{i}/{len(group_b_answers)}] Q&A {qa_id}: Error - {qa_results}")
+                continue
+            
+            print(f"\n[{i}/{len(group_b_answers)}] Q&A {qa_id} "
+                  f"({num_participants} participant(s)) - Completed")
             
             results.extend(qa_results)
             processed_count += len(qa_results)
@@ -309,7 +325,7 @@ async def main():
     results_dir = script_dir / 'exp1_results'
     stratified_file = results_dir / 'exp1_stratified_groups.json'
     feedback_dir = results_dir / 'initial_feedbacks'
-    human_input_file = results_dir / 'exp1_human_input.json'
+    human_input_file = results_dir / 'exp1_human_input_template.json'
     output_dir = results_dir
     
     if not stratified_file.exists():
