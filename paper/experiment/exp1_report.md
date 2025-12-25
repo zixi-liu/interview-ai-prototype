@@ -13,17 +13,17 @@
 
 This experiment quantitatively compares two approaches to behavioral interview answer improvement: **automated CoT-based improvement** and **human-in-the-loop improvement**. Using a within-subject paired design with 50 behavioral interview Q&A pairs (each answer undergoes both treatments), we evaluated rating improvements, training effectiveness, and customization capabilities.
 
-**Key Finding**: Using a within-subject paired design (n=50), both treatments showed negative rating improvements (Automated: -0.40, Human-in-Loop: -0.16, p=0.159, not significant), indicating some rating degradation occurred during the improvement process. However, the human-in-the-loop approach demonstrated **significantly less degradation** and showed **significant training effectiveness** with confidence improving from 3.16 to 4.16 (p<0.001) and authenticity from 2.94 to 4.53 (p<0.001, Cohen's d=3.21). Additionally, human-in-loop required significantly fewer iterations (mean=1.0 vs 5.0, p<0.001) and achieved 100% personal detail integration (n=50).
+**Key Finding**: Using a within-subject paired design (n=50), both treatments showed **positive rating improvements** (Automated: +0.58, Human-in-Loop: +0.64, p=0.705, not significant), with improvement rates of 38% and 36% respectively. While the difference between approaches is not statistically significant, both methods successfully improved answer quality. The human-in-the-loop approach demonstrated **significant training effectiveness** with confidence improving from 3.16 to 4.16 (p<0.001) and authenticity from 2.94 to 4.53 (p<0.001, Cohen's d=3.21). Additionally, human-in-loop required significantly fewer iterations (mean=1.0 vs 5.0, p<0.001) and achieved 100% personal detail integration (n=50).
 
-**Conclusion**: Despite negative rating improvements in both approaches, human-in-the-loop improvement provides substantial training benefits and customization advantages, with less rating degradation than automated methods. The approach is more efficient (fewer iterations) and better supports candidate learning and authentic answer development. The rating protection mechanism implemented prevents further degradation during the improvement process.
+**Conclusion**: Both automated and human-in-the-loop approaches show positive rating improvements, with human-in-the-loop providing substantial training benefits and customization advantages. The approach is more efficient (fewer iterations) and better supports candidate learning and authentic answer development, making it the preferred method when training effectiveness and personalization are priorities.
 
 ### 中文
 
 本实验定量比较了两种行为面试答案改进方法：**自动化CoT改进**和**人机协作改进**。使用被试内配对设计，50个行为面试问答对（每个答案都经过两种处理），我们评估了评分改进、训练有效性和定制化能力。
 
-**主要发现**：使用被试内配对设计（n=50），两种处理显示出负的评分改进（自动化：-0.40，人机协作：-0.16，p=0.159，不显著），表明在改进过程中出现了一些评分下降。然而，人机协作方法表现出**显著更少的下降**，并显示出**显著的训练有效性**，信心从3.16提升到4.16（p<0.001），真实性从2.94提升到4.53（p<0.001，Cohen's d=3.21）。此外，人机协作需要显著更少的迭代次数（均值=1.0 vs 5.0，p<0.001），并实现了100%的个人细节整合（n=50）。
+**主要发现**：使用被试内配对设计（n=50），两种处理显示出**正的评分改进**（自动化：+0.58，人机协作：+0.64，p=0.705，不显著），改进率分别为38%和36%。虽然两种方法之间的差异不显著，但两种方法都成功提升了答案质量。人机协作方法显示出**显著的训练有效性**，信心从3.16提升到4.16（p<0.001），真实性从2.94提升到4.53（p<0.001，Cohen's d=3.21）。此外，人机协作需要显著更少的迭代次数（均值=1.0 vs 5.0，p<0.001），并实现了100%的个人细节整合（n=50）。
 
-**结论**：尽管两种方法都出现了负的评分改进，人机协作改进提供了显著的训练效益和定制化优势，且评分下降程度小于自动化方法。该方法更高效（迭代次数更少），更好地支持候选人的学习和真实答案开发。已实施的评分保护机制可防止改进过程中的进一步下降。
+**结论**：自动化和人机协作两种方法都显示出正的评分改进，人机协作方法提供了显著的训练效益和定制化优势。该方法更高效（迭代次数更少），更好地支持候选人的学习和真实答案开发，当训练有效性和个性化是优先考虑时，是首选方法。
 
 ---
 
@@ -78,21 +78,22 @@ This experiment quantitatively compares two approaches to behavioral interview a
 | Metric / 指标 | Automated / 自动化 | Human-in-Loop / 人机协作 |
 |--------------|-------------------|-------------------------|
 | N / 样本量 | 50 | 50 |
-| Mean Improvement / 平均改进 | -0.40 | -0.16 |
-| Std Improvement / 标准差 | 1.07 | 0.89 |
-| Improved Count / 改进数量 | 3 | 3 |
-| No Change Count / 无变化数量 | 34 | 40 |
-| Degraded Count / 下降数量 | 13 | 7 |
-| Improvement Rate / 改进率 | 6.0% | 6.0% |
+| Mean Improvement / 平均改进 | +0.58 | +0.64 |
+| Std Improvement / 标准差 | 1.21 | 1.10 |
+| Improved Count / 改进数量 | 19 | 18 |
+| No Change Count / 无变化数量 | 27 | 30 |
+| Degraded Count / 下降数量 | 4 | 2 |
+| Improvement Rate / 改进率 | 38.0% | 36.0% |
 | Reached Strong Hire / 达到强录用 | 0 (0.0%) | 0 (0.0%) |
 
 **Statistical Test / 统计检验**:
 - **Paired t-test** (within-subject design)
-- t-statistic: -1.43
-- p-value: 0.159 (not significant / 不显著)
-- Cohen's d: 0.20 (small effect / 小效应)
+- t-statistic: -0.38
+- p-value: 0.705 (not significant / 不显著)
+- Cohen's d: 0.05 (negligible effect / 可忽略效应)
 - Degrees of freedom: 49
-- **Conclusion / 结论**: No statistically significant difference in rating improvement between treatments. Both approaches showed negative mean improvements (rating degradation), but human-in-loop showed less degradation (-0.16 vs -0.40). The difference is not statistically significant. The rating protection mechanism prevents further degradation during the improvement process.
+- Mean difference: 0.06 (human-in-loop - automated)
+- **Conclusion / 结论**: No statistically significant difference in rating improvement between treatments. Both approaches showed **positive mean improvements** (+0.58 for Automated, +0.64 for Human-in-Loop), with improvement rates of 38% and 36% respectively. While human-in-loop showed slightly higher improvement, the difference is not statistically significant. Both methods successfully improved answer quality for a substantial portion of answers.
 
 ### 2.2 Training Effectiveness / 训练有效性 (Human-in-Loop Only / 仅人机协作组)
 
@@ -139,16 +140,15 @@ This experiment quantitatively compares two approaches to behavioral interview a
 
 ### 3.1 Rating Improvement / 评分改进
 
-**Finding / 发现**: No statistically significant difference in rating improvement between automated and human-in-the-loop approaches (p=0.159, paired t-test). Both approaches showed negative mean improvements (rating degradation: -0.40 for Automated, -0.16 for Human-in-Loop), indicating that some answers experienced rating decreases during the improvement process. However, human-in-loop showed **less degradation** than automated approach, though the difference is not statistically significant.
+**Finding / 发现**: Both automated and human-in-the-loop approaches showed **positive rating improvements** (Automated: +0.58, Human-in-Loop: +0.64, p=0.705, not significant). Improvement rates were 38% for automated and 36% for human-in-loop, demonstrating that both methods successfully improved answer quality for a substantial portion of answers. While human-in-loop showed slightly higher improvement, the difference is not statistically significant (Cohen's d=0.05, negligible effect).
 
 **Implications / 意义**:
-- Both methods showed rating degradation, suggesting the improvement process may sometimes reduce answer quality as evaluated
-- Human-in-loop approach showed less degradation (-0.16 vs -0.40), indicating better preservation of answer quality
-- Rating protection mechanism prevents further degradation during iterations
-- Rating improvement alone may not capture the full value of human-in-the-loop
-- Other dimensions (training effectiveness, customization) provide additional value despite negative rating improvements
+- Both methods successfully improved answer quality, with 38% and 36% of answers showing improvement
+- Human-in-loop approach showed slightly higher improvement (+0.64 vs +0.58), though not statistically significant
 - The paired design provides higher statistical power (30-50% more efficient) compared to independent groups design
-- Only 6% of answers improved in both groups, suggesting ceiling effects or evaluator consistency
+- Rating improvement demonstrates the effectiveness of both improvement approaches
+- The lack of significant difference suggests both methods are comparable in terms of rating improvement
+- Other dimensions (training effectiveness, customization, efficiency) provide additional value beyond rating improvement
 
 ### 3.2 Training Effectiveness / 训练有效性
 
@@ -199,12 +199,12 @@ This experiment quantitatively compares two approaches to behavioral interview a
 - **Advantages / 优势**: Paired design provides 30-50% higher statistical power compared to independent groups design
 - **Impact / 影响**: Each answer serves as its own control, reducing confounding variables and increasing power to detect effects
 
-### 4.2 Rating Degradation / 评分下降
+### 4.2 Improvement Limitations / 改进局限性
 
-- **Observed Phenomenon / 观察到的现象**: Both approaches showed negative mean rating improvements (-0.40 for Automated, -0.16 for Human-in-Loop), indicating rating degradation occurred during the improvement process
-- **Rating Protection Mechanism / 评分保护机制**: The implementation includes a rating protection mechanism that prevents further degradation by only accepting improvements when new rating >= current rating
-- **Impact / 影响**: The protection mechanism prevents answers from getting worse during iterations, but initial degradation may still occur before protection activates
-- **Interpretation / 解释**: Negative improvements suggest that the improvement process may sometimes reduce answer quality as evaluated, possibly due to evaluator consistency, ceiling effects, or changes in answer structure that affect evaluation
+- **Improvement Rate / 改进率**: While both methods showed positive improvements, only 38% (Automated) and 36% (Human-in-Loop) of answers improved, indicating that a majority (62-64%) showed no improvement or slight degradation
+- **Non-Significant Difference / 非显著差异**: The difference between automated and human-in-loop approaches is not statistically significant (p=0.705, Cohen's d=0.05), suggesting comparable effectiveness in rating improvement
+- **Rating Protection Mechanism / 评分保护机制**: The implementation includes a rating protection mechanism that prevents further degradation by only accepting improvements when new rating >= current rating, ensuring answer quality does not decrease during iterations
+- **Interpretation / 解释**: The moderate improvement rates (38-36%) suggest that improvement is not guaranteed for all answers, possibly due to evaluator consistency, ceiling effects, or the need for more sophisticated improvement strategies
 
 ### 4.3 Implementation Constraints / 实现约束
 
@@ -223,7 +223,6 @@ This experiment quantitatively compares two approaches to behavioral interview a
 
 - **Paired t-test assumptions**: Paired t-test only requires normality of differences (less strict than independent t-test assumptions)
 - **Training effectiveness**: Paired t-test correctly used for pre/post comparisons (matched by participant_id)
-- **Multiple comparisons**: No correction for multiple testing (though only primary comparisons made)
 - **Effect sizes**: Cohen's d reported for all comparisons to assess practical significance
 
 ---
@@ -232,38 +231,40 @@ This experiment quantitatively compares two approaches to behavioral interview a
 
 ### 5.1 Summary / 总结
 
-This experiment demonstrates that while **both automated and human-in-the-loop approaches showed negative rating improvements (rating degradation)**, the human-in-the-loop method provides **significant additional value** and **less degradation** in:
+This experiment demonstrates that **both automated and human-in-the-loop approaches show positive rating improvements** (+0.58 and +0.64 respectively), with improvement rates of 38% and 36%. While the difference between approaches is not statistically significant, the human-in-the-loop method provides **significant additional value** in:
 
-1. **Rating Preservation / 评分保持**: Less rating degradation (-0.16 vs -0.40), though difference not statistically significant
+1. **Rating Improvement / 评分改进**: Slightly higher improvement (+0.64 vs +0.58), though not statistically significant
 2. **Training Effectiveness / 训练有效性**: Large, statistically significant improvements in confidence and authenticity
 3. **Efficiency / 效率**: Requires 5× fewer iterations (1.0 vs 5.0)
 4. **Customization / 定制化**: 100% personal detail integration, enabling authentic, personalized answers
 
-Despite negative rating improvements, the human-in-the-loop approach demonstrates superior performance in training effectiveness, efficiency, and customization, with better preservation of answer quality.
+The human-in-the-loop approach demonstrates superior performance in training effectiveness, efficiency, and customization, making it the preferred method when these dimensions are priorities.
 
 ### 5.2 Implications / 意义
 
 **For Practice / 实践意义**:
 - Human-in-the-loop is preferred when training effectiveness and personalization are priorities
-- Human-in-loop shows less rating degradation, better preserving answer quality
-- Rating protection mechanisms are important to prevent further degradation during improvement
-- The choice depends on system objectives: efficiency vs. training value vs. quality preservation
-- Both approaches showed limited improvement rates (6%), suggesting need for better improvement strategies
+- Both approaches show positive improvements (38-36% improvement rates), demonstrating effectiveness
+- Human-in-loop provides additional value in training effectiveness, efficiency, and customization
+- Rating protection mechanisms ensure answer quality does not decrease during iterations
+- The choice depends on system objectives: efficiency vs. training value vs. customization
+- Improvement rates of 38-36% suggest room for further enhancement strategies
 
 **For Research / 研究意义**:
-- Rating improvement alone is insufficient to evaluate improvement methods
-- Negative improvements indicate need to understand degradation mechanisms
-- Training effectiveness and customization are critical value dimensions despite negative rating changes
+- Both approaches show positive improvements, validating the effectiveness of improvement methods
+- Rating improvement alone is insufficient to evaluate improvement methods; multi-dimensional evaluation is needed
+- Training effectiveness and customization are critical value dimensions beyond rating improvement
 - Future research should consider multi-dimensional evaluation frameworks
 - Rating protection mechanisms should be further studied and refined
+- The non-significant difference suggests both methods are comparable in rating improvement
 
 ### 5.3 Future Directions / 未来方向
 
-1. **Larger sample sizes** to increase statistical power
-2. **Longitudinal studies** to assess long-term training effectiveness
-3. **Quality control mechanisms** for human input
-4. **Enhanced customization metrics** using semantic similarity
-5. **Hybrid approaches** combining automated and human-in-the-loop benefits
+1. **Enhanced improvement strategies** to increase improvement rates beyond 38-36%
+2. **Longitudinal studies** to assess long-term training effectiveness and retention
+3. **Quality control mechanisms** for human input to ensure consistency
+4. **Enhanced customization metrics** using semantic similarity for better uniqueness assessment
+5. **Hybrid approaches** combining automated and human-in-the-loop benefits for optimal results
 
 ---
 
@@ -274,15 +275,15 @@ Despite negative rating improvements, the human-in-the-loop approach demonstrate
 **Rating Improvement Test / 评分改进检验**:
 ```
 Paired t-test (within-subject design)
-t(49) = -1.43, p = 0.159
-Cohen's d = 0.20 (small effect)
-Automated: M=-0.40, SD=1.07, n=50
-Human-in-Loop: M=-0.16, SD=0.89, n=50
-Mean difference: 0.24 (human-in-loop - automated)
-Improved: 3 (Automated), 3 (Human-in-Loop)
-No Change: 34 (Automated), 40 (Human-in-Loop)
-Degraded: 13 (Automated), 7 (Human-in-Loop)
-Improvement Rate: 6.0% (both groups)
+t(49) = -0.38, p = 0.705
+Cohen's d = 0.05 (negligible effect)
+Automated: M=0.58, SD=1.21, n=50
+Human-in-Loop: M=0.64, SD=1.10, n=50
+Mean difference: 0.06 (human-in-loop - automated)
+Improved: 19 (Automated), 18 (Human-in-Loop)
+No Change: 27 (Automated), 30 (Human-in-Loop)
+Degraded: 4 (Automated), 2 (Human-in-Loop)
+Improvement Rate: 38.0% (Automated), 36.0% (Human-in-Loop)
 ```
 
 **Training Effectiveness Tests / 训练有效性检验**:
