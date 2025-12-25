@@ -22,7 +22,7 @@ if _project_root not in sys.path:
 # Add utils to path
 sys.path.insert(0, str(Path(__file__).parent / 'utils'))
 
-from paper.experiment.utils.statistics import (
+from paper.experiment.utils._statistics import (
     independent_ttest,
     rating_improvement_stats,
     descriptive_stats,
@@ -30,17 +30,39 @@ from paper.experiment.utils.statistics import (
     cohens_d,
 )
 
-# Try to import visualization (may not be available)
-try:
-    from utils.visualization import (
-        plot_rating_improvement_distribution,
-        plot_comparison_table,
-    )
-    HAS_VISUALIZATION = True
-except ImportError:
-    HAS_VISUALIZATION = False
-    print("Warning: Visualization utilities not available. Install matplotlib and seaborn for plots.")
-
+# # Try to import visualization (may not be available)
+# try:
+#     # Try relative import first (when running from experiment directory)
+#     from utils.visualization import (
+#         plot_rating_improvement_distribution,
+#         plot_training_effectiveness,
+#         plot_iteration_comparison,
+#         plot_customization_metrics,
+#         plot_comprehensive_comparison,
+#     )
+#     HAS_VISUALIZATION = True
+# except ImportError:
+#     try:
+#         # Try absolute import (when running from project root)
+#         from paper.experiment.utils.visualization import (
+#             plot_rating_improvement_distribution,
+#             plot_training_effectiveness,
+#             plot_iteration_comparison,
+#             plot_customization_metrics,
+#             plot_comprehensive_comparison,
+#         )
+#         HAS_VISUALIZATION = True
+#     except ImportError:
+#         HAS_VISUALIZATION = False
+#         print("Warning: Visualization utilities not available. Install matplotlib and seaborn for plots.")
+from paper.experiment.utils.visualization import (
+    plot_rating_improvement_distribution,
+    plot_training_effectiveness,
+    plot_iteration_comparison,
+    plot_customization_metrics,
+    plot_comprehensive_comparison,
+)
+HAS_VISUALIZATION = True
 
 def load_results(results_dir: Path) -> tuple[list, list]:
     """Load results from Group A and Group B."""
@@ -404,7 +426,6 @@ def main():
         
         # Save analysis
         analysis_file = output_dir / 'exp1_rating_improvement_analysis.json'
-        print(improvement_analysis)
         with open(analysis_file, 'w', encoding='utf-8') as f:
             json.dump(improvement_analysis, f, indent=2, ensure_ascii=False)
         print(f"\nAnalysis saved to: {analysis_file}")
@@ -491,19 +512,96 @@ def main():
     print("="*80)
     generate_comparison_table(group_a, group_b, output_dir / 'exp1_table1_rating_improvement')
     
-    # Generate visualization (if available)
+    # Generate visualizations (if available)
     if HAS_VISUALIZATION:
-        print("\nGenerating visualizations...")
+        print("\n" + "="*80)
+        print("Generating Visualizations")
+        print("="*80)
+        
         try:
+            # Figure 1: Rating Improvement Distribution
+            print("\nGenerating Figure 1: Rating Improvement Distribution...")
             plot_rating_improvement_distribution(
-                group_a, group_b, output_dir / 'exp1_figure1_rating_improvement_distribution.png'
+                group_a, group_b, 
+                output_dir / 'exp1_figure1_rating_improvement_distribution.png',
+                ttest_result=improvement_analysis.get('ttest') if 'error' not in improvement_analysis else None
             )
-            print("Figure 1 saved to: exp1_figure1_rating_improvement_distribution.png")
+            print("✓ Figure 1 saved")
         except Exception as e:
-            print(f"Warning: Could not generate visualization: {e}")
+            print(f"✗ Warning: Could not generate Figure 1: {e}")
+        
+        try:
+            # Figure 2: Training Effectiveness
+            if 'error' not in training_analysis:
+                print("\nGenerating Figure 2: Training Effectiveness...")
+                plot_training_effectiveness(
+                    training_analysis,
+                    output_dir / 'exp1_figure2_training_effectiveness.png',
+                    group_b_data=group_b
+                )
+                print("✓ Figure 2 saved")
+            else:
+                print("\nSkipping Figure 2: Training effectiveness data not available")
+        except Exception as e:
+            print(f"✗ Warning: Could not generate Figure 2: {e}")
+        
+        try:
+            # Figure 3: Iteration Comparison
+            if 'error' not in iterations_analysis:
+                print("\nGenerating Figure 3: Iteration Comparison...")
+                group_a_valid = [r for r in group_a if 'error' not in r and 'iterations' in r]
+                group_b_valid = [r for r in group_b if 'error' not in r and 'iterations' in r]
+                group_a_iterations = [r['iterations'] for r in group_a_valid]
+                group_b_iterations = [r['iterations'] for r in group_b_valid]
+                
+                plot_iteration_comparison(
+                    group_a_iterations,
+                    group_b_iterations,
+                    output_dir / 'exp1_figure3_iteration_comparison.png',
+                    ttest_result=iterations_analysis.get('ttest')
+                )
+                print("✓ Figure 3 saved")
+            else:
+                print("\nSkipping Figure 3: Iteration data not available")
+        except Exception as e:
+            print(f"✗ Warning: Could not generate Figure 3: {e}")
+        
+        try:
+            # Figure 4: Customization Metrics
+            print("\nGenerating Figure 4: Customization Metrics...")
+            plot_customization_metrics(
+                customization_analysis,
+                output_dir / 'exp1_figure4_customization_metrics.png'
+            )
+            print("✓ Figure 4 saved")
+        except Exception as e:
+            print(f"✗ Warning: Could not generate Figure 4: {e}")
+        
+        try:
+            # Figure 5: Comprehensive Comparison
+            if all(['error' not in improvement_analysis, 
+                   'error' not in training_analysis,
+                   'error' not in iterations_analysis]):
+                print("\nGenerating Figure 5: Comprehensive Comparison...")
+                plot_comprehensive_comparison(
+                    improvement_analysis,
+                    training_analysis,
+                    iterations_analysis,
+                    customization_analysis,
+                    output_dir / 'exp1_figure5_comprehensive_comparison.png'
+                )
+                print("✓ Figure 5 saved")
+            else:
+                print("\nSkipping Figure 5: Some analysis data not available")
+        except Exception as e:
+            print(f"✗ Warning: Could not generate Figure 5: {e}")
+        
+        print("\n" + "="*80)
+        print("Visualization generation complete!")
+        print("="*80)
     else:
         print("\nVisualization not available. Install matplotlib and seaborn for plots.")
-        print("Figure 1 (Rating Improvement Distribution) - TODO: Generate manually")
+        print("Figures - TODO: Generate manually")
     
     # Summary
     print("\n" + "="*80)
@@ -514,7 +612,14 @@ def main():
     print("  - Table 1: Rating improvement comparison")
     print("  - Table 2: Training effectiveness metrics")
     print("  - Statistical analysis results (JSON)")
-    print("  - Figure 1: Rating improvement distribution (if visualization available)")
+    if HAS_VISUALIZATION:
+        print("  - Figure 1: Rating improvement distribution")
+        print("  - Figure 2: Training effectiveness (pre/post)")
+        print("  - Figure 3: Iteration comparison")
+        print("  - Figure 4: Customization metrics")
+        print("  - Figure 5: Comprehensive comparison")
+    else:
+        print("  - Figures: Not generated (install matplotlib/seaborn)")
 
 
 if __name__ == '__main__':
