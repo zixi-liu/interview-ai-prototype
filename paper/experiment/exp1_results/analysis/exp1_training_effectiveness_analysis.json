@@ -1,57 +1,61 @@
 {
   "pre_confidence": {
-    "mean": 3.2666666666666666,
+    "mean": 3.14,
     "median": 3.0,
-    "std": 0.6914918072835209,
+    "std": 0.7561988724494884,
     "min": 2.0,
     "max": 4.0,
     "q25": 3.0,
     "q75": 4.0,
-    "n": 30
+    "n": 50
   },
   "pre_authenticity": {
-    "mean": 2.8,
+    "mean": 2.94,
     "median": 3.0,
-    "std": 0.5508613944197479,
+    "std": 0.6197431989566818,
     "min": 2.0,
     "max": 4.0,
-    "q25": 2.25,
+    "q25": 3.0,
     "q75": 3.0,
-    "n": 30
+    "n": 50
   },
   "post_confidence": {
-    "mean": 4.266666666666667,
+    "mean": 4.14,
     "median": 4.0,
-    "std": 0.6914918072835209,
+    "std": 0.7561988724494884,
     "min": 3.0,
     "max": 5.0,
     "q25": 4.0,
     "q75": 5.0,
-    "n": 30
+    "n": 50
   },
   "post_authenticity": {
-    "mean": 4.533333333333333,
+    "mean": 4.52,
     "median": 5.0,
-    "std": 0.6288102248298566,
+    "std": 0.6141195788629907,
     "min": 3.0,
     "max": 5.0,
     "q25": 4.0,
     "q75": 5.0,
-    "n": 30
+    "n": 50
   },
   "confidence_improvement": {
-    "mean_pre": 3.2666666666666666,
-    "mean_post": 4.266666666666667,
+    "mean_pre": 3.163265306122449,
+    "mean_post": 4.163265306122449,
     "improvement": 1.0,
-    "p_value": 6.13770889538426e-07,
-    "significant": true
+    "p_value": 0.0,
+    "significant": true,
+    "cohens_d": 0.0,
+    "n_paired": 49
   },
   "authenticity_improvement": {
-    "mean_pre": 2.8,
-    "mean_post": 4.533333333333333,
-    "improvement": 1.7333333333333334,
-    "p_value": 2.2572167062131286e-16,
-    "significant": true
+    "mean_pre": 2.938775510204082,
+    "mean_post": 4.530612244897959,
+    "improvement": 1.5918367346938775,
+    "p_value": 4.2720700040487774e-27,
+    "significant": true,
+    "cohens_d": 3.2055546442165683,
+    "n_paired": 49
   },
-  "recall_test_count": 30
+  "recall_test_count": 50
 }

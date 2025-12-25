@@ -24,10 +24,13 @@ sys.path.insert(0, str(Path(__file__).parent / 'utils'))
 
 from paper.experiment.utils._statistics import (
     independent_ttest,
+    paired_ttest,
     rating_improvement_stats,
     descriptive_stats,
     format_statistical_results,
     cohens_d,
+    test_normality,
+    test_homogeneity_of_variance,
 )
 
 # # Try to import visualization (may not be available)
@@ -68,6 +71,7 @@ def load_results(results_dir: Path) -> tuple[list, list]:
     """Load results from Group A and Group B."""
     automated_file = results_dir / 'exp1_automated_results.json'
     human_in_loop_file = results_dir / 'exp1_human_in_loop_results.json'
+    paired_file = results_dir / 'exp1_paired_results.json'
     
     group_a = []
     if automated_file.exists():
@@ -82,13 +86,146 @@ def load_results(results_dir: Path) -> tuple[list, list]:
             group_b = json.load(f)
     else:
         print(f"Warning: {human_in_loop_file} not found")
+
+    paired_results = []
+    if paired_file.exists():
+        with open(paired_file, 'r', encoding='utf-8') as f:
+            paired_results = json.load(f)
+    else:
+        print(f"Warning: {paired_file} not found")
     
-    return group_a, group_b
+    return group_a, group_b, paired_results
+
+
+def extract_paired_data_for_visualization(paired_results: list) -> dict:
+    """
+    Extract paired data for visualization.
+    
+    Returns:
+        Dict with:
+        - automated_improvements: List of automated rating improvements
+        - human_improvements: List of human-in-loop rating improvements
+        - automated_iterations: List of automated iteration counts
+        - human_iterations: List of human-in-loop iteration counts
+        - pre_conf_individual: List of pre-confidence scores
+        - post_conf_individual: List of post-confidence scores
+        - pre_auth_individual: List of pre-authenticity scores
+        - post_auth_individual: List of post-authenticity scores
+    """
+    automated_improvements = []
+    human_improvements = []
+    automated_iterations = []
+    human_iterations = []
+    pre_conf_individual = []
+    post_conf_individual = []
+    pre_auth_individual = []
+    post_auth_individual = []
+    
+    for result in paired_results:
+        if ('error' not in result and 
+            'automated' in result and 'human_in_loop' in result and
+            'error' not in result.get('automated', {}) and
+            'error' not in result.get('human_in_loop', {})):
+            
+            # Rating improvements
+            if 'rating_improvement' in result.get('automated', {}):
+                automated_improvements.append(result['automated']['rating_improvement'])
+            if 'rating_improvement' in result.get('human_in_loop', {}):
+                human_improvements.append(result['human_in_loop']['rating_improvement'])
+            
+            # Iterations
+            if 'iterations' in result.get('automated', {}):
+                automated_iterations.append(result['automated']['iterations'])
+            if 'iterations' in result.get('human_in_loop', {}):
+                human_iterations.append(result['human_in_loop']['iterations'])
+            
+            # Training effectiveness (from human_in_loop)
+            human_data = result.get('human_in_loop', {})
+            pre_survey = human_data.get('pre_survey', {})
+            post_survey = human_data.get('post_survey', {})
+            
+            if pre_survey.get('confidence') is not None:
+                pre_conf_individual.append(pre_survey['confidence'])
+            if post_survey.get('confidence') is not None:
+                post_conf_individual.append(post_survey['confidence'])
+            if pre_survey.get('authenticity') is not None:
+                pre_auth_individual.append(pre_survey['authenticity'])
+            if post_survey.get('authenticity') is not None:
+                post_auth_individual.append(post_survey['authenticity'])
+    
+    return {
+        'automated_improvements': automated_improvements,
+        'human_improvements': human_improvements,
+        'automated_iterations': automated_iterations,
+        'human_iterations': human_iterations,
+        'pre_conf_individual': pre_conf_individual,
+        'post_conf_individual': post_conf_individual,
+        'pre_auth_individual': pre_auth_individual,
+        'post_auth_individual': post_auth_individual,
+    }
+
+
+def analyze_rating_improvement_paired(paired_results: list) -> dict:
+    """
+    Analyze rating improvement using paired design.
+    Each result should have both 'automated' and 'human_in_loop' entries.
+    
+    Returns:
+        Dict with statistical analysis results using paired t-test
+    """
+    # Filter out errors and extract paired data
+    paired_data = []
+    for result in paired_results:
+        if ('error' not in result and 
+            'automated' in result and 'human_in_loop' in result and
+            'error' not in result.get('automated', {}) and
+            'error' not in result.get('human_in_loop', {}) and
+            'initial_rating_score' in result['automated'] and
+            'initial_rating_score' in result['human_in_loop']):
+            paired_data.append(result)
+    
+    if not paired_data:
+        return {
+            'error': 'Insufficient paired data for comparison',
+            'n': 0,
+        }
+    
+    # Extract improvement scores (paired)
+    automated_improvements = [r['automated']['rating_improvement'] for r in paired_data]
+    human_improvements = [r['human_in_loop']['rating_improvement'] for r in paired_data]
+    
+    # Paired t-test
+    ttest_result = paired_ttest(automated_improvements, human_improvements)
+    
+    # Improvement statistics for each group
+    automated_results = [r['automated'] for r in paired_data]
+    human_results = [r['human_in_loop'] for r in paired_data]
+    
+    automated_stats = rating_improvement_stats(automated_results)
+    human_stats = rating_improvement_stats(human_results)
+    
+    # Descriptive statistics
+    automated_desc = descriptive_stats(automated_improvements)
+    human_desc = descriptive_stats(human_improvements)
+    
+    return {
+        'ttest': ttest_result,
+        'design': 'paired',
+        'automated_stats': automated_stats,
+        'human_stats': human_stats,
+        'automated_descriptive': automated_desc,
+        'human_descriptive': human_desc,
+        'n': len(paired_data),
+    }
 
 
 def analyze_rating_improvement(group_a: list, group_b: list) -> dict:
     """
     Analyze rating improvement comparison between Group A and Group B.
+    Supports both independent groups and paired design.
+    
+    If data appears to be paired (same qa_ids in both groups), uses paired analysis.
+    Otherwise uses independent groups analysis.
     
     Returns:
         Dict with statistical analysis results
@@ -104,6 +241,45 @@ def analyze_rating_improvement(group_a: list, group_b: list) -> dict:
             'group_b_n': len(group_b_valid),
         }
     
+    # Check if data is paired (same qa_ids in both groups)
+    group_a_ids = {r['qa_id'] for r in group_a_valid}
+    group_b_ids = {r['qa_id'] for r in group_b_valid}
+    common_ids = group_a_ids & group_b_ids
+    
+    # If most IDs are common, treat as paired design
+    if len(common_ids) >= min(len(group_a_valid), len(group_b_valid)) * 0.8:
+        # Paired design: match by qa_id
+        paired_automated = []
+        paired_human = []
+        
+        # Create lookup dicts
+        group_a_dict = {r['qa_id']: r for r in group_a_valid}
+        group_b_dict = {r['qa_id']: r for r in group_b_valid}
+        
+        # Match pairs
+        for qa_id in common_ids:
+            if qa_id in group_a_dict and qa_id in group_b_dict:
+                paired_automated.append(group_a_dict[qa_id]['rating_improvement'])
+                paired_human.append(group_b_dict[qa_id]['rating_improvement'])
+        
+        if len(paired_automated) >= 2:
+            # Use paired t-test
+            ttest_result = paired_ttest(paired_automated, paired_human)
+            automated_stats = rating_improvement_stats([group_a_dict[qa_id] for qa_id in common_ids if qa_id in group_a_dict])
+            human_stats = rating_improvement_stats([group_b_dict[qa_id] for qa_id in common_ids if qa_id in group_b_dict])
+            
+            return {
+                'ttest': ttest_result,
+                'design': 'paired',
+                'group_a_stats': automated_stats,
+                'group_b_stats': human_stats,
+                'group_a_descriptive': descriptive_stats(paired_automated),
+                'group_b_descriptive': descriptive_stats(paired_human),
+                'group_a_n': len(paired_automated),
+                'group_b_n': len(paired_human),
+            }
+    
+    # Independent groups design
     # Extract improvement scores
     group_a_improvements = [r['rating_improvement'] for r in group_a_valid]
     group_b_improvements = [r['rating_improvement'] for r in group_b_valid]
@@ -121,6 +297,7 @@ def analyze_rating_improvement(group_a: list, group_b: list) -> dict:
     
     return {
         'ttest': ttest_result,
+        'design': 'independent',
         'group_a_stats': group_a_stats,
         'group_b_stats': group_b_stats,
         'group_a_descriptive': group_a_desc,
@@ -198,11 +375,52 @@ def analyze_training_effectiveness(group_b: list) -> dict:
         'recall_test_count': len(recall_tests),
     }
     
-    # Paired t-test for confidence and authenticity (if we have paired data)
-    # TODO: This requires matching pre/post pairs by participant_id
-    # For now, we'll do independent comparison (less ideal but still informative)
-    if pre_confidence and post_confidence:
-        # Independent comparison (not ideal, but paired data matching is complex)
+    # Paired t-test for confidence and authenticity
+    # Match pre/post pairs by participant_id
+    participant_pre_conf = {}
+    participant_post_conf = {}
+    participant_pre_auth = {}
+    participant_post_auth = {}
+    
+    for result in group_b_valid:
+        participant_id = result.get('participant_id')
+        if not participant_id:
+            continue
+        
+        pre_survey = result.get('pre_survey', {})
+        post_survey = result.get('post_survey', {})
+        
+        if pre_survey.get('confidence') is not None:
+            participant_pre_conf[participant_id] = pre_survey['confidence']
+        if post_survey.get('confidence') is not None:
+            participant_post_conf[participant_id] = post_survey['confidence']
+        if pre_survey.get('authenticity') is not None:
+            participant_pre_auth[participant_id] = pre_survey['authenticity']
+        if post_survey.get('authenticity') is not None:
+            participant_post_auth[participant_id] = post_survey['authenticity']
+    
+    # Match paired data for confidence
+    paired_pre_conf = []
+    paired_post_conf = []
+    for pid in participant_pre_conf:
+        if pid in participant_post_conf:
+            paired_pre_conf.append(participant_pre_conf[pid])
+            paired_post_conf.append(participant_post_conf[pid])
+    
+    if len(paired_pre_conf) >= 2:
+        # Use paired t-test
+        confidence_ttest = paired_ttest(paired_pre_conf, paired_post_conf)
+        results['confidence_improvement'] = {
+            'mean_pre': confidence_ttest['mean_before'],
+            'mean_post': confidence_ttest['mean_after'],
+            'improvement': confidence_ttest['mean_difference'],
+            'p_value': confidence_ttest['p_value'],
+            'significant': confidence_ttest['significant'],
+            'cohens_d': confidence_ttest['cohens_d'],
+            'n_paired': len(paired_pre_conf),
+        }
+    elif pre_confidence and post_confidence:
+        # Fallback to independent if no paired data available
         confidence_ttest = independent_ttest(pre_confidence, post_confidence)
         results['confidence_improvement'] = {
             'mean_pre': confidence_ttest['mean_a'],
@@ -210,9 +428,32 @@ def analyze_training_effectiveness(group_b: list) -> dict:
             'improvement': confidence_ttest['mean_b'] - confidence_ttest['mean_a'],
             'p_value': confidence_ttest['p_value'],
             'significant': confidence_ttest['significant'],
+            'cohens_d': confidence_ttest['cohens_d'],
+            'n_paired': 0,  # Indicates independent test was used
         }
     
-    if pre_authenticity and post_authenticity:
+    # Match paired data for authenticity
+    paired_pre_auth = []
+    paired_post_auth = []
+    for pid in participant_pre_auth:
+        if pid in participant_post_auth:
+            paired_pre_auth.append(participant_pre_auth[pid])
+            paired_post_auth.append(participant_post_auth[pid])
+    
+    if len(paired_pre_auth) >= 2:
+        # Use paired t-test
+        authenticity_ttest = paired_ttest(paired_pre_auth, paired_post_auth)
+        results['authenticity_improvement'] = {
+            'mean_pre': authenticity_ttest['mean_before'],
+            'mean_post': authenticity_ttest['mean_after'],
+            'improvement': authenticity_ttest['mean_difference'],
+            'p_value': authenticity_ttest['p_value'],
+            'significant': authenticity_ttest['significant'],
+            'cohens_d': authenticity_ttest['cohens_d'],
+            'n_paired': len(paired_pre_auth),
+        }
+    elif pre_authenticity and post_authenticity:
+        # Fallback to independent if no paired data available
         authenticity_ttest = independent_ttest(pre_authenticity, post_authenticity)
         results['authenticity_improvement'] = {
             'mean_pre': authenticity_ttest['mean_a'],
@@ -220,6 +461,8 @@ def analyze_training_effectiveness(group_b: list) -> dict:
             'improvement': authenticity_ttest['mean_b'] - authenticity_ttest['mean_a'],
             'p_value': authenticity_ttest['p_value'],
             'significant': authenticity_ttest['significant'],
+            'cohens_d': authenticity_ttest['cohens_d'],
+            'n_paired': 0,  # Indicates independent test was used
         }
     
     return results
@@ -394,11 +637,13 @@ def main():
     
     # Load results
     print("\nLoading results...")
-    group_a, group_b = load_results(results_dir)
+    group_a, group_b, paired_results = load_results(results_dir)
     print(f"Group A (Automated): {len(group_a)} results")
     print(f"Group B (Human-in-Loop): {len(group_b)} results")
+    if paired_results:
+        print(f"Paired design results: {len(paired_results)} pairs")
     
-    if not group_a and not group_b:
+    if not group_a and not group_b and not paired_results:
         print("Error: No results found. Please run previous steps first.")
         return
     
@@ -406,23 +651,62 @@ def main():
     print("\n" + "="*80)
     print("Analysis 1: Rating Improvement Comparison")
     print("="*80)
-    improvement_analysis = analyze_rating_improvement(group_a, group_b)
+    
+    # Use paired design analysis if available, otherwise use independent
+    if paired_results:
+        print("Using paired design analysis...")
+        improvement_analysis = analyze_rating_improvement_paired(paired_results)
+    else:
+        print("Using independent groups analysis...")
+        improvement_analysis = analyze_rating_improvement(group_a, group_b)
     
     if 'error' not in improvement_analysis:
+        design_type = improvement_analysis.get('design', 'independent')
+        test_name = "Paired t-test (Rating Improvement)" if design_type == 'paired' else "Independent t-test (Rating Improvement)"
         print("\nStatistical Test Results:")
-        print(format_statistical_results(improvement_analysis['ttest'], "Independent t-test (Rating Improvement)"))
+        print(format_statistical_results(improvement_analysis['ttest'], test_name))
+        
+        # Add normality and variance tests for independent design
+        if design_type == 'independent':
+            # Extract actual improvement scores for testing
+            group_a_valid = [r for r in group_a if 'error' not in r and 'rating_improvement' in r]
+            group_b_valid = [r for r in group_b if 'error' not in r and 'rating_improvement' in r]
+            if group_a_valid and group_b_valid:
+                group_a_scores = [r['rating_improvement'] for r in group_a_valid]
+                group_b_scores = [r['rating_improvement'] for r in group_b_valid]
+                
+                print("\nAssumption Tests:")
+                norm_a = test_normality(group_a_scores)
+                norm_b = test_normality(group_b_scores)
+                if norm_a.get('p_value') is not None:
+                    print(f"  Group A normality ({norm_a['test']}): p={norm_a['p_value']:.4f}, {norm_a['interpretation']}")
+                if norm_b.get('p_value') is not None:
+                    print(f"  Group B normality ({norm_b['test']}): p={norm_b['p_value']:.4f}, {norm_b['interpretation']}")
+                
+                var_test = test_homogeneity_of_variance(group_a_scores, group_b_scores)
+                print(f"  Variance homogeneity ({var_test['test']}): p={var_test['p_value']:.4f}, {var_test['interpretation']}")
+                if not var_test['equal_variances']:
+                    print(f"  Recommendation: {var_test['recommendation']}")
+        
+        # Handle different key names for paired vs independent design
+        if design_type == 'paired':
+            group_a_stats = improvement_analysis.get('automated_stats', {})
+            group_b_stats = improvement_analysis.get('human_stats', {})
+        else:
+            group_a_stats = improvement_analysis.get('group_a_stats', {})
+            group_b_stats = improvement_analysis.get('group_b_stats', {})
         
         print("\nGroup A (Automated) Statistics:")
-        print(f"  N: {improvement_analysis['group_a_stats']['n']}")
-        print(f"  Mean improvement: {improvement_analysis['group_a_stats']['mean_improvement']:.2f}")
-        print(f"  Improvement rate: {improvement_analysis['group_a_stats']['improvement_rate']:.1f}%")
-        print(f"  Strong Hire rate: {improvement_analysis['group_a_stats']['reached_strong_hire_rate']:.1f}%")
+        print(f"  N: {group_a_stats.get('n', improvement_analysis.get('group_a_n', improvement_analysis.get('n', 0)))}")
+        print(f"  Mean improvement: {group_a_stats.get('mean_improvement', 0):.2f}")
+        print(f"  Improvement rate: {group_a_stats.get('improvement_rate', 0):.1f}%")
+        print(f"  Strong Hire rate: {group_a_stats.get('reached_strong_hire_rate', 0):.1f}%")
         
         print("\nGroup B (Human-in-Loop) Statistics:")
-        print(f"  N: {improvement_analysis['group_b_stats']['n']}")
-        print(f"  Mean improvement: {improvement_analysis['group_b_stats']['mean_improvement']:.2f}")
-        print(f"  Improvement rate: {improvement_analysis['group_b_stats']['improvement_rate']:.1f}%")
-        print(f"  Strong Hire rate: {improvement_analysis['group_b_stats']['reached_strong_hire_rate']:.1f}%")
+        print(f"  N: {group_b_stats.get('n', improvement_analysis.get('group_b_n', improvement_analysis.get('n', 0)))}")
+        print(f"  Mean improvement: {group_b_stats.get('mean_improvement', 0):.2f}")
+        print(f"  Improvement rate: {group_b_stats.get('improvement_rate', 0):.1f}%")
+        print(f"  Strong Hire rate: {group_b_stats.get('reached_strong_hire_rate', 0):.1f}%")
         
         # Save analysis
         analysis_file = output_dir / 'exp1_rating_improvement_analysis.json'
@@ -515,29 +799,57 @@ def main():
     # Generate visualizations (if available)
     if HAS_VISUALIZATION:
         print("\n" + "="*80)
-        print("Generating Visualizations")
+        print("Generating Core Visualizations (Paired Design Focus)")
         print("="*80)
         
+        # Detect if using paired design
+        is_paired = paired_results and len(paired_results) > 0
+        paired_viz_data = None
+        
+        if is_paired:
+            print("Detected paired design - extracting paired data for visualization...")
+            paired_viz_data = extract_paired_data_for_visualization(paired_results)
+            print(f"  Extracted {len(paired_viz_data['automated_improvements'])} paired comparisons")
+        
         try:
-            # Figure 1: Rating Improvement Distribution
-            print("\nGenerating Figure 1: Rating Improvement Distribution...")
-            plot_rating_improvement_distribution(
-                group_a, group_b, 
-                output_dir / 'exp1_figure1_rating_improvement_distribution.png',
-                ttest_result=improvement_analysis.get('ttest') if 'error' not in improvement_analysis else None
-            )
+            # Figure 1: Rating Improvement (Core - Paired Design Focus)
+            print("\nGenerating Figure 1: Paired Rating Improvement Comparison...")
+            if is_paired and paired_viz_data:
+                # Use paired design visualization
+                plot_rating_improvement_distribution(
+                    group_a, group_b, 
+                    output_dir / 'exp1_figure1_rating_improvement_distribution.png',
+                    ttest_result=improvement_analysis.get('ttest') if 'error' not in improvement_analysis else None,
+                    is_paired_design=True,
+                    paired_data=paired_results
+                )
+            else:
+                # Fallback to independent design
+                plot_rating_improvement_distribution(
+                    group_a, group_b, 
+                    output_dir / 'exp1_figure1_rating_improvement_distribution.png',
+                    ttest_result=improvement_analysis.get('ttest') if 'error' not in improvement_analysis else None,
+                    is_paired_design=False
+                )
             print("✓ Figure 1 saved")
         except Exception as e:
             print(f"✗ Warning: Could not generate Figure 1: {e}")
         
         try:
-            # Figure 2: Training Effectiveness
+            # Figure 2: Training Effectiveness (Core - Significant Finding)
             if 'error' not in training_analysis:
-                print("\nGenerating Figure 2: Training Effectiveness...")
+                print("\nGenerating Figure 2: Training Effectiveness (Paired Comparison)...")
+                # Use paired data if available
+                group_b_for_viz = group_b
+                if is_paired and paired_viz_data:
+                    # Create group_b data structure from paired results for training effectiveness
+                    group_b_for_viz = [r.get('human_in_loop', {}) for r in paired_results 
+                                      if 'human_in_loop' in r and 'error' not in r.get('human_in_loop', {})]
+                
                 plot_training_effectiveness(
                     training_analysis,
                     output_dir / 'exp1_figure2_training_effectiveness.png',
-                    group_b_data=group_b
+                    group_b_data=group_b_for_viz
                 )
                 print("✓ Figure 2 saved")
             else:
@@ -546,59 +858,42 @@ def main():
             print(f"✗ Warning: Could not generate Figure 2: {e}")
         
         try:
-            # Figure 3: Iteration Comparison
+            # Figure 3: Efficiency Comparison (Optional - Significant Finding)
             if 'error' not in iterations_analysis:
-                print("\nGenerating Figure 3: Iteration Comparison...")
-                group_a_valid = [r for r in group_a if 'error' not in r and 'iterations' in r]
-                group_b_valid = [r for r in group_b if 'error' not in r and 'iterations' in r]
-                group_a_iterations = [r['iterations'] for r in group_a_valid]
-                group_b_iterations = [r['iterations'] for r in group_b_valid]
+                print("\nGenerating Figure 3: Efficiency Comparison...")
+                if is_paired and paired_viz_data:
+                    # Use paired data
+                    automated_iterations = paired_viz_data['automated_iterations']
+                    human_iterations = paired_viz_data['human_iterations']
+                else:
+                    # Fallback to independent groups
+                    group_a_valid = [r for r in group_a if 'error' not in r and 'iterations' in r]
+                    group_b_valid = [r for r in group_b if 'error' not in r and 'iterations' in r]
+                    automated_iterations = [r['iterations'] for r in group_a_valid]
+                    human_iterations = [r['iterations'] for r in group_b_valid]
                 
-                plot_iteration_comparison(
-                    group_a_iterations,
-                    group_b_iterations,
-                    output_dir / 'exp1_figure3_iteration_comparison.png',
-                    ttest_result=iterations_analysis.get('ttest')
-                )
-                print("✓ Figure 3 saved")
+                if automated_iterations and human_iterations:
+                    plot_iteration_comparison(
+                        automated_iterations,
+                        human_iterations,
+                        output_dir / 'exp1_figure3_iteration_comparison.png',
+                        ttest_result=iterations_analysis.get('ttest')
+                    )
+                    print("✓ Figure 3 saved")
+                else:
+                    print("  Skipping: Insufficient iteration data")
             else:
                 print("\nSkipping Figure 3: Iteration data not available")
         except Exception as e:
             print(f"✗ Warning: Could not generate Figure 3: {e}")
         
-        try:
-            # Figure 4: Customization Metrics
-            print("\nGenerating Figure 4: Customization Metrics...")
-            plot_customization_metrics(
-                customization_analysis,
-                output_dir / 'exp1_figure4_customization_metrics.png'
-            )
-            print("✓ Figure 4 saved")
-        except Exception as e:
-            print(f"✗ Warning: Could not generate Figure 4: {e}")
-        
-        try:
-            # Figure 5: Comprehensive Comparison
-            if all(['error' not in improvement_analysis, 
-                   'error' not in training_analysis,
-                   'error' not in iterations_analysis]):
-                print("\nGenerating Figure 5: Comprehensive Comparison...")
-                plot_comprehensive_comparison(
-                    improvement_analysis,
-                    training_analysis,
-                    iterations_analysis,
-                    customization_analysis,
-                    output_dir / 'exp1_figure5_comprehensive_comparison.png'
-                )
-                print("✓ Figure 5 saved")
-            else:
-                print("\nSkipping Figure 5: Some analysis data not available")
-        except Exception as e:
-            print(f"✗ Warning: Could not generate Figure 5: {e}")
-        
         print("\n" + "="*80)
-        print("Visualization generation complete!")
+        print("Core Visualization Generation Complete!")
         print("="*80)
+        print("Generated: Figure 1 (Rating Improvement), Figure 2 (Training Effectiveness)")
+        if 'error' not in iterations_analysis:
+            print("          Figure 3 (Efficiency)")
+        print("\nNote: Customization metrics available in analysis JSON (not visualized)")
     else:
         print("\nVisualization not available. Install matplotlib and seaborn for plots.")
         print("Figures - TODO: Generate manually")

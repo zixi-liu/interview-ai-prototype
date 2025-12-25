@@ -10,9 +10,14 @@ import os
 import sys
 import asyncio
 import json
+import random
 from pathlib import Path
 from collections import defaultdict
 from datetime import datetime
+
+# Set random seed for reproducibility
+RANDOM_SEED = 42
+random.seed(RANDOM_SEED)
 
 # Add project root to path
 _project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

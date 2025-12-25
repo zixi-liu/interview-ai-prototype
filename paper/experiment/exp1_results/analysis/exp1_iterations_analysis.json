@@ -2,14 +2,14 @@
   "ttest": {
     "t_statistic": Infinity,
     "p_value": 0.0,
-    "degrees_of_freedom": 48,
+    "degrees_of_freedom": 98,
     "cohens_d": 0.0,
     "mean_a": 5.0,
     "mean_b": 1.0,
     "std_a": 0.0,
     "std_b": 0.0,
-    "n_a": 20,
-    "n_b": 30,
+    "n_a": 50,
+    "n_b": 50,
     "significant": true
   },
   "group_a_mean_iterations": 5.0,
@@ -22,7 +22,7 @@
     "max": 5.0,
     "q25": 5.0,
     "q75": 5.0,
-    "n": 20
+    "n": 50
   },
   "group_b_stats": {
     "mean": 1.0,
@@ -32,6 +32,6 @@
     "max": 1.0,
     "q25": 1.0,
     "q75": 1.0,
-    "n": 30
+    "n": 50
   }
 }

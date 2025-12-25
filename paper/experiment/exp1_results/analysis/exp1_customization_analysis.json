@@ -1,17 +1,17 @@
 {
-  "unique_qa_pairs": 30,
+  "unique_qa_pairs": 50,
   "qa_pairs_with_multiple_participants": 0,
   "average_uniqueness": 0,
   "personal_detail_stats": {
-    "mean": 4.366666666666666,
+    "mean": 4.34,
     "median": 4.0,
-    "std": 2.0254132542705237,
+    "std": 1.9017714620525652,
     "min": 1.0,
     "max": 8.0,
     "q25": 3.0,
     "q75": 5.75,
-    "n": 30
+    "n": 50
   },
-  "answers_with_personal_details": 30,
+  "answers_with_personal_details": 50,
   "personal_details_rate": 100.0
 }

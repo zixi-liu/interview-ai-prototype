@@ -205,6 +205,76 @@ def rating_improvement_stats(results: List[Dict]) -> Dict:
     }
 
 
+def test_normality(scores: List[float], test_name: str = "Shapiro-Wilk") -> Dict:
+    """
+    Test if data follows normal distribution.
+    
+    Args:
+        scores: List of scores to test
+        test_name: Name of test ('shapiro' or 'ks')
+    
+    Returns:
+        Dict with test statistic, p-value, and normality result
+    """
+    arr = np.array(scores)
+    
+    if len(arr) < 3:
+        return {
+            'test': test_name,
+            'statistic': None,
+            'p_value': None,
+            'is_normal': None,
+            'note': 'Insufficient data for normality test (n < 3)'
+        }
+    
+    if test_name.lower() == 'shapiro' or test_name.lower() == 'shapiro-wilk':
+        # Shapiro-Wilk test (good for small samples, n < 5000)
+        if len(arr) > 5000:
+            # Use Kolmogorov-Smirnov for large samples
+            stat, p_value = stats.kstest(arr, 'norm', args=(np.mean(arr), np.std(arr, ddof=1)))
+            test_name = 'Kolmogorov-Smirnov'
+        else:
+            stat, p_value = stats.shapiro(arr)
+    else:
+        # Kolmogorov-Smirnov test
+        stat, p_value = stats.kstest(arr, 'norm', args=(np.mean(arr), np.std(arr, ddof=1)))
+    
+    return {
+        'test': test_name,
+        'statistic': float(stat),
+        'p_value': float(p_value),
+        'is_normal': bool(p_value >= 0.05),  # Null hypothesis: data is normal
+        'interpretation': 'Normal' if p_value >= 0.05 else 'Non-normal'
+    }
+
+
+def test_homogeneity_of_variance(group_a_scores: List[float], group_b_scores: List[float]) -> Dict:
+    """
+    Test if two groups have equal variances (Levene's test).
+    
+    Args:
+        group_a_scores: Scores from Group A
+        group_b_scores: Scores from Group B
+    
+    Returns:
+        Dict with test statistic, p-value, and homogeneity result
+    """
+    group_a = np.array(group_a_scores)
+    group_b = np.array(group_b_scores)
+    
+    # Levene's test for equal variances
+    stat, p_value = stats.levene(group_a, group_b)
+    
+    return {
+        'test': "Levene's test",
+        'statistic': float(stat),
+        'p_value': float(p_value),
+        'equal_variances': bool(p_value >= 0.05),  # Null hypothesis: equal variances
+        'interpretation': 'Equal variances' if p_value >= 0.05 else 'Unequal variances',
+        'recommendation': 'Use standard t-test' if p_value >= 0.05 else 'Use Welch\'s t-test'
+    }
+
+
 def format_statistical_results(ttest_result: Dict, test_name: str = "Independent t-test") -> str:
     """Format statistical test results as readable string."""
     lines = [

@@ -92,12 +92,15 @@ def plot_rating_improvement_distribution(
     group_b: List[Dict],
     output_file: Path,
     ttest_result: Optional[Dict] = None,
-    figsize: Tuple[float, float] = (12, 5.5)
+    is_paired_design: bool = False,
+    paired_data: Optional[List[Dict]] = None,
+    figsize: Tuple[float, float] = (10, 6)
 ):
     """
-    Create Figure 1: Rating improvement distribution (improved academic style).
+    Create Figure 1: Rating improvement comparison.
     
-    Uses violin plots with individual data points and confidence intervals.
+    For paired design: Shows paired comparison with connecting lines.
+    For independent design: Shows distribution with box plots.
     """
     if not HAS_MATPLOTLIB:
         raise ImportError("matplotlib and seaborn required for visualization")
@@ -105,10 +108,27 @@ def plot_rating_improvement_distribution(
     setup_academic_style()
     
     # Extract improvements
-    group_a_improvements = np.array([r['rating_improvement'] for r in group_a 
-                           if 'error' not in r and 'rating_improvement' in r])
-    group_b_improvements = np.array([r['rating_improvement'] for r in group_b 
-                           if 'error' not in r and 'rating_improvement' in r])
+    if is_paired_design and paired_data:
+        # Extract paired improvements
+        automated_improvements = np.array([r['automated']['rating_improvement'] 
+                                          for r in paired_data 
+                                          if 'automated' in r and 'rating_improvement' in r.get('automated', {})])
+        human_improvements = np.array([r['human_in_loop']['rating_improvement'] 
+                                      for r in paired_data 
+                                      if 'human_in_loop' in r and 'rating_improvement' in r.get('human_in_loop', {})])
+        
+        if len(automated_improvements) == 0 or len(human_improvements) == 0:
+            raise ValueError("Insufficient paired data for visualization")
+        
+        group_a_improvements = automated_improvements
+        group_b_improvements = human_improvements
+        n_paired = len(automated_improvements)
+    else:
+        group_a_improvements = np.array([r['rating_improvement'] for r in group_a 
+                               if 'error' not in r and 'rating_improvement' in r])
+        group_b_improvements = np.array([r['rating_improvement'] for r in group_b 
+                               if 'error' not in r and 'rating_improvement' in r])
+        n_paired = None
     
     if len(group_a_improvements) == 0 or len(group_b_improvements) == 0:
         raise ValueError("Insufficient data for visualization")
@@ -123,7 +143,6 @@ def plot_rating_improvement_distribution(
             h = sem * stats.t.ppf((1 + confidence) / 2, n - 1)
             return mean, mean - h, mean + h
     except ImportError:
-        # Fallback without scipy
         def ci_mean(data, confidence=0.95):
             n = len(data)
             mean = np.mean(data)
@@ -136,83 +155,142 @@ def plot_rating_improvement_distribution(
     mean_b, ci_low_b, ci_high_b = ci_mean(group_b_improvements)
     
     # Create figure
-    fig, axes = plt.subplots(1, 2, figsize=figsize)
-    fig.suptitle('Figure 1: Rating Improvement Distribution', fontsize=13, fontweight='bold', y=1.02)
-    
-    # Panel A: Violin plot with individual points
-    ax1 = axes[0]
-    data_for_violin = [group_a_improvements, group_b_improvements]
-    positions = [1, 2]
-    labels = ['Group A\n(Automated)', 'Group B\n(Human-in-Loop)']
-    
-    # Create violin plots
-    parts = ax1.violinplot(data_for_violin, positions=positions, widths=0.6,
-                          showmeans=True, showmedians=True)
-    for i, pc in enumerate(parts['bodies']):
-        pc.set_facecolor([ACADEMIC_COLORS['group_a'], ACADEMIC_COLORS['group_b']][i])
-        pc.set_alpha(0.6)
-        pc.set_edgecolor('black')
-        pc.set_linewidth(1.2)
-    
-    # Add individual data points (strip plot with jitter)
-    for i, (data, pos) in enumerate(zip(data_for_violin, positions)):
-        jitter = np.random.normal(0, 0.05, len(data))
-        ax1.scatter(jitter + pos, data, alpha=0.5, s=30, 
-                   color='black', edgecolors='white', linewidths=0.5, zorder=3)
-    
-    # Add mean and confidence intervals
-    ax1.errorbar(positions, [mean_a, mean_b], 
-                yerr=[[mean_a - ci_low_a, mean_b - ci_low_b],
-                      [ci_high_a - mean_a, ci_high_b - mean_b]],
-                fmt='o', color='red', markersize=8, capsize=5, capthick=2,
-                label='Mean (95% CI)', zorder=4)
-    
-    ax1.set_xticks(positions)
-    ax1.set_xticklabels(labels, fontweight='bold')
-    ax1.set_ylabel('Rating Improvement (score change)', fontweight='bold')
-    ax1.set_title('(A) Distribution with Individual Data Points', fontweight='bold')
-    ax1.legend(loc='upper right', frameon=True, fontsize=9)
-    ax1.grid(True, alpha=0.3, linestyle='--', axis='y')
-    ax1.axhline(0, color='gray', linestyle='-', linewidth=0.8, alpha=0.5)
-    
-    # Add sample sizes
-    ax1.text(1, ax1.get_ylim()[0] + 0.1, f'n={len(group_a_improvements)}', 
-            ha='center', fontsize=9, style='italic')
-    ax1.text(2, ax1.get_ylim()[0] + 0.1, f'n={len(group_b_improvements)}', 
-            ha='center', fontsize=9, style='italic')
-    
-    # Panel B: Box plot with enhanced statistics
-    ax2 = axes[1]
-    bp = ax2.boxplot(data_for_violin, labels=labels, patch_artist=True, 
-                     widths=0.6, showmeans=True, meanline=True)
-    bp['boxes'][0].set_facecolor(ACADEMIC_COLORS['group_a'])
-    bp['boxes'][0].set_alpha(0.7)
-    bp['boxes'][1].set_facecolor(ACADEMIC_COLORS['group_b'])
-    bp['boxes'][1].set_alpha(0.7)
-    
-    # Add statistical annotation if provided
-    if ttest_result:
-        p_value = ttest_result.get('p_value', 1.0)
-        cohens_d = ttest_result.get('cohens_d', 0.0)
-        n_a = ttest_result.get('n_a', len(group_a_improvements))
-        n_b = ttest_result.get('n_b', len(group_b_improvements))
-        y_max = max([np.max(group_a_improvements), np.max(group_b_improvements)]) + 0.5
-        add_statistical_annotation(ax2, 1, 2, y_max, p_value, text_y_offset=0.3)
+    if is_paired_design:
+        # Paired design: Single panel with paired comparison
+        fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+        fig.suptitle('Figure 1: Paired Rating Improvement Comparison', 
+                    fontsize=13, fontweight='bold', y=0.98)
         
-        # Enhanced statistics text box
-        if p_value < 0.001:
-            p_text = 'p < 0.001'
-        else:
-            p_text = f'p = {p_value:.3f}'
-        stats_text = f"{p_text}\nCohen's d = {cohens_d:.2f}\nn₁={n_a}, n₂={n_b}"
-        ax2.text(1.5, y_max + 0.9, stats_text, ha='center', va='bottom',
-                fontsize=9, bbox=dict(boxstyle='round', facecolor='wheat', 
-                alpha=0.8, edgecolor='black', linewidth=1))
-    
-    ax2.set_ylabel('Rating Improvement (score change)', fontweight='bold')
-    ax2.set_title('(B) Box Plot with Statistical Summary', fontweight='bold')
-    ax2.grid(True, alpha=0.3, linestyle='--', axis='y')
-    ax2.axhline(0, color='gray', linestyle='-', linewidth=0.8, alpha=0.5)
+        positions = [1, 2]
+        labels = ['Automated', 'Human-in-Loop']
+        
+        # Draw connecting lines for paired data
+        for auto_imp, human_imp in zip(automated_improvements, human_improvements):
+            ax.plot(positions, [auto_imp, human_imp], 
+                   color='gray', alpha=0.2, linewidth=0.8, zorder=1)
+        
+        # Add individual points
+        jitter_a = np.random.normal(0, 0.03, len(automated_improvements))
+        jitter_b = np.random.normal(0, 0.03, len(human_improvements))
+        ax.scatter(positions[0] + jitter_a, automated_improvements, 
+                  alpha=0.6, s=40, color=ACADEMIC_COLORS['group_a'], 
+                  edgecolors='black', linewidths=0.5, zorder=3, label='Automated')
+        ax.scatter(positions[1] + jitter_b, human_improvements, 
+                  alpha=0.6, s=40, color=ACADEMIC_COLORS['group_b'], 
+                  edgecolors='black', linewidths=0.5, zorder=3, label='Human-in-Loop')
+        
+        # Add box plots for distribution
+        bp = ax.boxplot([automated_improvements, human_improvements], 
+                        positions=positions, widths=0.3, patch_artist=True,
+                        showmeans=True, meanline=True, zorder=2)
+        bp['boxes'][0].set_facecolor(ACADEMIC_COLORS['group_a'])
+        bp['boxes'][0].set_alpha(0.3)
+        bp['boxes'][1].set_facecolor(ACADEMIC_COLORS['group_b'])
+        bp['boxes'][1].set_alpha(0.3)
+        
+        # Add mean and confidence intervals
+        ax.errorbar(positions, [mean_a, mean_b], 
+                   yerr=[[mean_a - ci_low_a, mean_b - ci_low_b],
+                         [ci_high_a - mean_a, ci_high_b - mean_b]],
+                   fmt='o', color='red', markersize=10, capsize=6, capthick=2,
+                   label='Mean (95% CI)', zorder=4, linewidth=2)
+        
+        # Statistical annotation
+        if ttest_result:
+            p_value = ttest_result.get('p_value', 1.0)
+            cohens_d = ttest_result.get('cohens_d', 0.0)
+            y_max = max([np.max(automated_improvements), np.max(human_improvements)]) + 0.5
+            add_statistical_annotation(ax, 1, 2, y_max, p_value, text_y_offset=0.3)
+            
+            if p_value < 0.001:
+                p_text = 'p < 0.001'
+            else:
+                p_text = f'p = {p_value:.3f}'
+            stats_text = f"{p_text}\nCohen's d = {cohens_d:.2f}\nPaired t-test (n={n_paired})"
+            ax.text(1.5, y_max + 0.9, stats_text, ha='center', va='bottom',
+                   fontsize=10, bbox=dict(boxstyle='round', facecolor='wheat', 
+                   alpha=0.9, edgecolor='black', linewidth=1.5))
+        
+        ax.set_xticks(positions)
+        ax.set_xticklabels(labels, fontweight='bold', fontsize=12)
+        ax.set_ylabel('Rating Improvement (score change)', fontweight='bold', fontsize=11)
+        ax.set_title('Paired Design Comparison (n=50)', fontweight='bold', fontsize=12, pad=10)
+        ax.legend(loc='upper right', frameon=True, fontsize=10)
+        ax.grid(True, alpha=0.3, linestyle='--', axis='y')
+        ax.axhline(0, color='gray', linestyle='-', linewidth=1, alpha=0.5)
+        
+        # Add sample size
+        ax.text(1.5, ax.get_ylim()[0] - 0.3, f'n = {n_paired} (paired)', 
+               ha='center', fontsize=10, style='italic', fontweight='bold')
+        
+    else:
+        # Independent design: Two panels
+        fig, axes = plt.subplots(1, 2, figsize=figsize)
+        fig.suptitle('Figure 1: Rating Improvement Distribution', 
+                    fontsize=13, fontweight='bold', y=1.02)
+        
+        data_for_plot = [group_a_improvements, group_b_improvements]
+        positions = [1, 2]
+        labels = ['Automated', 'Human-in-Loop']
+        
+        # Panel A: Box plot with individual points
+        ax1 = axes[0]
+        bp = ax1.boxplot(data_for_plot, positions=positions, widths=0.6, 
+                         patch_artist=True, showmeans=True, meanline=True)
+        bp['boxes'][0].set_facecolor(ACADEMIC_COLORS['group_a'])
+        bp['boxes'][0].set_alpha(0.7)
+        bp['boxes'][1].set_facecolor(ACADEMIC_COLORS['group_b'])
+        bp['boxes'][1].set_alpha(0.7)
+        
+        # Add individual points
+        for i, (data, pos) in enumerate(zip(data_for_plot, positions)):
+            jitter = np.random.normal(0, 0.05, len(data))
+            ax1.scatter(jitter + pos, data, alpha=0.5, s=30, 
+                       color='black', edgecolors='white', linewidths=0.5, zorder=3)
+        
+        ax1.errorbar(positions, [mean_a, mean_b], 
+                    yerr=[[mean_a - ci_low_a, mean_b - ci_low_b],
+                          [ci_high_a - mean_a, ci_high_b - mean_b]],
+                    fmt='o', color='red', markersize=8, capsize=5, capthick=2,
+                    label='Mean (95% CI)', zorder=4)
+        
+        ax1.set_xticks(positions)
+        ax1.set_xticklabels(labels, fontweight='bold')
+        ax1.set_ylabel('Rating Improvement (score change)', fontweight='bold')
+        ax1.set_title('(A) Distribution', fontweight='bold')
+        ax1.legend(loc='upper right', frameon=True, fontsize=9)
+        ax1.grid(True, alpha=0.3, linestyle='--', axis='y')
+        ax1.axhline(0, color='gray', linestyle='-', linewidth=0.8, alpha=0.5)
+        ax1.text(1.5, ax1.get_ylim()[0] + 0.1, 
+                f'n₁={len(group_a_improvements)}, n₂={len(group_b_improvements)}', 
+                ha='center', fontsize=9, style='italic')
+        
+        # Panel B: Statistical summary
+        ax2 = axes[1]
+        if ttest_result:
+            p_value = ttest_result.get('p_value', 1.0)
+            cohens_d = ttest_result.get('cohens_d', 0.0)
+            y_max = max([np.max(group_a_improvements), np.max(group_b_improvements)]) + 0.5
+            add_statistical_annotation(ax2, 1, 2, y_max, p_value, text_y_offset=0.3)
+            
+            if p_value < 0.001:
+                p_text = 'p < 0.001'
+            else:
+                p_text = f'p = {p_value:.3f}'
+            stats_text = f"{p_text}\nCohen's d = {cohens_d:.2f}\nn₁={len(group_a_improvements)}, n₂={len(group_b_improvements)}"
+            ax2.text(1.5, y_max + 0.9, stats_text, ha='center', va='bottom',
+                    fontsize=9, bbox=dict(boxstyle='round', facecolor='wheat', 
+                    alpha=0.8, edgecolor='black', linewidth=1))
+        
+        ax2.bar(positions, [mean_a, mean_b], yerr=[[mean_a - ci_low_a], [mean_b - ci_low_b]],
+               color=[ACADEMIC_COLORS['group_a'], ACADEMIC_COLORS['group_b']],
+               alpha=0.7, edgecolor='black', linewidth=1.5, width=0.6, capsize=8)
+        ax2.set_xticks(positions)
+        ax2.set_xticklabels(labels, fontweight='bold')
+        ax2.set_ylabel('Mean Rating Improvement', fontweight='bold')
+        ax2.set_title('(B) Statistical Summary', fontweight='bold')
+        ax2.grid(True, alpha=0.3, linestyle='--', axis='y')
+        ax2.axhline(0, color='gray', linestyle='-', linewidth=0.8, alpha=0.5)
     
     plt.tight_layout()
     plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
@@ -268,21 +346,21 @@ def plot_training_effectiveness(
                 if post_survey.get('authenticity') is not None:
                     post_auth_individual.append(post_survey['authenticity'])
     
-    # Create figure with 2x2 layout
-    fig, axes = plt.subplots(2, 2, figsize=figsize)
-    fig.suptitle('Figure 2: Training Effectiveness (Pre/Post Comparison)', 
+    # Create simplified figure with 1x2 layout (two side-by-side paired comparisons)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    fig.suptitle('Figure 2: Training Effectiveness (Paired Pre/Post Comparison)', 
                  fontsize=13, fontweight='bold', y=0.98)
     
     # Panel A: Confidence - Paired comparison with individual trajectories
-    ax1 = axes[0, 0]
+    ax1 = axes[0]
     conf_means = [pre_conf.get('mean', 0), post_conf.get('mean', 0)]
     conf_stds = [pre_conf.get('std', 0), post_conf.get('std', 0)]
     
-    # Draw individual trajectories if available
+    # Draw individual trajectories if available (all pairs, not limited)
     if len(pre_conf_individual) == len(post_conf_individual) and len(pre_conf_individual) > 0:
         x_pos = [0, 1]
-        for pre, post in zip(pre_conf_individual[:30], post_conf_individual[:30]):  # Limit to 30 for clarity
-            ax1.plot(x_pos, [pre, post], color='gray', alpha=0.2, linewidth=0.8, zorder=1)
+        for pre, post in zip(pre_conf_individual, post_conf_individual):
+            ax1.plot(x_pos, [pre, post], color='gray', alpha=0.15, linewidth=0.6, zorder=1)
     
     # Add bars with error bars
     bars1 = ax1.bar([0, 1], conf_means, yerr=conf_stds, 
@@ -290,123 +368,86 @@ def plot_training_effectiveness(
                     alpha=0.7, edgecolor='black', linewidth=1.5, capsize=8, width=0.5, zorder=2)
     
     # Add mean points
-    ax1.scatter([0, 1], conf_means, color='red', s=100, zorder=3, 
+    ax1.scatter([0, 1], conf_means, color='red', s=120, zorder=4, 
                edgecolors='white', linewidths=2, marker='o')
     
     # Add value labels
     for i, (mean, std) in enumerate(zip(conf_means, conf_stds)):
-        ax1.text(i, mean + std + 0.15, f'{mean:.2f}', ha='center', va='bottom',
-                fontweight='bold', fontsize=10)
+        ax1.text(i, mean + std + 0.2, f'{mean:.2f}', ha='center', va='bottom',
+                fontweight='bold', fontsize=11)
     
     # Statistical annotation
     if conf_improve.get('significant'):
         p_val = conf_improve.get('p_value', 1.0)
         effect_size = conf_improve.get('improvement', 0)
-        y_max = max(conf_means) + max(conf_stds) + 0.5
-        add_statistical_annotation(ax1, 0, 1, y_max, p_val, text_y_offset=0.2)
+        y_max = max(conf_means) + max(conf_stds) + 0.6
+        add_statistical_annotation(ax1, 0, 1, y_max, p_val, text_y_offset=0.25)
         sig_text = '***' if p_val < 0.001 else '**' if p_val < 0.01 else '*'
-        ax1.text(0.5, y_max + 0.35, sig_text, ha='center', va='bottom',
-                fontsize=16, fontweight='bold', color=ACADEMIC_COLORS['significant'])
-        # Add effect size
-        ax1.text(0.5, y_max + 0.6, f'Δ = {effect_size:.2f}', ha='center', va='bottom',
-                fontsize=9, style='italic')
+        ax1.text(0.5, y_max + 0.4, sig_text, ha='center', va='bottom',
+                fontsize=18, fontweight='bold', color=ACADEMIC_COLORS['significant'])
+        # Add effect size and p-value
+        if p_val < 0.001:
+            p_text = 'p < 0.001'
+        else:
+            p_text = f'p = {p_val:.3f}'
+        ax1.text(0.5, y_max + 0.7, f'Δ = {effect_size:.2f} ({p_text})', 
+                ha='center', va='bottom', fontsize=10, style='italic')
     
-    ax1.set_ylabel('Confidence Score (1-5)', fontweight='bold')
-    ax1.set_title('(A) Confidence: Paired Comparison', fontweight='bold')
+    ax1.set_ylabel('Confidence Score (1-5)', fontweight='bold', fontsize=11)
+    ax1.set_title('(A) Confidence', fontweight='bold', fontsize=12)
     ax1.set_xticks([0, 1])
-    ax1.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    ax1.set_ylim(0, 5.5)
+    ax1.set_xticklabels(['Pre', 'Post'], fontweight='bold', fontsize=11)
+    ax1.set_ylim(0, 5.8)
     ax1.grid(True, alpha=0.3, linestyle='--', axis='y')
     if len(pre_conf_individual) > 0:
-        ax1.text(0.5, -0.5, f'n = {len(pre_conf_individual)}', ha='center', fontsize=9, style='italic')
+        ax1.text(0.5, -0.4, f'n = {len(pre_conf_individual)} (paired)', 
+                ha='center', fontsize=10, style='italic', fontweight='bold')
     
     # Panel B: Authenticity - Paired comparison
-    ax2 = axes[0, 1]
+    ax2 = axes[1]
     auth_means = [pre_auth.get('mean', 0), post_auth.get('mean', 0)]
     auth_stds = [pre_auth.get('std', 0), post_auth.get('std', 0)]
     
-    # Draw individual trajectories
+    # Draw individual trajectories (all pairs)
     if len(pre_auth_individual) == len(post_auth_individual) and len(pre_auth_individual) > 0:
-        for pre, post in zip(pre_auth_individual[:30], post_auth_individual[:30]):
-            ax2.plot([0, 1], [pre, post], color='gray', alpha=0.2, linewidth=0.8, zorder=1)
+        for pre, post in zip(pre_auth_individual, post_auth_individual):
+            ax2.plot([0, 1], [pre, post], color='gray', alpha=0.15, linewidth=0.6, zorder=1)
     
     bars2 = ax2.bar([0, 1], auth_means, yerr=auth_stds,
                     color=[ACADEMIC_COLORS['pre'], ACADEMIC_COLORS['post']],
                     alpha=0.7, edgecolor='black', linewidth=1.5, capsize=8, width=0.5, zorder=2)
     
-    ax2.scatter([0, 1], auth_means, color='red', s=100, zorder=3,
+    ax2.scatter([0, 1], auth_means, color='red', s=120, zorder=4,
                edgecolors='white', linewidths=2, marker='o')
     
     for i, (mean, std) in enumerate(zip(auth_means, auth_stds)):
-        ax2.text(i, mean + std + 0.15, f'{mean:.2f}', ha='center', va='bottom',
-                fontweight='bold', fontsize=10)
+        ax2.text(i, mean + std + 0.2, f'{mean:.2f}', ha='center', va='bottom',
+                fontweight='bold', fontsize=11)
     
     if auth_improve.get('significant'):
         p_val = auth_improve.get('p_value', 1.0)
         effect_size = auth_improve.get('improvement', 0)
-        y_max = max(auth_means) + max(auth_stds) + 0.5
-        add_statistical_annotation(ax2, 0, 1, y_max, p_val, text_y_offset=0.2)
+        y_max = max(auth_means) + max(auth_stds) + 0.6
+        add_statistical_annotation(ax2, 0, 1, y_max, p_val, text_y_offset=0.25)
         sig_text = '***' if p_val < 0.001 else '**' if p_val < 0.01 else '*'
-        ax2.text(0.5, y_max + 0.35, sig_text, ha='center', va='bottom',
-                fontsize=16, fontweight='bold', color=ACADEMIC_COLORS['significant'])
-        ax2.text(0.5, y_max + 0.6, f'Δ = {effect_size:.2f}', ha='center', va='bottom',
-                fontsize=9, style='italic')
+        ax2.text(0.5, y_max + 0.4, sig_text, ha='center', va='bottom',
+                fontsize=18, fontweight='bold', color=ACADEMIC_COLORS['significant'])
+        if p_val < 0.001:
+            p_text = 'p < 0.001'
+        else:
+            p_text = f'p = {p_val:.3f}'
+        ax2.text(0.5, y_max + 0.7, f'Δ = {effect_size:.2f} ({p_text})', 
+                ha='center', va='bottom', fontsize=10, style='italic')
     
-    ax2.set_ylabel('Authenticity Score (1-5)', fontweight='bold')
-    ax2.set_title('(B) Authenticity: Paired Comparison', fontweight='bold')
+    ax2.set_ylabel('Authenticity Score (1-5)', fontweight='bold', fontsize=11)
+    ax2.set_title('(B) Authenticity', fontweight='bold', fontsize=12)
     ax2.set_xticks([0, 1])
-    ax2.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    ax2.set_ylim(0, 5.5)
+    ax2.set_xticklabels(['Pre', 'Post'], fontweight='bold', fontsize=11)
+    ax2.set_ylim(0, 5.8)
     ax2.grid(True, alpha=0.3, linestyle='--', axis='y')
     if len(pre_auth_individual) > 0:
-        ax2.text(0.5, -0.5, f'n = {len(pre_auth_individual)}', ha='center', fontsize=9, style='italic')
-    
-    # Panel C: Confidence distribution (violin plot)
-    ax3 = axes[1, 0]
-    if len(pre_conf_individual) > 0 and len(post_conf_individual) > 0:
-        data_for_violin = [pre_conf_individual, post_conf_individual]
-        parts = ax3.violinplot(data_for_violin, positions=[1, 2], widths=0.6, showmeans=True)
-        for i, pc in enumerate(parts['bodies']):
-            pc.set_facecolor([ACADEMIC_COLORS['pre'], ACADEMIC_COLORS['post']][i])
-            pc.set_alpha(0.6)
-            pc.set_edgecolor('black')
-        ax3.set_xticks([1, 2])
-        ax3.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    else:
-        # Fallback to bar chart
-        ax3.bar([0, 1], conf_means, yerr=conf_stds, 
-               color=[ACADEMIC_COLORS['pre'], ACADEMIC_COLORS['post']],
-               alpha=0.7, edgecolor='black', capsize=8)
-        ax3.set_xticks([0, 1])
-        ax3.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    
-    ax3.set_ylabel('Confidence Score', fontweight='bold')
-    ax3.set_title('(C) Confidence Distribution', fontweight='bold')
-    ax3.set_ylim(0, 5.5)
-    ax3.grid(True, alpha=0.3, linestyle='--', axis='y')
-    
-    # Panel D: Authenticity distribution
-    ax4 = axes[1, 1]
-    if len(pre_auth_individual) > 0 and len(post_auth_individual) > 0:
-        data_for_violin = [pre_auth_individual, post_auth_individual]
-        parts = ax4.violinplot(data_for_violin, positions=[1, 2], widths=0.6, showmeans=True)
-        for i, pc in enumerate(parts['bodies']):
-            pc.set_facecolor([ACADEMIC_COLORS['pre'], ACADEMIC_COLORS['post']][i])
-            pc.set_alpha(0.6)
-            pc.set_edgecolor('black')
-        ax4.set_xticks([1, 2])
-        ax4.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    else:
-        ax4.bar([0, 1], auth_means, yerr=auth_stds,
-               color=[ACADEMIC_COLORS['pre'], ACADEMIC_COLORS['post']],
-               alpha=0.7, edgecolor='black', capsize=8)
-        ax4.set_xticks([0, 1])
-        ax4.set_xticklabels(['Pre', 'Post'], fontweight='bold')
-    
-    ax4.set_ylabel('Authenticity Score', fontweight='bold')
-    ax4.set_title('(D) Authenticity Distribution', fontweight='bold')
-    ax4.set_ylim(0, 5.5)
-    ax4.grid(True, alpha=0.3, linestyle='--', axis='y')
+        ax2.text(0.5, -0.4, f'n = {len(pre_auth_individual)} (paired)', 
+                ha='center', fontsize=10, style='italic', fontweight='bold')
     
     plt.tight_layout()
     plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
