@@ -1,4 +1,6 @@
 # Chain-of-Thought Prompting for Interview Evaluation: Limitations and Enhancements
+# (Option 1) Interview Auto-Evaluation and Auto-Improvement
+# (Option 2) ABI: Interview Evaluation and Improvement dataset
 
 **Authors:** Zixi Liu, Kewen Zhu
 
@@ -41,6 +43,10 @@ This work makes three primary contributions:
 2. **Convergence analysis** showing CoT prompting reaches diminishing returns after one iteration in interview contexts
 3. **Adversarial challenging mechanism** (negativity bias model) that improves evaluation realism
 
+(Optional) Contribution
+1. Fullfill Lack of research in AI Interview
+2. Improve interview preparation
+3. Provide enhanced-datasests
 ---
 
 ## 2. Related Work
