@@ -1,6 +1,4 @@
-# Chain-of-Thought Prompting for Interview Evaluation: Limitations and Enhancements
-# (Option 1) Interview Auto-Evaluation and Auto-Improvement
-# (Option 2) ABI: Interview Evaluation and Improvement dataset
+# Interview Auto-Evaluation and Auto-Improvement
 
 **Authors:** Zixi Liu, Kewen Zhu, Jing Chen
 
