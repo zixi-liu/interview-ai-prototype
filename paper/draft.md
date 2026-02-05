@@ -1,6 +1,6 @@
 # Interview Auto-Evaluation and Auto-Improvement
 
-**Authors:** Zixi Liu, Kewen Zhu, Jing Chen
+**Authors:** Zixi Liu, Kewen Zhu, Yanjing Li, Jing Chen
 
 ## Abstract
 
