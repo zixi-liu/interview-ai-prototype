@@ -42,6 +42,7 @@ from bq_early_stop import rating_histogram, should_stop_layer
 from bq_rating_prompt_schema import build_bq_rating_prompt, parse_bq_rating_output
 from bq_stage_runner import run_stage_tasks
 from litellm_client import complete_text, provider_bucket_for_model
+from viz_rating_stats import aggregate_stats, emit_html, load_rows, stats_to_chart_data
 
 LOGGER = logging.getLogger("run_bq_experiment")
 
@@ -179,8 +180,18 @@ def _resolve_output_paths(cfg: dict[str, Any], out_dir: Path) -> tuple[Path, Pat
     return out_dir / str(rows_name), out_dir / str(meta_name)
 
 
+def _write_viz_from_rows(rows_path: Path) -> Path:
+    """Generate/update HTML visualization from rows.jsonl."""
+    viz_path = rows_path.parent / "viz_rating_stats.html"
+    rows = load_rows(rows_path)
+    stats = aggregate_stats(rows)
+    data = stats_to_chart_data(stats)
+    emit_html(data, viz_path)
+    return viz_path
+
+
 async def run_experiment(cfg: dict[str, Any], *, dry_run: bool, limit_samples: int | None) -> None:
-    level = cfg["level"]
+    level = str(cfg["level"]).strip().lower()
     companies: list[str] = cfg["companies"]
     models: dict[str, str] = cfg["models"]
     max_reps = int(cfg["max_replicates"])
@@ -360,6 +371,11 @@ async def run_experiment(cfg: dict[str, Any], *, dry_run: bool, limit_samples: i
     if not dry_run:
         append_jsonl(runs_meta_path, meta_final)
         LOGGER.info("appended run to %s and rows to %s", runs_meta_path, rows_path)
+        try:
+            viz_path = _write_viz_from_rows(rows_path)
+            LOGGER.info("updated visualization at %s", viz_path)
+        except Exception:
+            LOGGER.exception("failed to update visualization from %s", rows_path)
     else:
         LOGGER.info("dry-run total task slots ~ %s (sum over reps); no files written", total_tasks)
 
@@ -388,6 +404,9 @@ def main() -> None:
         cfg["level"] = args.level
     if args.max_replicates is not None:
         cfg["max_replicates"] = args.max_replicates
+
+    # Normalize level to lowercase for stable output and grouping.
+    cfg["level"] = str(cfg.get("level", "")).strip().lower()
 
     apply_api_keys_from_config(cfg)
 

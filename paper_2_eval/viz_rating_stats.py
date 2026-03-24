@@ -44,7 +44,7 @@ def aggregate_stats(rows: list[dict]) -> dict:
             continue
         q = r.get("question", "").strip()
         c = r.get("company", "").strip()
-        lvl = r.get("level", "").strip()
+        lvl = r.get("level", "").strip().lower()
         m = r.get("model_name", "").strip()
         rating = r.get("rating", "").strip()
         key = (q, c, lvl, m)
