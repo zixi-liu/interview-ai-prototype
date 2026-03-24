@@ -19,7 +19,10 @@ import argparse
 from typing import List, Dict, Tuple
 from dataclasses import dataclass, asdict
 from dotenv import load_dotenv
+import litellm
 from litellm import acompletion
+
+litellm.drop_params = True
 
 load_dotenv()
 

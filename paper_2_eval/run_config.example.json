@@ -1,0 +1,38 @@
+{
+  "level": "senior",
+  "companies": ["Google"],
+  "models": {
+    "openai": "gpt-5.4-mini"
+  },
+  "data": {
+    "answers_toml": "../awesome-behavioral-interviews/answers.toml",
+    "max_answer_samples": 10
+  },
+  "output_dir": "./results/latest",
+  "max_replicates": 10,
+  "early_stop": {
+    "min_rep_to_check": 3,
+    "max_abs_bin_diff": 0.02,
+    "js_divergence": 0.01,
+    "consecutive_stable_pairs": 2
+  },
+  "runner": {
+    "parallel_reps": true,
+    "max_concurrent_global": 10,
+    "max_concurrent_per_provider": {
+      "openai": 4,
+      "google": 2,
+      "anthropic": 2,
+      "xai": 2
+    },
+    "min_interval_sec_per_provider": {},
+    "max_retries": 3,
+    "request_timeout_sec": 240
+  },
+  "api_keys": {
+    "OPENAI_API_KEY": "",
+    "ANTHROPIC_API_KEY": "",
+    "GEMINI_API_KEY": "",
+    "XAI_API_KEY": ""
+  }
+}
