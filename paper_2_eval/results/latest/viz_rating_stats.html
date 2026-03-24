@@ -94,11 +94,45 @@
             height: 8px;
             border-radius: 1px;
         }
+        .filters {
+            display: flex;
+            gap: 0.5rem 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+        .filters label {
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .filters select {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid #334155;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            min-width: 140px;
+        }
+        .filters select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        tr.hidden { display: none; }
     </style>
 </head>
 <body>
     <h1>BQ Rating Stats</h1>
     <p class="sub">question × company × level × model</p>
+    <div class="filters">
+        <label>Question <select id="fq"><option value="">— all —</option><option value="Describe a time when you led a team. What was the outcome?">Describe a time when you led a team. What was the outcome?</option><option value="Describe a time when you went above and beyond the requirements for a project.">Describe a time when you went above and beyond the requirements for a project.</option><option value="Describe a time you received tough or critical feedback">Describe a time you received tough or critical feedback</option><option value="How do you handle a situation where you don't know the answer to a question?">How do you handle a situation where you don't know the answer to a question?</option><option value="Provide an example of a time when you had to make a difficult decision.">Provide an example of a time when you had to make a difficult decision.</option><option value="Tell me about a situation when you had a conflict with a teammate.">Tell me about a situation when you had a conflict with a teammate.</option><option value="Tell me about a time you failed. How did you deal with the situation?">Tell me about a time you failed. How did you deal with the situation?</option><option value="Tell me about a time you had a disagreement with your manager.">Tell me about a time you had a disagreement with your manager.</option><option value="Tell me about a time you worked well under pressure.">Tell me about a time you worked well under pressure.</option><option value="Tell me about yourself.">Tell me about yourself.</option></select></label>
+        <label>Company <select id="fc"><option value="">— all —</option><option value="Google">Google</option></select></label>
+        <label>Level <select id="fl"><option value="">— all —</option><option value="senior">senior</option></select></label>
+        <label>Model <select id="fm"><option value="">— all —</option><option value="gpt-5.4-mini">gpt-5.4-mini</option><option value="gpt-5.4-pro">gpt-5.4-pro</option></select></label>
+    </div>
     <div class="legend">
         <span><span class="swatch" style="background:#dc2626"></span> No Hire</span>
         <span><span class="swatch" style="background:#f97316"></span> Leaning No Hire</span>
@@ -119,7 +153,7 @@
             </thead>
             <tbody>
                 
-        <tr>
+        <tr data-question="Describe a time when you led a team. What was the outcome?" data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Describe a time when you led a team. What was the outcome?</td>
             <td>Google</td>
             <td>senior</td>
@@ -128,7 +162,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Describe a time when you went above and beyond the requirements for a project." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Describe a time when you went above and beyond the requirements for a project.</td>
             <td>Google</td>
             <td>senior</td>
@@ -137,7 +171,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Describe a time you received tough or critical feedback" data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Describe a time you received tough or critical feedback</td>
             <td>Google</td>
             <td>senior</td>
@@ -146,7 +180,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="How do you handle a situation where you don't know the answer to a question?" data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">How do you handle a situation where you don't know the answer to a question?</td>
             <td>Google</td>
             <td>senior</td>
@@ -155,7 +189,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Provide an example of a time when you had to make a difficult decision." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Provide an example of a time when you had to make a difficult decision.</td>
             <td>Google</td>
             <td>senior</td>
@@ -164,7 +198,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about a situation when you had a conflict with a teammate." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Tell me about a situation when you had a conflict with a teammate.</td>
             <td>Google</td>
             <td>senior</td>
@@ -173,7 +207,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about a time you failed. How did you deal with the situation?" data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Tell me about a time you failed. How did you deal with the situation?</td>
             <td>Google</td>
             <td>senior</td>
@@ -182,7 +216,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about a time you had a disagreement with your manager." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Tell me about a time you had a disagreement with your manager.</td>
             <td>Google</td>
             <td>senior</td>
@@ -191,7 +225,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about a time you had a disagreement with your manager." data-company="Google" data-level="senior" data-model="gpt-5.4-pro">
             <td class="q-cell">Tell me about a time you had a disagreement with your manager.</td>
             <td>Google</td>
             <td>senior</td>
@@ -200,7 +234,7 @@
             <td class="total">4</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about a time you worked well under pressure." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Tell me about a time you worked well under pressure.</td>
             <td>Google</td>
             <td>senior</td>
@@ -209,7 +243,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about yourself." data-company="Google" data-level="senior" data-model="gpt-5.4-mini">
             <td class="q-cell">Tell me about yourself.</td>
             <td>Google</td>
             <td>senior</td>
@@ -218,7 +252,7 @@
             <td class="total">10</td>
         </tr>
         
-        <tr>
+        <tr data-question="Tell me about yourself." data-company="Google" data-level="senior" data-model="gpt-5.4-pro">
             <td class="q-cell">Tell me about yourself.</td>
             <td>Google</td>
             <td>senior</td>
@@ -229,5 +263,21 @@
         
             </tbody>
         </table>
+    <script>
+        (function() {
+            var rows = document.querySelectorAll('tbody tr');
+            function filter() {
+                var q = document.getElementById('fq').value;
+                var c = document.getElementById('fc').value;
+                var l = document.getElementById('fl').value;
+                var m = document.getElementById('fm').value;
+                rows.forEach(function(tr) {
+                    var ok = (!q || tr.dataset.question === q) && (!c || tr.dataset.company === c) && (!l || tr.dataset.level === l) && (!m || tr.dataset.model === m);
+                    tr.classList.toggle('hidden', !ok);
+                });
+            }
+            ['fq','fc','fl','fm'].forEach(function(id) { document.getElementById(id).addEventListener('change', filter); });
+        })();
+    </script>
 </body>
 </html>

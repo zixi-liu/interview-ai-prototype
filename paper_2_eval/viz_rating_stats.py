@@ -71,6 +71,11 @@ def stats_to_chart_data(stats: dict) -> list[dict]:
     return out
 
 
+def _select_opts(values: list[str]) -> str:
+    """Generate <option> elements for a select."""
+    return "".join(f'<option value="{v.replace(chr(34), "&quot;")}">{v}</option>' for v in values)
+
+
 def _color(rating: str) -> str:
     return {
         "No Hire": "#dc2626",
@@ -82,7 +87,13 @@ def _color(rating: str) -> str:
 
 
 def emit_html(data: list[dict], out_path: Path) -> None:
-    """Generate standalone HTML with embedded Chart.js for browser visualization."""
+    """Generate standalone HTML with filter dropdowns and table."""
+    # Unique values for filters
+    questions = sorted({d["question"] for d in data})
+    companies = sorted({d["company"] for d in data})
+    levels = sorted({d["level"] for d in data})
+    models = sorted({d["model"] for d in data})
+
     rows_html = []
     for d in data:
         labels = list(RATING_ORDER)
@@ -92,8 +103,9 @@ def emit_html(data: list[dict], out_path: Path) -> None:
             f'<div class="bar-cell"><div class="bar" style="width:{p}%;background:{_color(r)}" title="{r}: {c} ({p}%)"></div><span class="bar-label">{c}</span></div>'
             for r, c, p in zip(labels, counts, pcts)
         )
+        q_esc = d["question"].replace('"', "&quot;")
         rows_html.append(f"""
-        <tr>
+        <tr data-question="{q_esc}" data-company="{d["company"]}" data-level="{d["level"]}" data-model="{d["model"]}">
             <td class="q-cell">{d["question"]}</td>
             <td>{d["company"]}</td>
             <td>{d["level"]}</td>
@@ -199,11 +211,45 @@ def emit_html(data: list[dict], out_path: Path) -> None:
             height: 8px;
             border-radius: 1px;
         }}
+        .filters {{
+            display: flex;
+            gap: 0.5rem 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }}
+        .filters label {{
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }}
+        .filters select {{
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid #334155;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            min-width: 140px;
+        }}
+        .filters select:focus {{
+            outline: none;
+            border-color: var(--accent);
+        }}
+        tr.hidden {{ display: none; }}
     </style>
 </head>
 <body>
     <h1>BQ Rating Stats</h1>
     <p class="sub">question × company × level × model</p>
+    <div class="filters">
+        <label>Question <select id="fq"><option value="">— all —</option>{_select_opts(questions)}</select></label>
+        <label>Company <select id="fc"><option value="">— all —</option>{_select_opts(companies)}</select></label>
+        <label>Level <select id="fl"><option value="">— all —</option>{_select_opts(levels)}</select></label>
+        <label>Model <select id="fm"><option value="">— all —</option>{_select_opts(models)}</select></label>
+    </div>
     <div class="legend">
         <span><span class="swatch" style="background:#dc2626"></span> No Hire</span>
         <span><span class="swatch" style="background:#f97316"></span> Leaning No Hire</span>
@@ -226,6 +272,22 @@ def emit_html(data: list[dict], out_path: Path) -> None:
                 {"".join(rows_html)}
             </tbody>
         </table>
+    <script>
+        (function() {{
+            var rows = document.querySelectorAll('tbody tr');
+            function filter() {{
+                var q = document.getElementById('fq').value;
+                var c = document.getElementById('fc').value;
+                var l = document.getElementById('fl').value;
+                var m = document.getElementById('fm').value;
+                rows.forEach(function(tr) {{
+                    var ok = (!q || tr.dataset.question === q) && (!c || tr.dataset.company === c) && (!l || tr.dataset.level === l) && (!m || tr.dataset.model === m);
+                    tr.classList.toggle('hidden', !ok);
+                }});
+            }}
+            ['fq','fc','fl','fm'].forEach(function(id) {{ document.getElementById(id).addEventListener('change', filter); }});
+        }})();
+    </script>
 </body>
 </html>
 """
