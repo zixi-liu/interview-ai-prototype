@@ -98,10 +98,8 @@ def build_bq_rating_prompt(
     Keep this function stable across experiments for reproducibility.
     """
     eval_block = EVALUATION_INSTRUCTIONS_TEMPLATE.format(company=company)
-    return f"""You are a hiring committee interviewer at {company}.
-Evaluate the candidate's behavioral answer for a {level} role.
-
-{eval_block}
+    return f"""You are an interviewer at {company}.
+Evaluate the candidate's behavioral answer for a {level} Software Engineer role.
 
 Question:
 {question}
