@@ -8,6 +8,7 @@ an interactive HTML dashboard for browser viewing.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import webbrowser
 from collections import defaultdict
@@ -294,6 +295,36 @@ def emit_html(data: list[dict], out_path: Path) -> None:
     out_path.write_text(html, encoding="utf-8")
 
 
+def emit_summary_table(data: list[dict], out_path: Path) -> None:
+    """One CSV row per group; utf-8-sig for Excel. Columns: ids, total, n/pct per rating."""
+    hdr = (
+        "question",
+        "company",
+        "level",
+        "model",
+        "total",
+        *[f"n_{r}" for r in RATING_ORDER],
+        *[f"pct_{r}" for r in RATING_ORDER],
+    )
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    key = lambda d: (d["question"], d["company"], d["level"], d["model"])
+    with out_path.open("w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(hdr)
+        for d in sorted(data, key=key):
+            w.writerow(
+                [
+                    d["question"],
+                    d["company"],
+                    d["level"],
+                    d["model"],
+                    d["total"],
+                    *[d["counts"][r] for r in RATING_ORDER],
+                    *[d["pct"][r] for r in RATING_ORDER],
+                ]
+            )
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Visualize BQ rating stats from rows.jsonl")
     ap.add_argument(
@@ -327,6 +358,11 @@ def main() -> None:
 
     emit_html(data, out)
     print(f"Wrote {len(data)} aggregations to {out}")
+
+    summary_path = out.parent / "viz_rating_stats_summary.csv"
+    emit_summary_table(data, summary_path)
+    print(f"Wrote group summary table ({len(data)} rows) to {summary_path}")
+
     if args.open_browser:
         webbrowser.open(out.as_uri())
 

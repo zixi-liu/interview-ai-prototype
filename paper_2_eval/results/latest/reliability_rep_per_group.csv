@@ -1,0 +1,281 @@
+﻿run_id,question,company,level,model,sample_id,n_reps,replicate_ids,agreement_all_same_rating,pstdev_ordinal_1_to_5
+20260325T055551Z,Tell me about yourself.,Google,senior,gpt-5.4-mini,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T055551Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-mini,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-mini,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-mini,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-mini,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T055551Z,Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-mini,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-mini,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-mini,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055551Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-mini,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.5
+20260325T055551Z,Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-mini,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Tell me about yourself.,Google,mid-level,gpt-5.4-mini,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-mini,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-mini,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-mini,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-mini,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T055727Z,Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-mini,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T055727Z,Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-mini,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-mini,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055727Z,How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-mini,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T055727Z,Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-mini,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about yourself.,Meta,senior,gpt-5.4-mini,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.5
+20260325T055947Z,Tell me about yourself.,Amazon,senior,gpt-5.4-mini,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T055947Z,Tell me about a time you had a disagreement with your manager.,Meta,senior,gpt-5.4-mini,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a time you had a disagreement with your manager.,Amazon,senior,gpt-5.4-mini,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a situation when you had a conflict with a teammate.,Meta,senior,gpt-5.4-mini,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a situation when you had a conflict with a teammate.,Amazon,senior,gpt-5.4-mini,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a time you failed. How did you deal with the situation?,Meta,senior,gpt-5.4-mini,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a time you failed. How did you deal with the situation?,Amazon,senior,gpt-5.4-mini,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Describe a time when you led a team. What was the outcome?,Meta,senior,gpt-5.4-mini,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T055947Z,Describe a time when you led a team. What was the outcome?,Amazon,senior,gpt-5.4-mini,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a time you worked well under pressure.,Meta,senior,gpt-5.4-mini,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Tell me about a time you worked well under pressure.,Amazon,senior,gpt-5.4-mini,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Provide an example of a time when you had to make a difficult decision.,Meta,senior,gpt-5.4-mini,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Provide an example of a time when you had to make a difficult decision.,Amazon,senior,gpt-5.4-mini,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Describe a time when you went above and beyond the requirements for a project.,Meta,senior,gpt-5.4-mini,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Describe a time when you went above and beyond the requirements for a project.,Amazon,senior,gpt-5.4-mini,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,How do you handle a situation where you don't know the answer to a question?,Meta,senior,gpt-5.4-mini,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T055947Z,How do you handle a situation where you don't know the answer to a question?,Amazon,senior,gpt-5.4-mini,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T055947Z,Describe a time you received tough or critical feedback,Meta,senior,gpt-5.4-mini,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T055947Z,Describe a time you received tough or critical feedback,Amazon,senior,gpt-5.4-mini,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Tell me about yourself.,Google,senior,gpt-5.4,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060145Z,Describe a time you received tough or critical feedback,Google,senior,gpt-5.4,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Tell me about yourself.,Google,mid-level,gpt-5.4,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T060351Z,Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060351Z,How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T060351Z,Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Tell me about yourself.,Google,mid-level,gpt-5.4-pro,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T060520Z,Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-pro,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-pro,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-pro,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-pro,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-pro,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-pro,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-pro,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-pro,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T060520Z,Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-pro,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T064453Z,Tell me about yourself.,Google,mid-level,gpt-5.4-mini,1,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064453Z,Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-mini,2,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.3
+20260325T064453Z,Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-mini,3,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064453Z,Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-mini,4,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064453Z,Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-mini,5,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.4583
+20260325T064453Z,Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-mini,6,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064453Z,Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-mini,7,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.2179
+20260325T064453Z,Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-mini,8,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064453Z,How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-mini,9,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.4975
+20260325T064453Z,Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-mini,10,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Tell me about yourself.,Google,mid-level,gpt-5.4-mini,1,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-mini,2,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-mini,3,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-mini,4,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-mini,5,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.433
+20260325T064523Z,Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-mini,6,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-mini,7,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-mini,8,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064523Z,How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-mini,9,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.4899
+20260325T064523Z,Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-mini,10,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Tell me about yourself.,Google,senior,gpt-5.4-mini,1,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.3
+20260325T064756Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-mini,2,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-mini,3,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-mini,4,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-mini,5,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.3
+20260325T064756Z,Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-mini,6,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-mini,7,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-mini,8,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064756Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-mini,9,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.3571
+20260325T064756Z,Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-mini,10,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Tell me about yourself.,Google,senior,gpt-5.4-mini,1,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-mini,2,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-mini,3,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-mini,4,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-mini,5,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.2179
+20260325T064821Z,Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-mini,6,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-mini,7,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-mini,8,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T064821Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-mini,9,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",0.0,0.3571
+20260325T064821Z,Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-mini,10,20,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]",1.0,0.0
+20260325T065146Z,Tell me about yourself.,Amazon,senior,gpt-5.4-mini,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2179
+20260325T065146Z,Tell me about yourself.,Meta,senior,gpt-5.4-mini,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4994
+20260325T065146Z,Tell me about a time you had a disagreement with your manager.,Amazon,senior,gpt-5.4-mini,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a time you had a disagreement with your manager.,Meta,senior,gpt-5.4-mini,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a situation when you had a conflict with a teammate.,Amazon,senior,gpt-5.4-mini,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a situation when you had a conflict with a teammate.,Meta,senior,gpt-5.4-mini,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a time you failed. How did you deal with the situation?,Amazon,senior,gpt-5.4-mini,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a time you failed. How did you deal with the situation?,Meta,senior,gpt-5.4-mini,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Describe a time when you led a team. What was the outcome?,Amazon,senior,gpt-5.4-mini,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.1561
+20260325T065146Z,Describe a time when you led a team. What was the outcome?,Meta,senior,gpt-5.4-mini,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2179
+20260325T065146Z,Tell me about a time you worked well under pressure.,Amazon,senior,gpt-5.4-mini,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Tell me about a time you worked well under pressure.,Meta,senior,gpt-5.4-mini,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Provide an example of a time when you had to make a difficult decision.,Amazon,senior,gpt-5.4-mini,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Provide an example of a time when you had to make a difficult decision.,Meta,senior,gpt-5.4-mini,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Describe a time when you went above and beyond the requirements for a project.,Amazon,senior,gpt-5.4-mini,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Describe a time when you went above and beyond the requirements for a project.,Meta,senior,gpt-5.4-mini,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,How do you handle a situation where you don't know the answer to a question?,Amazon,senior,gpt-5.4-mini,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3
+20260325T065146Z,How do you handle a situation where you don't know the answer to a question?,Meta,senior,gpt-5.4-mini,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3571
+20260325T065146Z,Describe a time you received tough or critical feedback,Amazon,senior,gpt-5.4-mini,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065146Z,Describe a time you received tough or critical feedback,Meta,senior,gpt-5.4-mini,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T065431Z,Tell me about yourself.,Google,senior,gpt-5.4-pro,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-pro,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T065431Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-pro,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-pro,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-pro,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-pro,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-pro,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-pro,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T065431Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-pro,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T065431Z,Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-pro,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071225Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-flash-lite-preview,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071225Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-flash-lite-preview,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T071225Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-flash-lite-preview,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4472
+20260325T071225Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-flash-lite-preview,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T071225Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-flash-lite-preview,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T071225Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-flash-lite-preview,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T071225Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-flash-lite-preview,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T071225Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-flash-lite-preview,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071225Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-flash-lite-preview,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071225Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-flash-lite-preview,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T071309Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-flash-lite-preview,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T071309Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-flash-lite-preview,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3307
+20260325T071309Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-flash-lite-preview,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4684
+20260325T071309Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-flash-lite-preview,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4583
+20260325T071309Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-flash-lite-preview,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4
+20260325T071309Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-flash-lite-preview,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.5454
+20260325T071309Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-flash-lite-preview,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2236
+20260325T071309Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-flash-lite-preview,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4409
+20260325T071309Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-flash-lite-preview,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4409
+20260325T071309Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-flash-lite-preview,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4975
+20260325T071609Z,Tell me about yourself.,Google,senior,gemini/gemini-3-flash-preview,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071609Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3-flash-preview,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T071609Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3-flash-preview,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T071609Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3-flash-preview,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T071609Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3-flash-preview,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.5
+20260325T071609Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3-flash-preview,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T071609Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3-flash-preview,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T071609Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3-flash-preview,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4472
+20260325T071609Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3-flash-preview,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T071609Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3-flash-preview,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.6708
+20260325T071659Z,Tell me about yourself.,Google,senior,gemini/gemini-3-flash-preview,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T071659Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3-flash-preview,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.433
+20260325T071659Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3-flash-preview,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4943
+20260325T071659Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3-flash-preview,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.519
+20260325T071659Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3-flash-preview,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.5
+20260325T071659Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3-flash-preview,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4684
+20260325T071659Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3-flash-preview,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3571
+20260325T071659Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3-flash-preview,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2634
+20260325T071659Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3-flash-preview,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T071659Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3-flash-preview,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4899
+20260325T074020Z,Tell me about yourself.,Google,senior,claude-haiku-4-5,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T074020Z,Tell me about a time you had a disagreement with your manager.,Google,senior,claude-haiku-4-5,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074020Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-haiku-4-5,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T074020Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-haiku-4-5,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074020Z,Describe a time when you led a team. What was the outcome?,Google,senior,claude-haiku-4-5,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074020Z,Tell me about a time you worked well under pressure.,Google,senior,claude-haiku-4-5,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074020Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-haiku-4-5,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T074020Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-haiku-4-5,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T074020Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-haiku-4-5,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T074020Z,Describe a time you received tough or critical feedback,Google,senior,claude-haiku-4-5,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074218Z,Tell me about yourself.,Google,senior,claude-haiku-4-5,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.477
+20260325T074218Z,Tell me about a time you had a disagreement with your manager.,Google,senior,claude-haiku-4-5,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.5568
+20260325T074218Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-haiku-4-5,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2179
+20260325T074218Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-haiku-4-5,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4899
+20260325T074218Z,Describe a time when you led a team. What was the outcome?,Google,senior,claude-haiku-4-5,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.6538
+20260325T074218Z,Tell me about a time you worked well under pressure.,Google,senior,claude-haiku-4-5,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T074218Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-haiku-4-5,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4943
+20260325T074218Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-haiku-4-5,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3
+20260325T074218Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-haiku-4-5,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.8062
+20260325T074218Z,Describe a time you received tough or critical feedback,Google,senior,claude-haiku-4-5,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2179
+20260325T074525Z,Tell me about yourself.,Google,senior,claude-sonnet-4-6,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074525Z,Tell me about a time you had a disagreement with your manager.,Google,senior,claude-sonnet-4-6,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074525Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-sonnet-4-6,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T074525Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-sonnet-4-6,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074525Z,Describe a time when you led a team. What was the outcome?,Google,senior,claude-sonnet-4-6,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074525Z,Tell me about a time you worked well under pressure.,Google,senior,claude-sonnet-4-6,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T074525Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-sonnet-4-6,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074525Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-sonnet-4-6,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.5
+20260325T074525Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-sonnet-4-6,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4583
+20260325T074525Z,Describe a time you received tough or critical feedback,Google,senior,claude-sonnet-4-6,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T074605Z,Tell me about yourself.,Google,senior,claude-sonnet-4-6,1,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T074605Z,Tell me about a time you had a disagreement with your manager.,Google,senior,claude-sonnet-4-6,2,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T074605Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-sonnet-4-6,3,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2179
+20260325T074605Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-sonnet-4-6,4,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.3
+20260325T074605Z,Describe a time when you led a team. What was the outcome?,Google,senior,claude-sonnet-4-6,5,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T074605Z,Tell me about a time you worked well under pressure.,Google,senior,claude-sonnet-4-6,6,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4841
+20260325T074605Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-sonnet-4-6,7,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",1.0,0.0
+20260325T074605Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-sonnet-4-6,8,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.4975
+20260325T074605Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-sonnet-4-6,9,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.2634
+20260325T074605Z,Describe a time you received tough or critical feedback,Google,senior,claude-sonnet-4-6,10,40,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",0.0,0.1561
+20260325T075230Z,Tell me about yourself.,Google,senior,claude-opus-4-6,1,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T075230Z,Tell me about a time you had a disagreement with your manager.,Google,senior,claude-opus-4-6,2,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4899
+20260325T075230Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-opus-4-6,3,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T075230Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-opus-4-6,4,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.3
+20260325T075230Z,Describe a time when you led a team. What was the outcome?,Google,senior,claude-opus-4-6,5,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T075230Z,Tell me about a time you worked well under pressure.,Google,senior,claude-opus-4-6,6,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",0.0,0.4
+20260325T075230Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-opus-4-6,7,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T075230Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-opus-4-6,8,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T075230Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-opus-4-6,9,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260325T075230Z,Describe a time you received tough or critical feedback,Google,senior,claude-opus-4-6,10,10,"[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",1.0,0.0
+20260327T222651Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,1,2,"[1, 2]",1.0,0.0
+20260327T222651Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,2,2,"[1, 2]",0.0,0.5
+20260327T222651Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,3,2,"[1, 2]",1.0,0.0
+20260327T222651Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,4,2,"[1, 2]",0.0,0.5
+20260327T222651Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,5,2,"[1, 2]",1.0,0.0
+20260327T222651Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,6,2,"[1, 2]",1.0,0.0
+20260327T222651Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,7,2,"[1, 2]",0.0,0.5
+20260327T222651Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,8,2,"[1, 2]",1.0,0.0
+20260327T222651Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,9,2,"[1, 2]",1.0,0.0
+20260327T222651Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,1,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,2,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,3,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,4,2,"[1, 2]",0.0,0.5
+20260327T222834Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,5,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,6,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,7,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,8,2,"[1, 2]",1.0,0.0
+20260327T222834Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,9,2,"[1, 2]",1.0,0.0
+20260327T222834Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,1,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,2,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,3,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,4,2,"[1, 2]",0.0,0.5
+20260327T223252Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,5,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,6,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,7,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,8,2,"[1, 2]",0.0,0.5
+20260327T223252Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,9,2,"[1, 2]",1.0,0.0
+20260327T223252Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,2,"[1, 2]",1.0,0.0
+20260327T223659Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,1,2,"[1, 2]",1.0,0.0
+20260327T223659Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,2,2,"[1, 2]",0.0,0.5
+20260327T223659Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,3,2,"[1, 2]",1.0,0.0
+20260327T223659Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,4,2,"[1, 2]",0.0,0.5
+20260327T223659Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,5,2,"[1, 2]",1.0,0.0
+20260327T223659Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,6,2,"[1, 2]",1.0,0.0
+20260327T223659Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,7,2,"[1, 2]",0.0,0.5
+20260327T223659Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,8,2,"[1, 2]",1.0,0.0
+20260327T223659Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,9,2,"[1, 2]",0.0,0.5
+20260327T223659Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,1,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,2,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,3,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,4,2,"[1, 2]",0.0,0.5
+20260327T223957Z,Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,5,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,6,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,7,2,"[1, 2]",0.0,0.5
+20260327T223957Z,Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,8,2,"[1, 2]",0.0,0.5
+20260327T223957Z,How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,9,2,"[1, 2]",1.0,0.0
+20260327T223957Z,Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,2,"[1, 2]",1.0,0.0

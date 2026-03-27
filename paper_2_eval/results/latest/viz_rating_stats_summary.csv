@@ -1,0 +1,141 @@
+﻿question,company,level,model,total,n_No Hire,n_Leaning No Hire,n_Leaning Hire,n_Hire,n_Strong Hire,pct_No Hire,pct_Leaning No Hire,pct_Leaning Hire,pct_Hire,pct_Strong Hire
+Describe a time when you led a team. What was the outcome?,Amazon,senior,gpt-5.4-mini,50,0,0,49,1,0,0.0,0.0,98.0,2.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4,10,0,0,8,2,0,0.0,0.0,80.0,20.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-mini,50,0,0,33,17,0,0.0,0.0,66.0,34.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,claude-haiku-4-5,50,0,0,40,6,4,0.0,0.0,80.0,12.0,8.0
+Describe a time when you led a team. What was the outcome?,Google,senior,claude-opus-4-6,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,claude-sonnet-4-6,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3-flash-preview,50,0,0,25,25,0,0.0,0.0,50.0,50.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,9,41,0,0,0.0,18.0,82.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gemini/gemini-3.1-pro-preview,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-mini,50,0,0,46,4,0,0.0,0.0,92.0,8.0,0.0
+Describe a time when you led a team. What was the outcome?,Google,senior,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you led a team. What was the outcome?,Meta,senior,gpt-5.4-mini,50,0,0,47,3,0,0.0,0.0,94.0,6.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-haiku-4-5,50,0,0,45,5,0,0.0,0.0,90.0,10.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-opus-4-6,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,claude-sonnet-4-6,50,0,27,23,0,0,0.0,54.0,46.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3-flash-preview,50,0,4,45,1,0,0.0,8.0,90.0,2.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,8,41,1,0,0.0,16.0,82.0,2.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,2,8,0,0,0.0,20.0,80.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Google,senior,gpt-5.4-pro,10,0,6,4,0,0,0.0,60.0,40.0,0.0,0.0
+Describe a time when you went above and beyond the requirements for a project.,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,mid-level,gpt-5.4-pro,10,0,1,9,0,0,0.0,10.0,90.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,claude-haiku-4-5,50,0,0,48,2,0,0.0,0.0,96.0,4.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,claude-opus-4-6,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,claude-sonnet-4-6,50,0,49,1,0,0,0.0,98.0,2.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3-flash-preview,50,0,30,19,1,0,0.0,60.0,38.0,2.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,24,26,0,0,0.0,48.0,52.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gemini/gemini-3.1-pro-preview,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Describe a time you received tough or critical feedback,Google,senior,gpt-5.4-pro,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Describe a time you received tough or critical feedback,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Amazon,senior,gpt-5.4-mini,50,0,0,44,6,0,0.0,0.0,88.0,12.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4,10,0,0,8,2,0,0.0,0.0,80.0,20.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-mini,50,0,0,30,20,0,0.0,0.0,60.0,40.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-haiku-4-5,50,0,0,35,7,8,0.0,0.0,70.0,14.0,16.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-opus-4-6,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,claude-sonnet-4-6,50,0,0,44,6,0,0.0,0.0,88.0,12.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3-flash-preview,50,0,0,0,49,1,0.0,0.0,0.0,98.0,2.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,0,8,41,1,0.0,0.0,16.0,82.0,2.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gemini/gemini-3.1-pro-preview,10,0,0,1,9,0,0.0,0.0,10.0,90.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-mini,50,0,0,39,11,0,0.0,0.0,78.0,22.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Google,senior,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+How do you handle a situation where you don't know the answer to a question?,Meta,senior,gpt-5.4-mini,50,0,0,41,9,0,0.0,0.0,82.0,18.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-mini,50,0,0,49,1,0,0.0,0.0,98.0,2.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-haiku-4-5,50,0,0,44,4,2,0.0,0.0,88.0,8.0,4.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-opus-4-6,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,claude-sonnet-4-6,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3-flash-preview,50,0,0,7,43,0,0.0,0.0,14.0,86.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,1,46,3,0,0.0,2.0,92.0,6.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,0,5,5,0,0.0,0.0,50.0,50.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Google,senior,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Provide an example of a time when you had to make a difficult decision.,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-haiku-4-5,50,0,0,47,3,0,0.0,0.0,94.0,6.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-opus-4-6,10,0,1,9,0,0,0.0,10.0,90.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,claude-sonnet-4-6,50,0,5,45,0,0,0.0,10.0,90.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3-flash-preview,50,0,0,29,21,0,0.0,0.0,58.0,42.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,1,35,14,0,0.0,2.0,70.0,28.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Google,senior,gpt-5.4-pro,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about a situation when you had a conflict with a teammate.,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-haiku-4-5,50,0,1,46,1,2,0.0,2.0,92.0,2.0,4.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-opus-4-6,10,0,9,1,0,0,0.0,90.0,10.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,claude-sonnet-4-6,50,0,4,46,0,0,0.0,8.0,92.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3-flash-preview,50,0,34,15,1,0,0.0,68.0,30.0,2.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,14,36,0,0,0.0,28.0,72.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gemini/gemini-3.1-pro-preview,10,0,5,5,0,0,0.0,50.0,50.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Google,senior,gpt-5.4-pro,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about a time you failed. How did you deal with the situation?,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-mini,50,0,0,48,2,0,0.0,0.0,96.0,4.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,claude-haiku-4-5,50,0,0,40,8,2,0.0,0.0,80.0,16.0,4.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,claude-opus-4-6,10,0,4,6,0,0,0.0,40.0,60.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,claude-sonnet-4-6,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3-flash-preview,50,0,0,10,40,0,0.0,0.0,20.0,80.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,0,44,6,0,0.0,0.0,88.0,12.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,0,8,2,0,0.0,0.0,80.0,20.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Google,senior,gpt-5.4-pro,10,0,9,1,0,0,0.0,90.0,10.0,0.0,0.0
+Tell me about a time you had a disagreement with your manager.,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Amazon,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-mini,50,0,0,48,2,0,0.0,0.0,96.0,4.0,0.0
+Tell me about a time you worked well under pressure.,Google,mid-level,gpt-5.4-pro,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,claude-haiku-4-5,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,claude-opus-4-6,10,0,8,2,0,0,0.0,80.0,20.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,claude-sonnet-4-6,50,0,19,31,0,0,0.0,38.0,62.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3-flash-preview,50,0,19,31,0,0,0.0,38.0,62.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,25,24,1,0,0.0,50.0,48.0,2.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Google,senior,gpt-5.4-pro,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about a time you worked well under pressure.,Meta,senior,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about yourself.,Amazon,senior,gpt-5.4-mini,50,0,4,46,0,0,0.0,8.0,92.0,0.0,0.0
+Tell me about yourself.,Google,mid-level,gpt-5.4,10,0,0,10,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about yourself.,Google,mid-level,gpt-5.4-mini,50,0,0,50,0,0,0.0,0.0,100.0,0.0,0.0
+Tell me about yourself.,Google,mid-level,gpt-5.4-pro,10,0,3,7,0,0,0.0,30.0,70.0,0.0,0.0
+Tell me about yourself.,Google,senior,claude-haiku-4-5,50,0,30,20,0,0,0.0,60.0,40.0,0.0,0.0
+Tell me about yourself.,Google,senior,claude-opus-4-6,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,claude-sonnet-4-6,50,0,50,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,gemini/gemini-3-flash-preview,50,0,50,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,gemini/gemini-3.1-flash-lite-preview,50,0,50,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,gemini/gemini-3.1-pro-preview,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,gpt-5.4,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Google,senior,gpt-5.4-mini,50,0,4,46,0,0,0.0,8.0,92.0,0.0,0.0
+Tell me about yourself.,Google,senior,gpt-5.4-pro,10,0,10,0,0,0,0.0,100.0,0.0,0.0,0.0
+Tell me about yourself.,Meta,senior,gpt-5.4-mini,50,0,26,24,0,0,0.0,52.0,48.0,0.0,0.0
