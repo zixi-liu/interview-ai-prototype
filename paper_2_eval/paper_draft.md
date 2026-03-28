@@ -14,7 +14,7 @@ Large Language Models (LLMs) are increasingly deployed as hiring evaluators, yet
 
 ### 1.1 Background: The Rise of AI in Hiring
 
-Artificial intelligence is rapidly transforming hiring practices. An estimated 99% of Fortune 500 companies now use AI-powered tools somewhere in their recruitment pipeline, and 90% of large employers use automated systems to filter job applications (AllAboutAI, 2025). SHRM's 2024 Talent Trends Survey found that among organizations using AI for HR, 64% apply it to recruitment, interviewing, and hiring — the leading use case (SHRM, 2024). Products like HireVue, Pymetrics, and numerous startup offerings promise to evaluate candidates at scale using Large Language Models (LLMs). The appeal is clear: consistent evaluation, reduced human bias, faster throughput, and lower cost per assessment.
+Artificial intelligence is rapidly transforming hiring practices. An estimated 99% of Fortune 500 companies now use AI-powered tools somewhere in their recruitment pipeline, and 90% of large employers use automated systems to filter job applications (AllAboutAI, 2025). SHRM's 2024 Talent Trends Survey found that among organizations using AI for HR, 64% apply it to recruitment, interviewing, and hiring — the leading use case (Society for Human Resource Management, 2024). Products like HireVue, Pymetrics, and numerous startup offerings promise to evaluate candidates at scale using Large Language Models (LLMs). The appeal is clear: consistent evaluation, reduced human bias, faster throughput, and lower cost per assessment.
 
 The behavioral interview — in which candidates describe past experiences demonstrating competencies such as leadership, conflict resolution, and problem-solving — is a cornerstone of hiring at major technology companies including Google, Meta, and Amazon. These companies employ structured rubrics to evaluate behavioral answers on ordinal scales, making them a natural target for LLM-based automation.
 
@@ -62,11 +62,11 @@ Section 2 reviews related work. Section 3 describes our experimental design. Sec
 
 The paradigm of using LLMs as evaluators has gained significant traction. Zheng et al. (2023) introduced MT-Bench and Chatbot Arena for evaluating conversational AI using LLM judges. Liu et al. (2023) proposed G-Eval, demonstrating that GPT-4 evaluations correlate with human judgments for text generation quality. However, these works focus on general NLG evaluation rather than domain-specific, high-stakes assessment.
 
-Recent studies have identified systematic biases in LLM judges, including leniency bias (Wang et al., 2023), position bias (Zheng et al., 2023), and verbosity bias (Saito et al., 2024). Our work extends this line of inquiry to the hiring domain, where such biases have direct consequences for candidates and employers.
+Recent studies have identified systematic biases in LLM judges, including leniency bias (Wang et al., 2024), position bias (Zheng et al., 2023), and verbosity bias (Saito et al., 2023). Our work extends this line of inquiry to the hiring domain, where such biases have direct consequences for candidates and employers.
 
 ### 2.2 AI in Hiring
 
-Automated hiring systems have evolved from keyword-matching resume screeners to sophisticated multi-modal assessment platforms. HireVue (now part of the broader AI hiring ecosystem) processes millions of video interviews annually. Academic work has explored automated interview scoring (Chen et al., 2020; D'Mello et al., 2015) and feedback generation (Kumar et al., 2021).
+Automated hiring systems have evolved from keyword-matching resume screeners to sophisticated multi-modal assessment platforms. HireVue (now part of the broader AI hiring ecosystem) processes millions of video interviews annually. Academic work has explored automated interview scoring (Naim et al., 2018; Hemamou et al., 2019) and feedback generation (Hoque et al., 2013).
 
 However, the reliability of these systems remains underexplored. Raghavan et al. (2020) surveyed AI hiring tools and found a lack of validation evidence. Wilson et al. (2021) highlighted fairness concerns in AI hiring but did not conduct systematic reliability auditing. Our work fills this gap with the first multi-model reliability benchmark specifically for behavioral interview evaluation.
 
@@ -84,11 +84,11 @@ We adapt these classical reliability frameworks to the LLM evaluation context, t
 
 The regulatory environment for AI hiring is rapidly evolving:
 
-- **NYC Local Law 144** (2023) requires annual bias audits for automated employment decision tools
-- **Illinois AI Video Interview Act** (2020) mandates disclosure when AI analyzes video interviews
-- **EU AI Act** (2024) classifies AI hiring tools as "high-risk," requiring conformity assessments
-- **EEOC** guidance (2023) addresses AI-related discrimination in employment decisions
-- **NIST AI Risk Management Framework** (2023) provides standards for high-risk AI applications
+- **NYC Local Law 144** requires annual bias audits for automated employment decision tools (NYC Department of Consumer and Worker Protection, 2023)
+- **Illinois AI Video Interview Act** mandates disclosure when AI analyzes video interviews (Illinois General Assembly, 2020)
+- **EU AI Act** classifies AI hiring tools as "high-risk," requiring conformity assessments (European Parliament and Council, 2024)
+- **EEOC** guidance addresses AI-related discrimination in employment decisions (U.S. Equal Employment Opportunity Commission, 2023)
+- **NIST AI Risk Management Framework** provides standards for high-risk AI applications (National Institute of Standards and Technology, 2023)
 
 Our work provides empirical evidence directly relevant to these regulatory requirements, demonstrating specific failure modes that auditing frameworks should address.
 
@@ -403,7 +403,7 @@ Our results have practical implications for candidates interacting with AI hirin
 
 ### 6.5 Why This Matters for the United States
 
-AI-assisted hiring is projected to affect over 100 million job applications annually in the United States (Brookings, 2024). The reliability failures documented in this paper — scale collapse masking discriminative power, test-retest jitter exceeding one full grade, inter-model disagreement rivaling random assignment — have direct consequences for labor market efficiency and worker welfare. Unreliable AI hiring tools waste employer resources on false-positive screenings and systematically disadvantage candidates through arbitrary scoring variation. Our findings provide the empirical foundation for evidence-based regulation of AI hiring tools, supporting the goals of the EEOC, NIST AI RMF, and state-level AI hiring legislation.
+AI-assisted hiring is projected to affect over 100 million job applications annually in the United States (Levy Yeyati & Seyal, 2025). The reliability failures documented in this paper — scale collapse masking discriminative power, test-retest jitter exceeding one full grade, inter-model disagreement rivaling random assignment — have direct consequences for labor market efficiency and worker welfare. Unreliable AI hiring tools waste employer resources on false-positive screenings and systematically disadvantage candidates through arbitrary scoring variation. Our findings provide the empirical foundation for evidence-based regulation of AI hiring tools, supporting the goals of the EEOC, NIST AI RMF, and state-level AI hiring legislation.
 
 ---
 
@@ -435,39 +435,49 @@ Any LLM-based interview scoring system that reports only point estimates without
 
 ## References
 
-Amershi, S., et al. (2019). "Software Engineering for Machine Learning: A Case Study." ICSE-SEIP.
+AllAboutAI. (2025). *AI Recruitment Statistics 2026: Adoption, Automation & Market Outlook*. https://www.allaboutai.com/resources/ai-statistics/ai-recruitment/
 
-Chen, L., et al. (2020). "Automated Interview Assessment: A Machine Learning Approach." EMNLP.
+Cicchetti, D. V. (1994). Guidelines, criteria, and rules of thumb for evaluating normed and standardized assessment instruments in psychology. *Psychological Assessment*, 6(4), 284–290. https://doi.org/10.1037/1040-3590.6.4.284
 
-Cicchetti, D. V. (1994). "Guidelines, criteria, and rules of thumb for evaluating normed and standardized assessment instruments in psychology." Psychological Assessment, 6(4), 284–290.
+Cronbach, L. J. (1951). Coefficient alpha and the internal structure of tests. *Psychometrika*, 16(3), 297–334. https://doi.org/10.1007/BF02310555
 
-Cronbach, L. J. (1951). "Coefficient alpha and the internal structure of tests." Psychometrika, 16(3), 297-334.
+European Parliament and Council. (2024). Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). *Official Journal of the European Union*. https://data.europa.eu/eli/reg/2024/1689/oj
 
-D'Mello, S., et al. (2015). "Automated Detection of Engagement and Affect During Learning." EDM.
+Hemamou, L., Felhi, G., Vandenbussche, V., Martin, J.-C., & Clavel, C. (2019). HireNet: A Hierarchical Attention Model for the Automatic Analysis of Asynchronous Video Job Interviews. *Proceedings of the AAAI Conference on Artificial Intelligence*, 33(1), 573–581. https://doi.org/10.1609/aaai.v33i01.3301573
 
-Krippendorff, K. (2011). "Computing Krippendorff's Alpha-Reliability." Departmental Papers (ASC), University of Pennsylvania.
+Hoque, M. E., Courgeon, M., Martin, J.-C., Mutlu, B., & Picard, R. W. (2013). MACH: My Automated Conversation coacH. *Proceedings of the 2013 ACM International Joint Conference on Pervasive and Ubiquitous Computing (UbiComp '13)*, 697–706. https://doi.org/10.1145/2493432.2493502
 
-Kumar, V., et al. (2021). "Automated Feedback Generation for Interview Preparation Using NLP." AIED.
+Illinois General Assembly. (2020). Artificial Intelligence Video Interview Act (820 ILCS 42). https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015&ChapterID=68
 
-Liu, Y., et al. (2023). "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment." EMNLP.
+Krippendorff, K. (2011). *Computing Krippendorff's Alpha-Reliability*. University of Pennsylvania, Annenberg School for Communication. https://repository.upenn.edu/items/034a6030-c584-4d14-9d3d-7b7e8d16df20
 
-McDonald, R. P. (1999). Test Theory: A Unified Treatment. Lawrence Erlbaum Associates.
+Levy Yeyati, E., & Seyal, I. (2025). *Digital footprints and job matching: The new frontier of AI-driven hiring*. Brookings Institution. https://www.brookings.edu/articles/digital-footprints-and-job-matching-the-new-frontier-of-ai-driven-hiring/
 
-Raghavan, M., et al. (2020). "Mitigating Bias in Algorithmic Hiring: Evaluating Claims and Practices." FAT*.
+Liu, Y., Iter, D., Xu, Y., Wang, S., Xu, R., & Zhu, C. (2023). G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment. *Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 2511–2522. https://doi.org/10.18653/v1/2023.emnlp-main.153
 
-Saito, K., et al. (2024). "Verbosity Bias in LLM-as-a-Judge." arXiv preprint.
+McDonald, R. P. (1999). *Test Theory: A Unified Treatment*. Lawrence Erlbaum Associates.
 
-AllAboutAI (2025). "AI Recruitment Statistics 2026: Adoption, Automation & Market Outlook." https://www.allaboutai.com/resources/ai-statistics/ai-recruitment/
+Naim, I., Tanveer, M. I., Gildea, D., & Hoque, M. E. (2018). Automated Analysis and Prediction of Job Interview Performance. *IEEE Transactions on Affective Computing*, 9(2), 191–204. https://doi.org/10.1109/TAFFC.2016.2614299
 
-SHRM (2024). "2024 Talent Trends Survey: Artificial Intelligence Findings." Society for Human Resource Management. https://shrm-res.cloudinary.com/image/upload/AI/2024-Talent-Trends-Survey_Artificial-Intelligence-Findings.pdf
+National Institute of Standards and Technology. (2023). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST AI 100-1). https://doi.org/10.6028/NIST.AI.100-1
 
-Shrout, P. E., & Fleiss, J. L. (1979). "Intraclass correlations: uses in assessing rater reliability." Psychological Bulletin, 86(2), 420.
+NYC Department of Consumer and Worker Protection. (2023). *Local Law 144 of 2021: Automated Employment Decision Tools* (NYC Administrative Code § 20-870 et seq.). https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page
 
-Wang, J., et al. (2023). "On the Evaluation Metrics for LLM-based Code Generation." arXiv.
+Raghavan, M., Barocas, S., Kleinberg, J., & Levy, K. (2020). Mitigating Bias in Algorithmic Hiring: Evaluating Claims and Practices. *Proceedings of the 2020 Conference on Fairness, Accountability, and Transparency (FAT\*)*, 469–481. https://doi.org/10.1145/3351095.3372828
 
-Wilson, C., et al. (2021). "Building and Auditing Fair Algorithms: A Case Study in Candidate Screening." FAccT.
+Saito, K., Wachi, A., Wataoka, K., & Akimoto, Y. (2023). Verbosity Bias in Preference Labeling by Large Language Models. *Instruction Tuning and Instruction Following Workshop at NeurIPS 2023*. https://doi.org/10.48550/arXiv.2310.10076
 
-Zheng, L., et al. (2023). "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena." NeurIPS.
+Shrout, P. E., & Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. *Psychological Bulletin*, 86(2), 420–428. https://doi.org/10.1037/0033-2909.86.2.420
+
+Society for Human Resource Management. (2024). *2024 Talent Trends Survey: Artificial Intelligence Findings*. https://shrm-res.cloudinary.com/image/upload/AI/2024-Talent-Trends-Survey_Artificial-Intelligence-Findings.pdf
+
+U.S. Equal Employment Opportunity Commission. (2023). *Select Issues: Assessing Adverse Impact in Software, Algorithms, and Artificial Intelligence Used in Employment Selection Procedures Under Title VII of the Civil Rights Act of 1964*. https://www.eeoc.gov/laws/guidance/select-issues-assessing-adverse-impact-software-algorithms-and-artificial (Original page removed; archived version available at https://data.aclum.org/storage/2025/01/EOCC_www_eeoc_gov_laws_guidance_select-issues-assessing-adverse-impact-software-algorithms-and-artificial.pdf)
+
+Wang, P., Li, L., Chen, L., Cai, Z., Zhu, D., Lin, B., Cao, Y., Kong, L., Liu, Q., Liu, T., & Sui, Z. (2024). Large Language Models are not Fair Evaluators. *Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)*, 9440–9450. https://doi.org/10.18653/v1/2024.acl-long.511
+
+Wilson, C., Ghosh, A., Jiang, S., Mislove, A., Baker, L., Szary, J., Trindel, K., & Polli, F. (2021). Building and Auditing Fair Algorithms: A Case Study in Candidate Screening. *Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT)*, 666–677. https://doi.org/10.1145/3442188.3445928
+
+Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E. P., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. https://proceedings.neurips.cc/paper_files/paper/2023/hash/91f18a1287b398d378ef22505bf41832-Abstract-Datasets_and_Benchmarks.html
 
 ---
 
