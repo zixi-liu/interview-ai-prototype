@@ -152,13 +152,6 @@ Evaluate the candidate's behavioral answer for a {level} Software Engineer role.
 Question: {question}
 Candidate answer: {answer}
 
-Evaluation instructions:
-- Judge by real-world bar for {company} behavioral interviews.
-- Focus on ownership, problem solving, execution, collaboration,
-  communication, leadership, and impact.
-- Be strict and evidence-based. Do not give the benefit of the doubt
-  when details are missing.
-
 Output MUST be valid JSON:
 {"feedback": "<~200 words>", "rating": "<No Hire | Leaning No Hire |
   Leaning Hire | Hire | Strong Hire>"}
