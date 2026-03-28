@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import webbrowser
 from collections import defaultdict
 from pathlib import Path
@@ -21,6 +22,16 @@ RATING_ORDER = (
     "Hire",
     "Strong Hire",
 )
+
+RATING_VALUES = {
+    "No Hire": 1,
+    "Leaning No Hire": 2,
+    "Leaning Hire": 3,
+    "Hire": 4,
+    "Strong Hire": 5,
+}
+
+FLAGSHIP_MODELS = {"gpt-5.4-pro", "claude-opus-4-6", "gemini/gemini-3.1-pro-preview"}
 
 
 def load_rows(path: Path) -> list[dict]:
@@ -72,6 +83,145 @@ def stats_to_chart_data(stats: dict) -> list[dict]:
     return out
 
 
+def compute_question_tier_averages(data: list[dict]) -> list[dict]:
+    """Weighted-average rating per question for flagship vs lightweight models.
+
+    Rating scale: No Hire=1, Leaning No Hire=2, Leaning Hire=3, Hire=4, Strong Hire=5.
+    Returns one dict per question with flagship_avg, lightweight_avg, totals.
+    """
+    accum: dict[str, dict[str, dict[str, float]]] = defaultdict(
+        lambda: {
+            "flagship": {"total": 0, "wsum": 0.0},
+            "lightweight": {"total": 0, "wsum": 0.0},
+        }
+    )
+    for d in data:
+        tier = "flagship" if d["model"] in FLAGSHIP_MODELS else "lightweight"
+        for rating, count in d["counts"].items():
+            accum[d["question"]][tier]["total"] += count
+            accum[d["question"]][tier]["wsum"] += RATING_VALUES.get(rating, 0) * count
+
+    result = []
+    for question in sorted(accum):
+        row: dict = {"question": question}
+        for tier in ("flagship", "lightweight"):
+            t = accum[question][tier]["total"]
+            row[f"{tier}_avg"] = round(accum[question][tier]["wsum"] / t, 3) if t else None
+            row[f"{tier}_total"] = t
+        result.append(row)
+    return result
+
+
+def _expected_score(counts: dict) -> float:
+    total = sum(counts.values())
+    if total == 0:
+        return 0.0
+    return sum(RATING_VALUES.get(r, 0) * c for r, c in counts.items()) / total
+
+
+def _entropy(counts: dict) -> float:
+    total = sum(counts.values())
+    if total == 0:
+        return 0.0
+    return -sum((c / total) * math.log(c / total) for c in counts.values() if c > 0)
+
+
+def _n_bins_nonzero(counts: dict) -> int:
+    return sum(1 for c in counts.values() if c > 0)
+
+
+def _spearman_rho(x: list[float], y: list[float]) -> float | None:
+    """Spearman rank correlation (no scipy dependency)."""
+    n = len(x)
+    if n < 3:
+        return None
+
+    def _rank(vals):
+        idx = sorted(range(n), key=lambda i: vals[i])
+        ranks = [0.0] * n
+        i = 0
+        while i < n:
+            j = i
+            while j < n - 1 and vals[idx[j + 1]] == vals[idx[j]]:
+                j += 1
+            avg_r = (i + j) / 2 + 1
+            for k in range(i, j + 1):
+                ranks[idx[k]] = avg_r
+            i = j + 1
+        return ranks
+
+    rx, ry = _rank(x), _rank(y)
+    mx, my = sum(rx) / n, sum(ry) / n
+    num = sum((rx[i] - mx) * (ry[i] - my) for i in range(n))
+    dx = math.sqrt(sum((rx[i] - mx) ** 2 for i in range(n)))
+    dy = math.sqrt(sum((ry[i] - my) ** 2 for i in range(n)))
+    if dx == 0 or dy == 0:
+        return None
+    return num / (dx * dy)
+
+
+def compute_model_robustness(data: list[dict]) -> list[dict]:
+    """Per-model robustness scorecard: cross-Q volatility, entropy, pairwise rho."""
+    cells = []
+    for d in data:
+        cells.append({
+            "question": d["question"], "company": d["company"],
+            "level": d["level"], "model": d["model"], "total": d["total"],
+            "es": _expected_score(d["counts"]),
+            "entropy": _entropy(d["counts"]),
+            "n_bins": _n_bins_nonzero(d["counts"]),
+        })
+
+    model_cells: dict[str, list] = defaultdict(list)
+    for c in cells:
+        model_cells[c["model"]].append(c)
+
+    cl_vec: dict[tuple, dict[str, dict[str, float]]] = defaultdict(
+        lambda: defaultdict(dict)
+    )
+    for c in cells:
+        cl_vec[(c["company"], c["level"])][c["model"]][c["question"]] = c["es"]
+
+    model_rhos: dict[str, list[float]] = defaultdict(list)
+    for (_co, _lv), md in cl_vec.items():
+        ms = sorted(md)
+        for i in range(len(ms)):
+            for j in range(i + 1, len(ms)):
+                shared = sorted(set(md[ms[i]]) & set(md[ms[j]]))
+                if len(shared) >= 3:
+                    rho = _spearman_rho(
+                        [md[ms[i]][q] for q in shared],
+                        [md[ms[j]][q] for q in shared],
+                    )
+                    if rho is not None:
+                        model_rhos[ms[i]].append(rho)
+                        model_rhos[ms[j]].append(rho)
+
+    result = []
+    for model in sorted(model_cells):
+        mc = model_cells[model]
+        scores = [c["es"] for c in mc]
+        n = len(scores)
+        mean_es = sum(scores) / n
+        sd = math.sqrt(sum((s - mean_es) ** 2 for s in scores) / n) if n > 1 else 0.0
+        es_range = max(scores) - min(scores) if scores else 0.0
+        mean_ent = sum(c["entropy"] for c in mc) / n
+        mean_nb = sum(c["n_bins"] for c in mc) / n
+        rhos = model_rhos.get(model, [])
+        mean_rho = sum(rhos) / len(rhos) if rhos else None
+        result.append({
+            "model": model, "n_cells": n,
+            "total_samples": sum(c["total"] for c in mc),
+            "mean_es": round(mean_es, 3),
+            "cross_q_sd": round(sd, 3),
+            "cross_q_range": round(es_range, 2),
+            "mean_entropy": round(mean_ent, 3),
+            "mean_n_bins": round(mean_nb, 2),
+            "mean_pairwise_rho": round(mean_rho, 3) if mean_rho is not None else None,
+        })
+    return result
+
+
 def _select_opts(values: list[str]) -> str:
     """Generate <option> elements for a select."""
     return "".join(f'<option value="{v.replace(chr(34), "&quot;")}">{v}</option>' for v in values)
@@ -87,7 +237,24 @@ def _color(rating: str) -> str:
     }.get(rating, "#64748b")
 
 
-def emit_html(data: list[dict], out_path: Path) -> None:
+def _heat(val: float, lo: float, hi: float, *, invert: bool = False) -> str:
+    """Heatmap background: green (good) -> amber -> red (concern)."""
+    if hi <= lo:
+        return ""
+    t = max(0.0, min(1.0, (val - lo) / (hi - lo)))
+    if invert:
+        t = 1.0 - t
+    if t < 0.5:
+        s = t * 2
+        r, g, b = int(34 + 211 * s), int(197 - 39 * s), int(94 - 83 * s)
+    else:
+        s = (t - 0.5) * 2
+        r, g, b = int(245 - 6 * s), int(158 - 90 * s), int(11 + 57 * s)
+    return f"background:rgba({r},{g},{b},0.22)"
+
+
+def emit_html(data: list[dict], tier_data: list[dict],
+              robustness_data: list[dict], out_path: Path) -> None:
     """Generate standalone HTML with filter dropdowns and table."""
     # Unique values for filters
     questions = sorted({d["question"] for d in data})
@@ -115,6 +282,65 @@ def emit_html(data: list[dict], out_path: Path) -> None:
             <td class="total">{d["total"]}</td>
         </tr>
         """)
+
+    # ---- Build tier comparison rows ----
+    tier_rows_html = []
+    for td in tier_data:
+        q_short = td["question"][:55] + ("\u2026" if len(td["question"]) > 55 else "")
+        q_esc_t = td["question"].replace('"', "&quot;")
+        f_avg_s = f'{td["flagship_avg"]:.2f}' if td["flagship_avg"] is not None else "\u2014"
+        l_avg_s = f'{td["lightweight_avg"]:.2f}' if td["lightweight_avg"] is not None else "\u2014"
+        f_w = (td["flagship_avg"] - 1) / 4 * 100 if td["flagship_avg"] is not None else 0
+        l_w = (td["lightweight_avg"] - 1) / 4 * 100 if td["lightweight_avg"] is not None else 0
+        diff_s = ""
+        if td["flagship_avg"] is not None and td["lightweight_avg"] is not None:
+            diff_s = f'{td["flagship_avg"] - td["lightweight_avg"]:+.2f}'
+        tier_rows_html.append(
+            f'<tr>'
+            f'<td class="q-cell" title="{q_esc_t}">{q_short}</td>'
+            f'<td class="tier-bars"><div class="tier-row">'
+            f'<div class="tier-bar flagship-bar" style="width:{f_w:.1f}%">'
+            f'<span class="tier-val">{f_avg_s}</span></div>'
+            f'<div class="tier-bar lightweight-bar" style="width:{l_w:.1f}%">'
+            f'<span class="tier-val">{l_avg_s}</span></div>'
+            f'</div></td>'
+            f'<td class="num">{f_avg_s}</td>'
+            f'<td class="num">{td["flagship_total"]}</td>'
+            f'<td class="num">{l_avg_s}</td>'
+            f'<td class="num">{td["lightweight_total"]}</td>'
+            f'<td class="num diff">{diff_s}</td>'
+            f'</tr>'
+        )
+    tier_table_html = "\n".join(tier_rows_html)
+
+    # ---- Build robustness scorecard rows ----
+    rob = robustness_data
+    sd_vals = [r["cross_q_sd"] for r in rob]
+    rng_vals = [r["cross_q_range"] for r in rob]
+    ent_vals = [r["mean_entropy"] for r in rob]
+    rho_vals = [r["mean_pairwise_rho"] for r in rob if r["mean_pairwise_rho"] is not None]
+    sd_lo, sd_hi = min(sd_vals), max(sd_vals)
+    rng_lo, rng_hi = min(rng_vals), max(rng_vals)
+    ent_lo, ent_hi = min(ent_vals), max(ent_vals)
+    rho_lo, rho_hi = (min(rho_vals), max(rho_vals)) if rho_vals else (0, 1)
+    rob_rows = []
+    for r in rob:
+        rho_s = f'{r["mean_pairwise_rho"]:.3f}' if r["mean_pairwise_rho"] is not None else "\u2014"
+        rho_st = _heat(r["mean_pairwise_rho"], rho_lo, rho_hi, invert=True) if r["mean_pairwise_rho"] is not None else ""
+        rob_rows.append(
+            f'<tr>'
+            f'<td>{r["model"]}</td>'
+            f'<td class="num">{r["n_cells"]}</td>'
+            f'<td class="num">{r["total_samples"]}</td>'
+            f'<td class="num">{r["mean_es"]:.3f}</td>'
+            f'<td class="num" style="{_heat(r["cross_q_sd"], sd_lo, sd_hi)}">{r["cross_q_sd"]:.3f}</td>'
+            f'<td class="num" style="{_heat(r["cross_q_range"], rng_lo, rng_hi)}">{r["cross_q_range"]:.2f}</td>'
+            f'<td class="num" style="{_heat(r["mean_entropy"], ent_lo, ent_hi)}">{r["mean_entropy"]:.3f}</td>'
+            f'<td class="num">{r["mean_n_bins"]:.2f}</td>'
+            f'<td class="num" style="{rho_st}">{rho_s}</td>'
+            f'</tr>'
+        )
+    rob_table_html = "\n".join(rob_rows)
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -240,11 +466,46 @@ def emit_html(data: list[dict], out_path: Path) -> None:
             border-color: var(--accent);
         }}
         tr.hidden {{ display: none; }}
+        /* tabs */
+        .tab-nav {{ display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 2px solid #334155; }}
+        .tab-btn {{
+            padding: 0.5rem 1.25rem; background: transparent; border: none;
+            color: var(--muted); font-family: inherit; font-size: 0.85rem;
+            cursor: pointer; border-bottom: 2px solid transparent;
+            margin-bottom: -2px; transition: color 0.2s, border-color 0.2s;
+        }}
+        .tab-btn:hover {{ color: var(--text); }}
+        .tab-btn.active {{ color: var(--accent); border-bottom-color: var(--accent); }}
+        .tab-content {{ display: none; }}
+        .tab-content.active {{ display: block; }}
+        /* tier comparison */
+        .tier-desc {{ color: var(--muted); font-size: 0.75rem; margin-bottom: 1rem; line-height: 1.6; }}
+        .tier-desc code {{ background: var(--card); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.72rem; }}
+        .tier-bars {{ width: 380px; padding: 4px 0; }}
+        .tier-row {{ display: flex; flex-direction: column; gap: 3px; }}
+        .tier-bar {{
+            height: 20px; border-radius: 3px; display: flex; align-items: center;
+            padding: 0 8px; min-width: 44px; transition: width 0.3s ease;
+        }}
+        .flagship-bar {{ background: linear-gradient(90deg, #0ea5e9, #38bdf8); }}
+        .lightweight-bar {{ background: linear-gradient(90deg, #f59e0b, #fbbf24); }}
+        .tier-val {{ font-size: 0.7rem; font-weight: 600; color: #0f172a; white-space: nowrap; }}
+        .num {{ font-variant-numeric: tabular-nums; text-align: right; }}
+        .diff {{ color: var(--muted); }}
+        .tier-legend {{ display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.75rem; color: var(--muted); }}
+        .tier-legend span {{ display: inline-flex; align-items: center; gap: 0.3rem; }}
+        .tier-legend .tswatch {{ width: 14px; height: 10px; border-radius: 2px; }}
     </style>
 </head>
 <body>
     <h1>BQ Rating Stats</h1>
     <p class="sub">question × company × level × model</p>
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="detail">Detail Table</button>
+        <button class="tab-btn" data-tab="tier">Flagship vs Lightweight</button>
+        <button class="tab-btn" data-tab="robust">Model Robustness</button>
+    </div>
+    <div id="tab-detail" class="tab-content active">
     <div class="filters">
         <label>Question <select id="fq"><option value="">— all —</option>{_select_opts(questions)}</select></label>
         <label>Company <select id="fc"><option value="">— all —</option>{_select_opts(companies)}</select></label>
@@ -273,9 +534,65 @@ def emit_html(data: list[dict], out_path: Path) -> None:
                 {"".join(rows_html)}
             </tbody>
         </table>
+    </div>
+    <div id="tab-tier" class="tab-content">
+        <p class="tier-desc">
+            Weighted-average rating per question &mdash; <b>Flagship</b> vs <b>Lightweight</b> models.<br>
+            <b>Flagship:</b> <code>gpt-5.4-pro</code> &middot; <code>claude-opus-4-6</code> &middot; <code>gemini/gemini-3.1-pro-preview</code><br>
+            <b>Lightweight:</b> all other models<br>
+            Scale: No&nbsp;Hire&nbsp;=&nbsp;1 &rarr; Strong&nbsp;Hire&nbsp;=&nbsp;5
+        </p>
+        <div class="tier-legend">
+            <span><span class="tswatch" style="background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></span> Flagship</span>
+            <span><span class="tswatch" style="background:linear-gradient(90deg,#f59e0b,#fbbf24)"></span> Lightweight</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Rating Bar (1&ndash;5)</th>
+                    <th>Flagship Avg</th>
+                    <th>Flagship N</th>
+                    <th>Lightweight Avg</th>
+                    <th>Lightweight N</th>
+                    <th>Diff (F&minus;L)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {tier_table_html}
+            </tbody>
+        </table>
+    </div>
+    <div id="tab-robust" class="tab-content">
+        <p class="tier-desc">
+            Per-model robustness scorecard &mdash; each metric aggregated across all (question &times; company &times; level) cells.<br>
+            <b>Cross-Q SD / Range</b>: expected-score volatility across questions &mdash; <em>lower = more stable</em>.<br>
+            <b>Mean Entropy</b>: Shannon entropy of rating distribution &mdash; <em>lower = more deterministic</em>.<br>
+            <b>Mean &rho;</b>: average Spearman rank-correlation with every other model &mdash; <em>higher = more consensus</em>.<br>
+            Cells heatmap: <span style="color:#22c55e">green</span> = robust, <span style="color:#ef4444">red</span> = needs attention.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Cells</th>
+                    <th>Samples</th>
+                    <th>Mean Score</th>
+                    <th>Cross-Q SD &darr;</th>
+                    <th>Cross-Q Range &darr;</th>
+                    <th>Mean Entropy &darr;</th>
+                    <th>Mean #Bins</th>
+                    <th>Mean &rho; &uarr;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rob_table_html}
+            </tbody>
+        </table>
+    </div>
     <script>
         (function() {{
-            var rows = document.querySelectorAll('tbody tr');
+            var rows = document.querySelectorAll('#tab-detail tbody tr');
             function filter() {{
                 var q = document.getElementById('fq').value;
                 var c = document.getElementById('fc').value;
@@ -287,6 +604,14 @@ def emit_html(data: list[dict], out_path: Path) -> None:
                 }});
             }}
             ['fq','fc','fl','fm'].forEach(function(id) {{ document.getElementById(id).addEventListener('change', filter); }});
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {{
+                btn.addEventListener('click', function() {{
+                    document.querySelectorAll('.tab-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+                    document.querySelectorAll('.tab-content').forEach(function(c) {{ c.classList.remove('active'); }});
+                    btn.classList.add('active');
+                    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+                }});
+            }});
         }})();
     </script>
 </body>
@@ -325,6 +650,41 @@ def emit_summary_table(data: list[dict], out_path: Path) -> None:
             )
 
 
+def emit_tier_summary_csv(tier_data: list[dict], out_path: Path) -> None:
+    """Write per-question flagship vs lightweight weighted averages to CSV."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["question", "flagship_avg", "flagship_n",
+                     "lightweight_avg", "lightweight_n", "diff"])
+        for td in tier_data:
+            f_avg = td["flagship_avg"]
+            l_avg = td["lightweight_avg"]
+            diff = round(f_avg - l_avg, 3) if f_avg is not None and l_avg is not None else None
+            w.writerow([
+                td["question"], f_avg, td["flagship_total"],
+                l_avg, td["lightweight_total"], diff,
+            ])
+
+
+def emit_robustness_csv(robustness_data: list[dict], out_path: Path) -> None:
+    """Write per-model robustness scorecard to CSV."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow([
+            "model", "n_cells", "total_samples", "mean_expected_score",
+            "cross_q_sd", "cross_q_range", "mean_entropy",
+            "mean_n_bins", "mean_pairwise_rho",
+        ])
+        for r in robustness_data:
+            w.writerow([
+                r["model"], r["n_cells"], r["total_samples"],
+                r["mean_es"], r["cross_q_sd"], r["cross_q_range"],
+                r["mean_entropy"], r["mean_n_bins"], r["mean_pairwise_rho"],
+            ])
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Visualize BQ rating stats from rows.jsonl")
     ap.add_argument(
@@ -356,12 +716,23 @@ def main() -> None:
     if out is None:
         out = args.rows.parent / "viz_rating_stats.html"
 
-    emit_html(data, out)
+    tier_data = compute_question_tier_averages(data)
+    robustness_data = compute_model_robustness(data)
+
+    emit_html(data, tier_data, robustness_data, out)
     print(f"Wrote {len(data)} aggregations to {out}")
 
     summary_path = out.parent / "viz_rating_stats_summary.csv"
     emit_summary_table(data, summary_path)
     print(f"Wrote group summary table ({len(data)} rows) to {summary_path}")
+
+    tier_csv_path = out.parent / "viz_tier_comparison.csv"
+    emit_tier_summary_csv(tier_data, tier_csv_path)
+    print(f"Wrote tier comparison ({len(tier_data)} questions) to {tier_csv_path}")
+
+    rob_csv_path = out.parent / "viz_model_robustness.csv"
+    emit_robustness_csv(robustness_data, rob_csv_path)
+    print(f"Wrote model robustness ({len(robustness_data)} models) to {rob_csv_path}")
 
     if args.open_browser:
         webbrowser.open(out.as_uri())

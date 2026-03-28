@@ -122,11 +122,46 @@
             border-color: var(--accent);
         }
         tr.hidden { display: none; }
+        /* tabs */
+        .tab-nav { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 2px solid #334155; }
+        .tab-btn {
+            padding: 0.5rem 1.25rem; background: transparent; border: none;
+            color: var(--muted); font-family: inherit; font-size: 0.85rem;
+            cursor: pointer; border-bottom: 2px solid transparent;
+            margin-bottom: -2px; transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        /* tier comparison */
+        .tier-desc { color: var(--muted); font-size: 0.75rem; margin-bottom: 1rem; line-height: 1.6; }
+        .tier-desc code { background: var(--card); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.72rem; }
+        .tier-bars { width: 380px; padding: 4px 0; }
+        .tier-row { display: flex; flex-direction: column; gap: 3px; }
+        .tier-bar {
+            height: 20px; border-radius: 3px; display: flex; align-items: center;
+            padding: 0 8px; min-width: 44px; transition: width 0.3s ease;
+        }
+        .flagship-bar { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+        .lightweight-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .tier-val { font-size: 0.7rem; font-weight: 600; color: #0f172a; white-space: nowrap; }
+        .num { font-variant-numeric: tabular-nums; text-align: right; }
+        .diff { color: var(--muted); }
+        .tier-legend { display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.75rem; color: var(--muted); }
+        .tier-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+        .tier-legend .tswatch { width: 14px; height: 10px; border-radius: 2px; }
     </style>
 </head>
 <body>
     <h1>BQ Rating Stats</h1>
     <p class="sub">question × company × level × model</p>
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="detail">Detail Table</button>
+        <button class="tab-btn" data-tab="tier">Flagship vs Lightweight</button>
+        <button class="tab-btn" data-tab="robust">Model Robustness</button>
+    </div>
+    <div id="tab-detail" class="tab-content active">
     <div class="filters">
         <label>Question <select id="fq"><option value="">— all —</option><option value="Describe a time when you led a team. What was the outcome?">Describe a time when you led a team. What was the outcome?</option><option value="Describe a time when you went above and beyond the requirements for a project.">Describe a time when you went above and beyond the requirements for a project.</option><option value="Describe a time you received tough or critical feedback">Describe a time you received tough or critical feedback</option><option value="How do you handle a situation where you don't know the answer to a question?">How do you handle a situation where you don't know the answer to a question?</option><option value="Provide an example of a time when you had to make a difficult decision.">Provide an example of a time when you had to make a difficult decision.</option><option value="Tell me about a situation when you had a conflict with a teammate.">Tell me about a situation when you had a conflict with a teammate.</option><option value="Tell me about a time you failed. How did you deal with the situation?">Tell me about a time you failed. How did you deal with the situation?</option><option value="Tell me about a time you had a disagreement with your manager.">Tell me about a time you had a disagreement with your manager.</option><option value="Tell me about a time you worked well under pressure.">Tell me about a time you worked well under pressure.</option><option value="Tell me about yourself.">Tell me about yourself.</option></select></label>
         <label>Company <select id="fc"><option value="">— all —</option><option value="Amazon">Amazon</option><option value="Google">Google</option><option value="Meta">Meta</option></select></label>
@@ -1415,9 +1450,82 @@
         
             </tbody>
         </table>
+    </div>
+    <div id="tab-tier" class="tab-content">
+        <p class="tier-desc">
+            Weighted-average rating per question &mdash; <b>Flagship</b> vs <b>Lightweight</b> models.<br>
+            <b>Flagship:</b> <code>gpt-5.4-pro</code> &middot; <code>claude-opus-4-6</code> &middot; <code>gemini/gemini-3.1-pro-preview</code><br>
+            <b>Lightweight:</b> all other models<br>
+            Scale: No&nbsp;Hire&nbsp;=&nbsp;1 &rarr; Strong&nbsp;Hire&nbsp;=&nbsp;5
+        </p>
+        <div class="tier-legend">
+            <span><span class="tswatch" style="background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></span> Flagship</span>
+            <span><span class="tswatch" style="background:linear-gradient(90deg,#f59e0b,#fbbf24)"></span> Lightweight</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Rating Bar (1&ndash;5)</th>
+                    <th>Flagship Avg</th>
+                    <th>Flagship N</th>
+                    <th>Lightweight Avg</th>
+                    <th>Lightweight N</th>
+                    <th>Diff (F&minus;L)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="q-cell" title="Describe a time when you led a team. What was the outcome?">Describe a time when you led a team. What was the outco…</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:50.0%"><span class="tier-val">3.00</span></div><div class="tier-bar lightweight-bar" style="width:53.4%"><span class="tier-val">3.14</span></div></div></td><td class="num">3.00</td><td class="num">40</td><td class="num">3.14</td><td class="num">420</td><td class="num diff">-0.14</td></tr>
+<tr><td class="q-cell" title="Describe a time when you went above and beyond the requirements for a project.">Describe a time when you went above and beyond the requ…</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:45.0%"><span class="tier-val">2.80</span></div><div class="tier-bar lightweight-bar" style="width:48.1%"><span class="tier-val">2.92</span></div></div></td><td class="num">2.80</td><td class="num">40</td><td class="num">2.92</td><td class="num">420</td><td class="num diff">-0.12</td></tr>
+<tr><td class="q-cell" title="Describe a time you received tough or critical feedback">Describe a time you received tough or critical feedback</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:30.6%"><span class="tier-val">2.23</span></div><div class="tier-bar lightweight-bar" style="width:44.0%"><span class="tier-val">2.76</span></div></div></td><td class="num">2.23</td><td class="num">40</td><td class="num">2.76</td><td class="num">420</td><td class="num diff">-0.54</td></tr>
+<tr><td class="q-cell" title="How do you handle a situation where you don't know the answer to a question?">How do you handle a situation where you don't know the …</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:55.6%"><span class="tier-val">3.23</span></div><div class="tier-bar lightweight-bar" style="width:60.2%"><span class="tier-val">3.41</span></div></div></td><td class="num">3.23</td><td class="num">40</td><td class="num">3.41</td><td class="num">420</td><td class="num diff">-0.18</td></tr>
+<tr><td class="q-cell" title="Provide an example of a time when you had to make a difficult decision.">Provide an example of a time when you had to make a dif…</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:53.1%"><span class="tier-val">3.12</span></div><div class="tier-bar lightweight-bar" style="width:53.2%"><span class="tier-val">3.13</span></div></div></td><td class="num">3.12</td><td class="num">40</td><td class="num">3.13</td><td class="num">420</td><td class="num diff">-0.00</td></tr>
+<tr><td class="q-cell" title="Tell me about a situation when you had a conflict with a teammate.">Tell me about a situation when you had a conflict with …</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:43.1%"><span class="tier-val">2.73</span></div><div class="tier-bar lightweight-bar" style="width:51.9%"><span class="tier-val">3.08</span></div></div></td><td class="num">2.73</td><td class="num">40</td><td class="num">3.08</td><td class="num">420</td><td class="num diff">-0.35</td></tr>
+<tr><td class="q-cell" title="Tell me about a time you failed. How did you deal with the situation?">Tell me about a time you failed. How did you deal with …</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:35.0%"><span class="tier-val">2.40</span></div><div class="tier-bar lightweight-bar" style="width:47.2%"><span class="tier-val">2.89</span></div></div></td><td class="num">2.40</td><td class="num">40</td><td class="num">2.89</td><td class="num">420</td><td class="num diff">-0.49</td></tr>
+<tr><td class="q-cell" title="Tell me about a time you had a disagreement with your manager.">Tell me about a time you had a disagreement with your m…</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:43.1%"><span class="tier-val">2.73</span></div><div class="tier-bar lightweight-bar" style="width:53.6%"><span class="tier-val">3.14</span></div></div></td><td class="num">2.73</td><td class="num">40</td><td class="num">3.14</td><td class="num">420</td><td class="num diff">-0.42</td></tr>
+<tr><td class="q-cell" title="Tell me about a time you worked well under pressure.">Tell me about a time you worked well under pressure.</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:32.5%"><span class="tier-val">2.30</span></div><div class="tier-bar lightweight-bar" style="width:46.4%"><span class="tier-val">2.86</span></div></div></td><td class="num">2.30</td><td class="num">40</td><td class="num">2.86</td><td class="num">420</td><td class="num diff">-0.56</td></tr>
+<tr><td class="q-cell" title="Tell me about yourself.">Tell me about yourself.</td><td class="tier-bars"><div class="tier-row"><div class="tier-bar flagship-bar" style="width:29.4%"><span class="tier-val">2.17</span></div><div class="tier-bar lightweight-bar" style="width:36.7%"><span class="tier-val">2.47</span></div></div></td><td class="num">2.17</td><td class="num">40</td><td class="num">2.47</td><td class="num">420</td><td class="num diff">-0.29</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tab-robust" class="tab-content">
+        <p class="tier-desc">
+            Per-model robustness scorecard &mdash; each metric aggregated across all (question &times; company &times; level) cells.<br>
+            <b>Cross-Q SD / Range</b>: expected-score volatility across questions &mdash; <em>lower = more stable</em>.<br>
+            <b>Mean Entropy</b>: Shannon entropy of rating distribution &mdash; <em>lower = more deterministic</em>.<br>
+            <b>Mean &rho;</b>: average Spearman rank-correlation with every other model &mdash; <em>higher = more consensus</em>.<br>
+            Cells heatmap: <span style="color:#22c55e">green</span> = robust, <span style="color:#ef4444">red</span> = needs attention.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Cells</th>
+                    <th>Samples</th>
+                    <th>Mean Score</th>
+                    <th>Cross-Q SD &darr;</th>
+                    <th>Cross-Q Range &darr;</th>
+                    <th>Mean Entropy &darr;</th>
+                    <th>Mean #Bins</th>
+                    <th>Mean &rho; &uarr;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>claude-haiku-4-5</td><td class="num">10</td><td class="num">500</td><td class="num">3.082</td><td class="num" style="background:rgba(135,178,53,0.22)">0.262</td><td class="num" style="background:rgba(87,187,72,0.22)">1.06</td><td class="num" style="background:rgba(240,97,49,0.22)">0.425</td><td class="num">2.50</td><td class="num" style="background:rgba(34,197,94,0.22)">0.792</td></tr>
+<tr><td>claude-opus-4-6</td><td class="num">10</td><td class="num">100</td><td class="num">2.580</td><td class="num" style="background:rgba(244,149,16,0.22)">0.431</td><td class="num" style="background:rgba(64,191,81,0.22)">1.00</td><td class="num" style="background:rgba(158,174,45,0.22)">0.182</td><td class="num">1.40</td><td class="num" style="background:rgba(131,178,55,0.22)">0.723</td></tr>
+<tr><td>claude-sonnet-4-6</td><td class="num">10</td><td class="num">500</td><td class="num">2.704</td><td class="num" style="background:rgba(235,159,14,0.22)">0.394</td><td class="num" style="background:rgba(110,182,63,0.22)">1.12</td><td class="num" style="background:rgba(214,163,22,0.22)">0.242</td><td class="num">1.60</td><td class="num" style="background:rgba(83,187,74,0.22)">0.757</td></tr>
+<tr><td>gemini/gemini-3-flash-preview</td><td class="num">10</td><td class="num">500</td><td class="num">3.092</td><td class="num" style="background:rgba(239,68,68,0.22)">0.684</td><td class="num" style="background:rgba(239,68,68,0.22)">2.02</td><td class="num" style="background:rgba(239,72,65,0.22)">0.487</td><td class="num">2.20</td><td class="num" style="background:rgba(34,197,94,0.22)">0.792</td></tr>
+<tr><td>gemini/gemini-3.1-flash-lite-preview</td><td class="num">10</td><td class="num">500</td><td class="num">2.872</td><td class="num" style="background:rgba(243,135,24,0.22)">0.474</td><td class="num" style="background:rgba(240,94,51,0.22)">1.86</td><td class="num" style="background:rgba(239,68,68,0.22)">0.498</td><td class="num">2.40</td><td class="num" style="background:rgba(161,173,43,0.22)">0.702</td></tr>
+<tr><td>gemini/gemini-3.1-pro-preview</td><td class="num">10</td><td class="num">100</td><td class="num">2.790</td><td class="num" style="background:rgba(240,86,56,0.22)">0.628</td><td class="num" style="background:rgba(240,87,55,0.22)">1.90</td><td class="num" style="background:rgba(242,158,12,0.22)">0.271</td><td class="num">1.50</td><td class="num" style="background:rgba(56,192,85,0.22)">0.776</td></tr>
+<tr><td>gpt-5.4</td><td class="num">20</td><td class="num">200</td><td class="num">2.970</td><td class="num" style="background:rgba(111,182,63,0.22)">0.230</td><td class="num" style="background:rgba(141,177,51,0.22)">1.20</td><td class="num" style="background:rgba(34,197,94,0.22)">0.050</td><td class="num">1.10</td><td class="num" style="background:rgba(239,68,68,0.22)">0.494</td></tr>
+<tr><td>gpt-5.4-mini</td><td class="num">40</td><td class="num">2000</td><td class="num">3.021</td><td class="num" style="background:rgba(34,197,94,0.22)">0.128</td><td class="num" style="background:rgba(34,197,94,0.22)">0.92</td><td class="num" style="background:rgba(103,184,66,0.22)">0.124</td><td class="num">1.35</td><td class="num" style="background:rgba(215,163,22,0.22)">0.664</td></tr>
+<tr><td>gpt-5.4-pro</td><td class="num">20</td><td class="num">200</td><td class="num">2.655</td><td class="num" style="background:rgba(244,146,18,0.22)">0.441</td><td class="num" style="background:rgba(64,191,81,0.22)">1.00</td><td class="num" style="background:rgba(78,188,76,0.22)">0.097</td><td class="num">1.20</td><td class="num" style="background:rgba(244,152,14,0.22)">0.634</td></tr>
+            </tbody>
+        </table>
+    </div>
     <script>
         (function() {
-            var rows = document.querySelectorAll('tbody tr');
+            var rows = document.querySelectorAll('#tab-detail tbody tr');
             function filter() {
                 var q = document.getElementById('fq').value;
                 var c = document.getElementById('fc').value;
@@ -1429,6 +1537,14 @@
                 });
             }
             ['fq','fc','fl','fm'].forEach(function(id) { document.getElementById(id).addEventListener('change', filter); });
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+                    btn.classList.add('active');
+                    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+                });
+            });
         })();
     </script>
 </body>
