@@ -195,11 +195,17 @@ The most striking finding is the systematic collapse of the 5-point hiring scale
 - **62% of cells have zero entropy** — the model produces the same rating every single time
 - **90–100% of ratings concentrate in a single bin** for the majority of cells
 
+![Figure 7: Scale Collapse — Rating Bins Used per Evaluation Cell](results/latest/figures/fig7_scale_collapse_bins.png)
+
+![Figure 1: Expected Rating Score by Question and Model (Google, Senior)](results/latest/figures/fig1_scale_heatmap.png)
+
 Formal information-theoretic analysis confirms the severity: Shannon entropy is 0.707 nats against a maximum of 1.609 nats for a uniform 5-category distribution, yielding a **normalized entropy of only 0.439**. The effective number of categories (exp(H)) is **2.03** — a 5-point scale is functioning as a 2-point scale. The Gini-Simpson diversity index of 0.378 further corroborates that fewer than 2 categories carry meaningful probability mass.
 
 **Implication**: The 5-point scale degenerates into a de facto binary judgment (Leaning No Hire vs. Leaning Hire) under LLM evaluation. There is **zero headroom to distinguish exceptional candidates from mediocre ones**, and no mechanism to flag clearly unqualified candidates. Any selection system built on these ratings is operating with far less discriminative power than its scale implies.
 
 ### 4.2 Finding 2: Test-Retest Unreliability — 10x Spread in Consistency
+
+![Figure 2: Test-Retest Agreement Rate by Model](results/latest/figures/fig2_test_retest.png)
 
 Test-retest reliability varies by an order of magnitude across models:
 
@@ -235,6 +241,8 @@ ICC values range from 0.852 (gpt-5.4-pro) to 0.160 (claude-haiku-4-5) — a **5.
 
 ### 4.3 Finding 3: Inter-Model Disagreement — Swapping Models Reshuffles Rankings
 
+![Figure 3: Pairwise Inter-Model Rank Correlation (Google, Senior)](results/latest/figures/fig3_spearman_heatmap.png)
+
 Pairwise Spearman rank correlations of per-question expected scores reveal striking disagreement patterns:
 
 | Model Pair (Google Senior) | Spearman rho | Interpretation |
@@ -262,6 +270,8 @@ Furthermore, vulnerability-category questions (failure, conflict, pressure) show
 
 ### 4.4 Finding 4: Question-Type Sensitivity — 2-Grade Swings from Question Framing
 
+![Figure 4: Cross-Question Score Volatility by Model (Google, Senior)](results/latest/figures/fig4_cross_q_volatility.png)
+
 The same candidate answer receives dramatically different ratings depending on question type:
 
 - **"Tell me about yourself"** (Google, Senior): 8 out of 11 models assign 100% "Leaning No Hire" (expected score = 2.0)
@@ -272,6 +282,8 @@ This represents a **2-full-ordinal-point difference** (2.0 vs. 4.0) for the same
 **Implication**: LLM "harshness" is strongly governed by question type. Cross-question candidate comparison requires normalization or stratification. A candidate who excels at "how do you handle X" questions but struggles with "tell me about a time you failed" may be rated identically to a candidate with the opposite profile — or dramatically differently, depending on which model is used.
 
 ### 4.5 Finding 5: Expectation Gap — Community "Best Answers" Score Below Hire
+
+![Figure 5: Flagship vs Lightweight Model Ratings by Question](results/latest/figures/fig5_tier_comparison.png)
 
 The 10 answers used in this experiment come from a repository with 8,000+ GitHub stars — representing broad community endorsement. One would reasonably expect these answers to achieve at least "Hire" (4.0 on the 5-point scale).
 
@@ -320,6 +332,8 @@ All tests point to the same conclusion: LLM behavioral interview ratings exhibit
 ---
 
 ## 5. Model Robustness Scorecard: Stability and Consensus Are Orthogonal
+
+![Figure 6: Model Robustness Radar Chart](results/latest/figures/fig6_robustness_radar.png)
 
 Aggregating all metrics per model reveals that **stability** (self-consistency) and **consensus** (agreement with other models) are independent dimensions:
 
