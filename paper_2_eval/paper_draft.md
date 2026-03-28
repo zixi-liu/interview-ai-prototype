@@ -14,7 +14,7 @@ Large Language Models (LLMs) are increasingly deployed as hiring evaluators, yet
 
 ### 1.1 Background: The Rise of AI in Hiring
 
-Artificial intelligence is rapidly transforming hiring practices. An estimated 99% of Fortune 500 companies now use AI-powered tools somewhere in their recruitment pipeline, and 90% of large employers use automated systems to filter job applications (AllAboutAI, 2025). SHRM's 2024 Talent Trends Survey found that among organizations using AI for HR, 64% apply it to recruitment, interviewing, and hiring — the leading use case (Society for Human Resource Management, 2024). Products like HireVue, Pymetrics, and numerous startup offerings promise to evaluate candidates at scale using Large Language Models (LLMs). The appeal is clear: consistent evaluation, reduced human bias, faster throughput, and lower cost per assessment.
+Artificial intelligence is rapidly transforming hiring practices. An estimated 99% of Fortune 500 companies now use AI-powered tools somewhere in their recruitment pipeline, and 90% of large employers use automated systems to filter job applications ([AllAboutAI, 2025](#ref-allaboutai-2025)). SHRM's 2024 Talent Trends Survey found that among organizations using AI for HR, 64% apply it to recruitment, interviewing, and hiring — the leading use case ([Society for Human Resource Management, 2024](#ref-shrm-2024)). Products like HireVue, Pymetrics, and numerous startup offerings promise to evaluate candidates at scale using Large Language Models (LLMs). The appeal is clear: consistent evaluation, reduced human bias, faster throughput, and lower cost per assessment.
 
 The behavioral interview — in which candidates describe past experiences demonstrating competencies such as leadership, conflict resolution, and problem-solving — is a cornerstone of hiring at major technology companies including Google, Meta, and Amazon. These companies employ structured rubrics to evaluate behavioral answers on ordinal scales, making them a natural target for LLM-based automation.
 
@@ -60,23 +60,23 @@ Section 2 reviews related work. Section 3 describes our experimental design. Sec
 
 ### 2.1 LLM-as-Judge
 
-The paradigm of using LLMs as evaluators has gained significant traction. Zheng et al. (2023) introduced MT-Bench and Chatbot Arena for evaluating conversational AI using LLM judges. Liu et al. (2023) proposed G-Eval, demonstrating that GPT-4 evaluations correlate with human judgments for text generation quality. However, these works focus on general NLG evaluation rather than domain-specific, high-stakes assessment.
+The paradigm of using LLMs as evaluators has gained significant traction. [Zheng et al. (2023)](#ref-zheng-2023) introduced MT-Bench and Chatbot Arena for evaluating conversational AI using LLM judges. [Liu et al. (2023)](#ref-liu-2023) proposed G-Eval, demonstrating that GPT-4 evaluations correlate with human judgments for text generation quality. However, these works focus on general NLG evaluation rather than domain-specific, high-stakes assessment.
 
-Recent studies have identified systematic biases in LLM judges, including leniency bias (Wang et al., 2024), position bias (Zheng et al., 2023), and verbosity bias (Saito et al., 2023). Our work extends this line of inquiry to the hiring domain, where such biases have direct consequences for candidates and employers.
+Recent studies have identified systematic biases in LLM judges, including leniency bias ([Wang et al., 2024](#ref-wang-2024)), position bias ([Zheng et al., 2023](#ref-zheng-2023)), and verbosity bias ([Saito et al., 2023](#ref-saito-2023)). Our work extends this line of inquiry to the hiring domain, where such biases have direct consequences for candidates and employers.
 
 ### 2.2 AI in Hiring
 
-Automated hiring systems have evolved from keyword-matching resume screeners to sophisticated multi-modal assessment platforms. HireVue (now part of the broader AI hiring ecosystem) processes millions of video interviews annually. Academic work has explored automated interview scoring (Naim et al., 2018; Hemamou et al., 2019) and feedback generation (Hoque et al., 2013).
+Automated hiring systems have evolved from keyword-matching resume screeners to sophisticated multi-modal assessment platforms. HireVue (now part of the broader AI hiring ecosystem) processes millions of video interviews annually. Academic work has explored automated interview scoring ([Naim et al., 2018](#ref-naim-2018); [Hemamou et al., 2019](#ref-hemamou-2019)) and feedback generation ([Hoque et al., 2013](#ref-hoque-2013)).
 
-However, the reliability of these systems remains underexplored. Raghavan et al. (2020) surveyed AI hiring tools and found a lack of validation evidence. Wilson et al. (2021) highlighted fairness concerns in AI hiring but did not conduct systematic reliability auditing. Our work fills this gap with the first multi-model reliability benchmark specifically for behavioral interview evaluation.
+However, the reliability of these systems remains underexplored. [Raghavan et al. (2020)](#ref-raghavan-2020) surveyed AI hiring tools and found a lack of validation evidence. [Wilson et al. (2021)](#ref-wilson-2021) highlighted fairness concerns in AI hiring but did not conduct systematic reliability auditing. Our work fills this gap with the first multi-model reliability benchmark specifically for behavioral interview evaluation.
 
 ### 2.3 Evaluation Reliability in Psychology
 
 The psychometric tradition provides a rigorous framework for evaluating measurement instruments. Key reliability dimensions include:
 
-- **Test-retest reliability**: Consistency of scores across repeated measurements (Cronbach, 1951)
-- **Inter-rater reliability**: Agreement among different raters evaluating the same subject (Shrout & Fleiss, 1979)
-- **Internal consistency**: Coherence of items within a scale (McDonald, 1999)
+- **Test-retest reliability**: Consistency of scores across repeated measurements ([Cronbach, 1951](#ref-cronbach-1951))
+- **Inter-rater reliability**: Agreement among different raters evaluating the same subject ([Shrout & Fleiss, 1979](#ref-shrout-1979))
+- **Internal consistency**: Coherence of items within a scale ([McDonald, 1999](#ref-mcdonald-1999))
 
 We adapt these classical reliability frameworks to the LLM evaluation context, treating each model as a "rater" and each repeated API call as a "retest."
 
@@ -84,11 +84,11 @@ We adapt these classical reliability frameworks to the LLM evaluation context, t
 
 The regulatory environment for AI hiring is rapidly evolving:
 
-- **NYC Local Law 144** requires annual bias audits for automated employment decision tools (NYC Department of Consumer and Worker Protection, 2023)
-- **Illinois AI Video Interview Act** mandates disclosure when AI analyzes video interviews (Illinois General Assembly, 2020)
-- **EU AI Act** classifies AI hiring tools as "high-risk," requiring conformity assessments (European Parliament and Council, 2024)
-- **EEOC** guidance addresses AI-related discrimination in employment decisions (U.S. Equal Employment Opportunity Commission, 2023)
-- **NIST AI Risk Management Framework** provides standards for high-risk AI applications (National Institute of Standards and Technology, 2023)
+- **NYC Local Law 144** requires annual bias audits for automated employment decision tools ([NYC Department of Consumer and Worker Protection, 2023](#ref-nyc-2023))
+- **Illinois AI Video Interview Act** mandates disclosure when AI analyzes video interviews ([Illinois General Assembly, 2020](#ref-illinois-2020))
+- **EU AI Act** classifies AI hiring tools as "high-risk," requiring conformity assessments ([European Parliament and Council, 2024](#ref-european-parliament-2024))
+- **EEOC** guidance addresses AI-related discrimination in employment decisions ([U.S. Equal Employment Opportunity Commission, 2023](#ref-eeoc-2023))
+- **NIST AI Risk Management Framework** provides standards for high-risk AI applications ([National Institute of Standards and Technology, 2023](#ref-nist-2023))
 
 Our work provides empirical evidence directly relevant to these regulatory requirements, demonstrating specific failure modes that auditing frameworks should address.
 
@@ -235,7 +235,7 @@ Formal ICC(2,1) analysis (two-way random, single measures) quantifies the gap:
 | gpt-5.4-mini | 0.342 | Poor |
 | claude-haiku-4-5 | **0.160** | Poor — near random |
 
-ICC values range from 0.852 (gpt-5.4-pro) to 0.160 (claude-haiku-4-5) — a **5.3x spread**. Only one model (gpt-5.4-pro) exceeds the conventional 0.75 threshold for "good" reliability (Cicchetti, 1994). Four models fall below the 0.50 "fair" threshold, with claude-haiku-4-5 approaching chance-level consistency. Notably, gpt-5.4-mini — the highest-volume model in our benchmark (50 samples/cell) — achieves only 0.342 despite having the most data to stabilize.
+ICC values range from 0.852 (gpt-5.4-pro) to 0.160 (claude-haiku-4-5) — a **5.3x spread**. Only one model (gpt-5.4-pro) exceeds the conventional 0.75 threshold for "good" reliability ([Cicchetti, 1994](#ref-cicchetti-1994)). Four models fall below the 0.50 "fair" threshold, with claude-haiku-4-5 approaching chance-level consistency. Notably, gpt-5.4-mini — the highest-volume model in our benchmark (50 samples/cell) — achieves only 0.342 despite having the most data to stabilize.
 
 **Implication**: A candidate evaluated by Gemini Flash could receive "Leaning Hire" on one submission and "Leaning No Hire" on the next, purely from stochastic variation. **Single-shot LLM scores are unreliable for low-consistency models. Repeatability must be benchmarked and reported before deployment.**
 
@@ -262,7 +262,7 @@ Three formal tests confirm that inter-model disagreement is both statistically s
 
 2. **Kendall's W = 0.639** (χ² = 51.79, *p* < 0.001): Models show moderate concordance on question ranking — they partly agree on which questions are "harder" versus "easier," but agreement is far from complete. A W of 0.639 indicates roughly 64% shared ranking variance, leaving 36% attributable to idiosyncratic model-specific difficulty calibration.
 
-3. **Krippendorff's α = 0.523** (ordinal, 9 coders × 10 units): Inter-model agreement falls below the conventional 0.667 threshold for tentative conclusions (Krippendorff, 2011) and far below the 0.800 threshold required for reliable coding. This means LLM ratings would **not pass inter-rater reliability standards** in any social-science content-analysis study.
+3. **Krippendorff's α = 0.523** (ordinal, 9 coders × 10 units): Inter-model agreement falls below the conventional 0.667 threshold for tentative conclusions ([Krippendorff, 2011](#ref-krippendorff-2011)) and far below the 0.800 threshold required for reliable coding. This means LLM ratings would **not pass inter-rater reliability standards** in any social-science content-analysis study.
 
 Furthermore, vulnerability-category questions (failure, conflict, pressure) show the highest cross-model standard deviation (up to 0.58), serving as the most potent amplifiers of inter-model disagreement. GPT-5.4-pro rates "tough feedback" and "conflict" questions at 100% "Leaning No Hire" (expected score = 2.0), while GPT-5.4-mini rates the identical questions at 100% "Leaning Hire" (expected score = 3.0) — same brand, one full ordinal grade apart.
 
@@ -403,7 +403,7 @@ Our results have practical implications for candidates interacting with AI hirin
 
 ### 6.5 Why This Matters for the United States
 
-AI-assisted hiring is projected to affect over 100 million job applications annually in the United States (Levy Yeyati & Seyal, 2025). The reliability failures documented in this paper — scale collapse masking discriminative power, test-retest jitter exceeding one full grade, inter-model disagreement rivaling random assignment — have direct consequences for labor market efficiency and worker welfare. Unreliable AI hiring tools waste employer resources on false-positive screenings and systematically disadvantage candidates through arbitrary scoring variation. Our findings provide the empirical foundation for evidence-based regulation of AI hiring tools, supporting the goals of the EEOC, NIST AI RMF, and state-level AI hiring legislation.
+AI-assisted hiring is projected to affect over 100 million job applications annually in the United States ([Levy Yeyati & Seyal, 2025](#ref-levy-yeyati-2025)). The reliability failures documented in this paper — scale collapse masking discriminative power, test-retest jitter exceeding one full grade, inter-model disagreement rivaling random assignment — have direct consequences for labor market efficiency and worker welfare. Unreliable AI hiring tools waste employer resources on false-positive screenings and systematically disadvantage candidates through arbitrary scoring variation. Our findings provide the empirical foundation for evidence-based regulation of AI hiring tools, supporting the goals of the EEOC, NIST AI RMF, and state-level AI hiring legislation.
 
 ---
 
@@ -435,49 +435,49 @@ Any LLM-based interview scoring system that reports only point estimates without
 
 ## References
 
-AllAboutAI. (2025). *AI Recruitment Statistics 2026: Adoption, Automation & Market Outlook*. https://www.allaboutai.com/resources/ai-statistics/ai-recruitment/
+<a id="ref-allaboutai-2025"></a>AllAboutAI. (2025). *AI Recruitment Statistics 2026: Adoption, Automation & Market Outlook*. https://www.allaboutai.com/resources/ai-statistics/ai-recruitment/
 
-Cicchetti, D. V. (1994). Guidelines, criteria, and rules of thumb for evaluating normed and standardized assessment instruments in psychology. *Psychological Assessment*, 6(4), 284–290. https://doi.org/10.1037/1040-3590.6.4.284
+<a id="ref-cicchetti-1994"></a>Cicchetti, D. V. (1994). Guidelines, criteria, and rules of thumb for evaluating normed and standardized assessment instruments in psychology. *Psychological Assessment*, 6(4), 284–290. https://doi.org/10.1037/1040-3590.6.4.284
 
-Cronbach, L. J. (1951). Coefficient alpha and the internal structure of tests. *Psychometrika*, 16(3), 297–334. https://doi.org/10.1007/BF02310555
+<a id="ref-cronbach-1951"></a>Cronbach, L. J. (1951). Coefficient alpha and the internal structure of tests. *Psychometrika*, 16(3), 297–334. https://doi.org/10.1007/BF02310555
 
-European Parliament and Council. (2024). Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). *Official Journal of the European Union*. https://data.europa.eu/eli/reg/2024/1689/oj
+<a id="ref-european-parliament-2024"></a>European Parliament and Council. (2024). Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). *Official Journal of the European Union*. https://data.europa.eu/eli/reg/2024/1689/oj
 
-Hemamou, L., Felhi, G., Vandenbussche, V., Martin, J.-C., & Clavel, C. (2019). HireNet: A Hierarchical Attention Model for the Automatic Analysis of Asynchronous Video Job Interviews. *Proceedings of the AAAI Conference on Artificial Intelligence*, 33(1), 573–581. https://doi.org/10.1609/aaai.v33i01.3301573
+<a id="ref-hemamou-2019"></a>Hemamou, L., Felhi, G., Vandenbussche, V., Martin, J.-C., & Clavel, C. (2019). HireNet: A Hierarchical Attention Model for the Automatic Analysis of Asynchronous Video Job Interviews. *Proceedings of the AAAI Conference on Artificial Intelligence*, 33(1), 573–581. https://doi.org/10.1609/aaai.v33i01.3301573
 
-Hoque, M. E., Courgeon, M., Martin, J.-C., Mutlu, B., & Picard, R. W. (2013). MACH: My Automated Conversation coacH. *Proceedings of the 2013 ACM International Joint Conference on Pervasive and Ubiquitous Computing (UbiComp '13)*, 697–706. https://doi.org/10.1145/2493432.2493502
+<a id="ref-hoque-2013"></a>Hoque, M. E., Courgeon, M., Martin, J.-C., Mutlu, B., & Picard, R. W. (2013). MACH: My Automated Conversation coacH. *Proceedings of the 2013 ACM International Joint Conference on Pervasive and Ubiquitous Computing (UbiComp '13)*, 697–706. https://doi.org/10.1145/2493432.2493502
 
-Illinois General Assembly. (2020). Artificial Intelligence Video Interview Act (820 ILCS 42). https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015&ChapterID=68
+<a id="ref-illinois-2020"></a>Illinois General Assembly. (2020). Artificial Intelligence Video Interview Act (820 ILCS 42). https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015&ChapterID=68
 
-Krippendorff, K. (2011). *Computing Krippendorff's Alpha-Reliability*. University of Pennsylvania, Annenberg School for Communication. https://repository.upenn.edu/items/034a6030-c584-4d14-9d3d-7b7e8d16df20
+<a id="ref-krippendorff-2011"></a>Krippendorff, K. (2011). *Computing Krippendorff's Alpha-Reliability*. University of Pennsylvania, Annenberg School for Communication. https://repository.upenn.edu/items/034a6030-c584-4d14-9d3d-7b7e8d16df20
 
-Levy Yeyati, E., & Seyal, I. (2025). *Digital footprints and job matching: The new frontier of AI-driven hiring*. Brookings Institution. https://www.brookings.edu/articles/digital-footprints-and-job-matching-the-new-frontier-of-ai-driven-hiring/
+<a id="ref-levy-yeyati-2025"></a>Levy Yeyati, E., & Seyal, I. (2025). *Digital footprints and job matching: The new frontier of AI-driven hiring*. Brookings Institution. https://www.brookings.edu/articles/digital-footprints-and-job-matching-the-new-frontier-of-ai-driven-hiring/
 
-Liu, Y., Iter, D., Xu, Y., Wang, S., Xu, R., & Zhu, C. (2023). G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment. *Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 2511–2522. https://doi.org/10.18653/v1/2023.emnlp-main.153
+<a id="ref-liu-2023"></a>Liu, Y., Iter, D., Xu, Y., Wang, S., Xu, R., & Zhu, C. (2023). G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment. *Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 2511–2522. https://doi.org/10.18653/v1/2023.emnlp-main.153
 
-McDonald, R. P. (1999). *Test Theory: A Unified Treatment*. Lawrence Erlbaum Associates.
+<a id="ref-mcdonald-1999"></a>McDonald, R. P. (1999). *Test Theory: A Unified Treatment*. Lawrence Erlbaum Associates.
 
-Naim, I., Tanveer, M. I., Gildea, D., & Hoque, M. E. (2018). Automated Analysis and Prediction of Job Interview Performance. *IEEE Transactions on Affective Computing*, 9(2), 191–204. https://doi.org/10.1109/TAFFC.2016.2614299
+<a id="ref-naim-2018"></a>Naim, I., Tanveer, M. I., Gildea, D., & Hoque, M. E. (2018). Automated Analysis and Prediction of Job Interview Performance. *IEEE Transactions on Affective Computing*, 9(2), 191–204. https://doi.org/10.1109/TAFFC.2016.2614299
 
-National Institute of Standards and Technology. (2023). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST AI 100-1). https://doi.org/10.6028/NIST.AI.100-1
+<a id="ref-nist-2023"></a>National Institute of Standards and Technology. (2023). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST AI 100-1). https://doi.org/10.6028/NIST.AI.100-1
 
-NYC Department of Consumer and Worker Protection. (2023). *Local Law 144 of 2021: Automated Employment Decision Tools* (NYC Administrative Code § 20-870 et seq.). https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page
+<a id="ref-nyc-2023"></a>NYC Department of Consumer and Worker Protection. (2023). *Local Law 144 of 2021: Automated Employment Decision Tools* (NYC Administrative Code § 20-870 et seq.). https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page
 
-Raghavan, M., Barocas, S., Kleinberg, J., & Levy, K. (2020). Mitigating Bias in Algorithmic Hiring: Evaluating Claims and Practices. *Proceedings of the 2020 Conference on Fairness, Accountability, and Transparency (FAT\*)*, 469–481. https://doi.org/10.1145/3351095.3372828
+<a id="ref-raghavan-2020"></a>Raghavan, M., Barocas, S., Kleinberg, J., & Levy, K. (2020). Mitigating Bias in Algorithmic Hiring: Evaluating Claims and Practices. *Proceedings of the 2020 Conference on Fairness, Accountability, and Transparency (FAT\*)*, 469–481. https://doi.org/10.1145/3351095.3372828
 
-Saito, K., Wachi, A., Wataoka, K., & Akimoto, Y. (2023). Verbosity Bias in Preference Labeling by Large Language Models. *Instruction Tuning and Instruction Following Workshop at NeurIPS 2023*. https://doi.org/10.48550/arXiv.2310.10076
+<a id="ref-saito-2023"></a>Saito, K., Wachi, A., Wataoka, K., & Akimoto, Y. (2023). Verbosity Bias in Preference Labeling by Large Language Models. *Instruction Tuning and Instruction Following Workshop at NeurIPS 2023*. https://doi.org/10.48550/arXiv.2310.10076
 
-Shrout, P. E., & Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. *Psychological Bulletin*, 86(2), 420–428. https://doi.org/10.1037/0033-2909.86.2.420
+<a id="ref-shrout-1979"></a>Shrout, P. E., & Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. *Psychological Bulletin*, 86(2), 420–428. https://doi.org/10.1037/0033-2909.86.2.420
 
-Society for Human Resource Management. (2024). *2024 Talent Trends Survey: Artificial Intelligence Findings*. https://shrm-res.cloudinary.com/image/upload/AI/2024-Talent-Trends-Survey_Artificial-Intelligence-Findings.pdf
+<a id="ref-shrm-2024"></a>Society for Human Resource Management. (2024). *2024 Talent Trends Survey: Artificial Intelligence Findings*. https://shrm-res.cloudinary.com/image/upload/AI/2024-Talent-Trends-Survey_Artificial-Intelligence-Findings.pdf
 
-U.S. Equal Employment Opportunity Commission. (2023). *Select Issues: Assessing Adverse Impact in Software, Algorithms, and Artificial Intelligence Used in Employment Selection Procedures Under Title VII of the Civil Rights Act of 1964*. https://www.eeoc.gov/laws/guidance/select-issues-assessing-adverse-impact-software-algorithms-and-artificial (Original page removed; archived version available at https://data.aclum.org/storage/2025/01/EOCC_www_eeoc_gov_laws_guidance_select-issues-assessing-adverse-impact-software-algorithms-and-artificial.pdf)
+<a id="ref-eeoc-2023"></a>U.S. Equal Employment Opportunity Commission. (2023). *Select Issues: Assessing Adverse Impact in Software, Algorithms, and Artificial Intelligence Used in Employment Selection Procedures Under Title VII of the Civil Rights Act of 1964*. https://www.eeoc.gov/laws/guidance/select-issues-assessing-adverse-impact-software-algorithms-and-artificial (Original page removed; archived version available at https://data.aclum.org/storage/2025/01/EOCC_www_eeoc_gov_laws_guidance_select-issues-assessing-adverse-impact-software-algorithms-and-artificial.pdf)
 
-Wang, P., Li, L., Chen, L., Cai, Z., Zhu, D., Lin, B., Cao, Y., Kong, L., Liu, Q., Liu, T., & Sui, Z. (2024). Large Language Models are not Fair Evaluators. *Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)*, 9440–9450. https://doi.org/10.18653/v1/2024.acl-long.511
+<a id="ref-wang-2024"></a>Wang, P., Li, L., Chen, L., Cai, Z., Zhu, D., Lin, B., Cao, Y., Kong, L., Liu, Q., Liu, T., & Sui, Z. (2024). Large Language Models are not Fair Evaluators. *Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)*, 9440–9450. https://doi.org/10.18653/v1/2024.acl-long.511
 
-Wilson, C., Ghosh, A., Jiang, S., Mislove, A., Baker, L., Szary, J., Trindel, K., & Polli, F. (2021). Building and Auditing Fair Algorithms: A Case Study in Candidate Screening. *Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT)*, 666–677. https://doi.org/10.1145/3442188.3445928
+<a id="ref-wilson-2021"></a>Wilson, C., Ghosh, A., Jiang, S., Mislove, A., Baker, L., Szary, J., Trindel, K., & Polli, F. (2021). Building and Auditing Fair Algorithms: A Case Study in Candidate Screening. *Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT)*, 666–677. https://doi.org/10.1145/3442188.3445928
 
-Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E. P., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. https://proceedings.neurips.cc/paper_files/paper/2023/hash/91f18a1287b398d378ef22505bf41832-Abstract-Datasets_and_Benchmarks.html
+<a id="ref-zheng-2023"></a>Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E. P., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. https://proceedings.neurips.cc/paper_files/paper/2023/hash/91f18a1287b398d378ef22505bf41832-Abstract-Datasets_and_Benchmarks.html
 
 ---
 
