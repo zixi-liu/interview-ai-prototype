@@ -1,6 +1,6 @@
 # Scale Collapse, Model Disagreement, and False Precision: A Multi-Model Audit of LLM Behavioral Interview Scoring
 
-**Authors:** Kewen Zhu, Ze Sheng, Zixi Liu
+**Authors:** Kewen Zhu, Ze Sheng, Zixi Liu, Junyuan Tan
 
 ## Abstract
 
