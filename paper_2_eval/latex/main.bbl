@@ -1,0 +1,163 @@
+\begin{thebibliography}{22}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{AllAboutAI}(2025)]{allaboutai2025}
+{AllAboutAI}.
+\newblock {AI Recruitment Statistics 2026: Adoption, Automation \& Market
+  Outlook}.
+\newblock
+  \url{https://www.allaboutai.com/resources/ai-statistics/ai-recruitment/},
+  2025.
+
+\bibitem[Cicchetti(1994)]{cicchetti1994}
+Domenic~V. Cicchetti.
+\newblock Guidelines, criteria, and rules of thumb for evaluating normed and
+  standardized assessment instruments in psychology.
+\newblock \emph{Psychological Assessment}, 6\penalty0 (4):\penalty0 284--290,
+  1994.
+
+\bibitem[Cronbach(1951)]{cronbach1951}
+Lee~J. Cronbach.
+\newblock Coefficient alpha and the internal structure of tests.
+\newblock \emph{Psychometrika}, 16\penalty0 (3):\penalty0 297--334, 1951.
+
+\bibitem[{European Parliament and Council}(2024)]{euaiact2024}
+{European Parliament and Council}.
+\newblock {Regulation (EU) 2024/1689 laying down harmonised rules on artificial
+  intelligence (Artificial Intelligence Act)}.
+\newblock \url{https://data.europa.eu/eli/reg/2024/1689/oj}, 2024.
+
+\bibitem[Hemamou et~al.(2019)Hemamou, Felhi, Vandenbussche, Martin, and
+  Clavel]{hemamou2019}
+L\'{e}o Hemamou, Ghazi Felhi, Vincent Vandenbussche, Jean-Claude Martin, and
+  Chlo\'{e} Clavel.
+\newblock {HireNet: A Hierarchical Attention Model for the Automatic Analysis
+  of Asynchronous Video Job Interviews}.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~33, pages 573--581, 2019.
+
+\bibitem[Hoque et~al.(2013)Hoque, Courgeon, Martin, Mutlu, and
+  Picard]{hoque2013}
+Mohammed~E. Hoque, Matthieu Courgeon, Jean-Claude Martin, Bilge Mutlu, and
+  Rosalind~W. Picard.
+\newblock {MACH: My Automated Conversation coacH}.
+\newblock In \emph{Proceedings of the 2013 ACM International Joint Conference
+  on Pervasive and Ubiquitous Computing (UbiComp '13)}, pages 697--706, 2013.
+
+\bibitem[{Illinois General Assembly}(2020)]{illinois2020}
+{Illinois General Assembly}.
+\newblock {Artificial Intelligence Video Interview Act (820 ILCS 42)}.
+\newblock \url{https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015},
+  2020.
+
+\bibitem[Krippendorff(2011)]{krippendorff2011}
+Klaus Krippendorff.
+\newblock {Computing Krippendorff's Alpha-Reliability}.
+\newblock Technical report, University of Pennsylvania, Annenberg School for
+  Communication, 2011.
+
+\bibitem[{Levy Yeyati} and Seyal(2025)]{levy2025}
+Eduardo {Levy Yeyati} and Imran Seyal.
+\newblock {Digital footprints and job matching: The new frontier of AI-driven
+  hiring}.
+\newblock Brookings Institution.
+  \url{https://www.brookings.edu/articles/digital-footprints-and-job-matching-the-new-frontier-of-ai-driven-hiring/},
+  2025.
+
+\bibitem[Liu et~al.(2023)Liu, Iter, Xu, Wang, Xu, and Zhu]{liu2023geval}
+Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, and Chenguang Zhu.
+\newblock {G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment}.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}, pages 2511--2522, 2023.
+
+\bibitem[McDonald(1999)]{mcdonald1999}
+Roderick~P. McDonald.
+\newblock \emph{Test Theory: A Unified Treatment}.
+\newblock Lawrence Erlbaum Associates, 1999.
+
+\bibitem[Naim et~al.(2018)Naim, Tanveer, Gildea, and Hoque]{naim2018}
+Iftekhar Naim, M.~Iftekhar Tanveer, Daniel Gildea, and Mohammed~E. Hoque.
+\newblock {Automated Analysis and Prediction of Job Interview Performance}.
+\newblock \emph{IEEE Transactions on Affective Computing}, 9\penalty0
+  (2):\penalty0 191--204, 2018.
+
+\bibitem[{National Institute of Standards and Technology}(2023)]{nist2023}
+{National Institute of Standards and Technology}.
+\newblock {Artificial Intelligence Risk Management Framework (AI RMF 1.0)}.
+\newblock Technical report, NIST AI 100-1, 2023.
+
+\bibitem[{NYC Department of Consumer and Worker Protection}(2023)]{nyc2023}
+{NYC Department of Consumer and Worker Protection}.
+\newblock {Local Law 144 of 2021: Automated Employment Decision Tools}.
+\newblock
+  \url{https://www.nyc.gov/site/dca/about/automated-employment-decision-tools.page},
+  2023.
+
+\bibitem[Raghavan et~al.(2020)Raghavan, Barocas, Kleinberg, and
+  Levy]{raghavan2020}
+Manish Raghavan, Solon Barocas, Jon Kleinberg, and Karen Levy.
+\newblock {Mitigating Bias in Algorithmic Hiring: Evaluating Claims and
+  Practices}.
+\newblock In \emph{Proceedings of the 2020 Conference on Fairness,
+  Accountability, and Transparency (FAT*)}, pages 469--481, 2020.
+
+\bibitem[Saito et~al.(2023)Saito, Wachi, Wataoka, and Akimoto]{saito2023}
+Keita Saito, Akifumi Wachi, Koki Wataoka, and Youhei Akimoto.
+\newblock {Verbosity Bias in Preference Labeling by Large Language Models}.
+\newblock In \emph{Instruction Tuning and Instruction Following Workshop at
+  NeurIPS 2023}, 2023.
+
+\bibitem[Shrout and Fleiss(1979)]{shrout1979}
+Patrick~E. Shrout and Joseph~L. Fleiss.
+\newblock Intraclass correlations: Uses in assessing rater reliability.
+\newblock \emph{Psychological Bulletin}, 86\penalty0 (2):\penalty0 420--428,
+  1979.
+
+\bibitem[{Society for Human Resource Management}(2024)]{shrm2024}
+{Society for Human Resource Management}.
+\newblock {2024 Talent Trends Survey: Artificial Intelligence Findings}.
+\newblock
+  \url{https://shrm-res.cloudinary.com/image/upload/AI/2024-Talent-Trends-Survey_Artificial-Intelligence-Findings.pdf},
+  2024.
+
+\bibitem[{U.S. Equal Employment Opportunity Commission}(2023)]{eeoc2023}
+{U.S. Equal Employment Opportunity Commission}.
+\newblock {Select Issues: Assessing Adverse Impact in Software, Algorithms, and
+  Artificial Intelligence Used in Employment Selection Procedures Under Title
+  VII of the Civil Rights Act of 1964}.
+\newblock
+  \url{https://www.eeoc.gov/laws/guidance/select-issues-assessing-adverse-impact-software-algorithms-and-artificial},
+  2023.
+
+\bibitem[Wang et~al.(2024)Wang, Li, Chen, Cai, Zhu, Lin, Cao, Kong, Liu, Liu,
+  and Sui]{wang2024}
+Peiyi Wang, Lei Li, Liang Chen, Zefan Cai, Dawei Zhu, Binghuai Lin, Yunbo Cao,
+  Lingpeng Kong, Qi~Liu, Tianyu Liu, and Zhifang Sui.
+\newblock {Large Language Models are not Fair Evaluators}.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 9440--9450,
+  2024.
+
+\bibitem[Wilson et~al.(2021)Wilson, Ghosh, Jiang, Mislove, Baker, Szary,
+  Trindel, and Polli]{wilson2021}
+Christo Wilson, Avijit Ghosh, Shan Jiang, Alan Mislove, Lewis Baker, Janelle
+  Szary, Kelly Trindel, and Frida Polli.
+\newblock {Building and Auditing Fair Algorithms: A Case Study in Candidate
+  Screening}.
+\newblock In \emph{Proceedings of the 2021 ACM Conference on Fairness,
+  Accountability, and Transparency (FAccT)}, pages 666--677, 2021.
+
+\bibitem[Zheng et~al.(2023)Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li,
+  Li, Xing, Zhang, Gonzalez, and Stoica]{zheng2023}
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao
+  Zhuang, Zi~Lin, Zhuohan Li, Dacheng Li, Eric~P. Xing, Hao Zhang, Joseph~E.
+  Gonzalez, and Ion Stoica.
+\newblock {Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena}.
+\newblock In \emph{Advances in Neural Information Processing Systems 36
+  (NeurIPS 2023)}, 2023.
+
+\end{thebibliography}
