@@ -1,4 +1,6 @@
 .env
+.cursor/
+.vscode/
 __pycache__/
 *.pyc
 *.pyo

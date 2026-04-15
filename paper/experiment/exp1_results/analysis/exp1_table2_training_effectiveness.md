@@ -1,0 +1,7 @@
+# Table 2: Training Effectiveness Metrics (Group B)
+
+| Metric | Pre | Post | Improvement | Significant |
+| --- | --- | --- | --- | --- |
+| Confidence (1-5) | 3.16 | 4.16 | 1.00 | Yes |
+| Authenticity (1-5) | 2.94 | 4.53 | 1.59 | Yes |
+| Recall Test Responses | N/A | 50 | N/A | N/A |

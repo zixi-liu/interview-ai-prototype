@@ -14,78 +14,79 @@ Situation: In my role as a software developer at a large tech company, I'm const
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Situation: software developer at large tech co.
-- Learning AWS for cloud transition
-- Enrolled in AWS Certified Solutions Architect course
-- Studied evenings/weekends, hands-on practice
-- Learned EC2, S3, VPC, Lambda
-- Passed certification exam, high score
-- Led initiative to optimize deployment with AWS Lambda
+- Learning AWS for team transition
+- Enrolled in certification course
+- Studied evenings/weekends
+- Hands-on practice with EC2, S3, VPC, Lambda
+- Passed exam, high score
+- Led initiative on AWS Lambda
 - 30% reduction in operational costs
-- Team/management appreciated contribution
+- Team appreciated contribution
 - Continuous learning emphasized
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described their recent initiative to enhance their knowledge of AWS cloud computing in response to their team's transition to cloud-based projects. They enrolled in a certification course, dedicating significant personal time to study and practice. The candidate successfully passed the certification and applied their knowledge by leading an optimization initiative that resulted in a 30% reduction in operational costs. This example demonstrates a proactive approach to learning and a positive impact on team efficiency, aligning well with Junior-Mid level expectations.
+The candidate described their recent learning experience with AWS, motivated by their team's transition to cloud technologies. They enrolled in a certification course, dedicating significant personal time to study and practice. The candidate successfully passed the certification and applied their knowledge by leading an initiative that optimized application deployment, resulting in a notable 30% reduction in operational costs. This example demonstrates a proactive approach to learning and a positive impact on team efficiency, aligning with Junior-Mid expectations.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Proactive in learning new technologies relevant to job
+- Proactive in learning new technologies
 - Structured approach to studying and applying knowledge
-- Demonstrated ability to lead initiatives with measurable impact
-- Positive feedback from team and management indicates reliability
+- Demonstrated initiative in leading a project
+- Clear understanding of cloud computing concepts
+- Positive impact on team efficiency and cost reduction
 
 ============================================================
 4. Areas for Improvement
-- Need to clarify personal contributions vs. team efforts in project outcomes
-- Could provide more specific metrics or data on the impact of learning beyond cost reduction
-- Explore deeper collaboration aspects with team during the initiative
+- Provide more specific details on personal contributions vs. team efforts in the initiative.
+- Clarify how the learning directly influenced their day-to-day responsibilities beyond the project.
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
 - Ownership: 👍
 - Problem Solving: 👍
 - Execution: 👍
-- Collaboration: 👌
+- Collaboration: 👍
 - Communication: 👍
-- Leadership / Influence: 👌
+- Leadership / Influence: 👍
 - Culture Fit: 👍
 
 ============================================================
 6. Final Overall Recommendation
 - 👍 Hire
 
-The candidate demonstrates a solid understanding of the importance of continuous learning and has made a tangible impact on their team's efficiency. However, there is room for improvement in articulating personal contributions and broader collaboration efforts. Overall, they meet the expectations for a Junior-Mid level candidate and show potential for growth.
+The candidate demonstrated a solid understanding of cloud technologies and took initiative in learning and applying this knowledge effectively. While they showed good ownership and impact, further clarity on personal contributions would strengthen their case. Overall, they meet the expectations for a Junior-Mid level candidate.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you elaborate on your specific role in leading the AWS Lambda optimization initiative? What challenges did you face, and how did you address them?
-2. What specific metrics did you track to measure the success of the AWS Lambda implementation beyond just cost reduction?
-3. How did you collaborate with your team during the AWS learning process and the subsequent project implementation? Can you provide an example?
-4. Were there any aspects of the AWS course that you found particularly challenging? How did you overcome those challenges?
-5. How do you plan to continue your learning in cloud technologies or other areas relevant to your role?
+1. Can you elaborate on your specific role in leading the AWS Lambda initiative? What challenges did you face, and how did you overcome them?
+2. How did your learning about AWS directly change your approach to your daily responsibilities or tasks outside of the project?
+3. Were there any specific metrics or feedback from your team that highlighted the impact of your contributions on the project?
+4. Can you describe a situation where you had to collaborate with team members during this learning process? What was your contribution?
+5. How do you plan to continue your learning in cloud computing or other technologies moving forward?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
-- Red Flags: 
-  - "overclaiming contribution" (the candidate claims to have led an initiative without detailing collaborative efforts or team dynamics)
-  - "vagueness" (the impact of the AWS implementation lacks specific metrics beyond operational cost reduction)
+- Overclaiming contribution: The candidate states they "led an initiative" without clear evidence of leadership or the decision-making process involved.
+- Ambiguity avoidance: The description lacks specific details on how their actions directly influenced the team's adoption of AWS practices.
+- Lack of reflection: There is minimal insight into what challenges were faced during the learning process or how they overcame them.
 
 =====================
 2. Red Flag Severity Rating
-- "overclaiming contribution": ★★☆☆☆
-- "vagueness": ★★☆☆☆
+- Overclaiming contribution: ★★☆☆☆
+- Ambiguity avoidance: ★★☆☆☆
+- Lack of reflection: ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's claim of leading an initiative lacks clarity on team involvement and collaboration.
-- The impact metrics provided are limited and do not sufficiently demonstrate the candidate's direct influence on broader team outcomes.
+- The candidate's claim of leading an initiative lacks substantiation, raising concerns about ownership.
+- The response is vague regarding the direct impact of their contributions on the team's practices.
+- Limited reflection on challenges faced during the learning process suggests a lack of depth in self-assessment.
 
 =====================
 4. Improvement Suggestions
-- Clarify specific roles and contributions in team initiatives to avoid ambiguity.
-- Provide more detailed metrics on the impact of contributions beyond cost reduction.
-- Include examples of collaboration with team members to demonstrate teamwork and shared ownership.
+- Clarify specific leadership actions taken during the initiative to demonstrate ownership.
+- Provide measurable outcomes related to the team's adoption of AWS practices.
+- Reflect on challenges encountered during the learning process and how they were addressed.

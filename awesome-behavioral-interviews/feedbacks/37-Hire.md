@@ -14,34 +14,39 @@ Situation: At my previous job as a software developer in a mid-sized tech compan
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Situation: software dev, new feature, tight deadline
-- Task: project lead, motivate team, encourage collaboration
-- Actions: kickoff meeting, skill-sharing sessions, open communication, milestone celebrations, feedback/support
-- Result: high engagement, project ahead of deadline, 10% user engagement increase
-- Key takeaways: importance of communication, leveraging strengths, recognition
+- Project lead on new feature
+- Tight deadline, innovative tech
+- Kickoff meeting for goals
+- Skill-sharing sessions for upskilling
+- Open communication, regular check-ins
+- Milestone celebrations for motivation
+- Continuous feedback/support
+- Completed ahead of deadline
+- 10% increase in user engagement
 ============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a project where they served as the lead developer for a new software feature under a tight deadline. They implemented several strategies to motivate the team and promote collaboration, including kickoff meetings, skill-sharing sessions, and regular feedback. The project was completed two days early and resulted in a 10% increase in user engagement. While the candidate demonstrated structured thinking and a clear approach to team motivation, the impact of their leadership could be further substantiated with more specific metrics and individual contributions.
+The candidate described their experience as a project lead for a software feature development in a mid-sized tech company. They organized a kickoff meeting to align team goals, facilitated skill-sharing sessions to enhance team capabilities, and established open communication for collaboration. The project was completed two days early, resulting in a 10% increase in user engagement. While the candidate demonstrated structured thinking and initiative, the scope of their ownership in the project could be clearer, and the impact metrics, while positive, could benefit from more detailed data.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear articulation of the situation and actions taken
+- Clear articulation of project goals and importance
 - Structured approach to team motivation and collaboration
-- Effective use of communication strategies to engage team members
-- Demonstrated understanding of leveraging team strengths
+- Initiative in organizing skill-sharing sessions
+- Effective communication and feedback mechanisms
+- Positive outcome with early project completion
 
 ============================================================
 4. Areas for Improvement
-- More specific metrics on individual contributions to the project
-- Clarification on personal ownership versus team efforts in achieving the results
-- Greater emphasis on the challenges faced and how they were overcome
+- Clarify personal ownership vs. team contributions; some actions felt more team-driven.
+- Provide more specific metrics or data to quantify impact; "10% increase" is good but lacks context.
+- Explore deeper personal challenges faced during the project and how they were overcome.
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
 - Ownership: Meets(👌)
-- Problem Solving: Meets(👌)
+- Problem Solving: Meets+(👍)
 - Execution: Meets(👌)
 - Collaboration: Strong(🌟)
 - Communication: Strong(🌟)
@@ -52,35 +57,39 @@ The candidate described a project where they served as the lead developer for a 
 6. Final Overall Recommendation
 - 👍Hire
 
-The candidate demonstrated solid collaboration and communication skills, essential for a Junior-Mid level role. However, there is a need for clearer ownership and specific metrics regarding individual contributions to fully meet the expectations for this level. Overall, they show potential to grow within the team.
+The candidate demonstrated solid collaboration and communication skills, effectively motivating their team and achieving project goals. However, there is a need for clearer ownership and more detailed metrics to fully meet the expectations for a Junior-Mid level role. Overall, they show promise and could be a valuable addition to the team with some development.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific examples of how you personally contributed to the success of the project beyond organizing meetings?
-2. What challenges did you face in motivating the team, and how did you address them?
-3. How did you measure the effectiveness of the skill-sharing sessions, and what feedback did you receive from team members?
-4. Can you describe a situation where a team member struggled with the new technology? How did you support them specifically?
-5. What would you do differently in a future project to ensure even greater individual accountability and ownership?
+1. Can you describe a specific challenge you faced during the project and how you personally addressed it?
+2. How did you ensure that your contributions were recognized and not overshadowed by team efforts?
+3. What specific metrics or data did you track during the project to measure success beyond user engagement?
+4. Can you provide an example of how you handled a conflict or disagreement within the team during this project?
+5. How did you prioritize tasks among team members with varying expertise, and what was your role in that process?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
-- Overclaiming contribution: The candidate describes the project as a success but does not clearly delineate their individual contributions versus team efforts.
-- Lack of reflection: The candidate does not discuss any challenges faced or lessons learned from failures during the project.
+- Red Flags: 
+  - "executor-style contribution" (the candidate describes organizing events and sessions but lacks clear ownership of outcomes)
+  - "vagueness" (the impact of the project is mentioned, but the candidate does not specify their direct contributions to achieving the results)
+  - "lack of reflection" (the candidate does not discuss any challenges faced or lessons learned beyond general statements)
 
 =====================
 2. Red Flag Severity Rating
-- Overclaiming contribution: ★★★☆☆
-- Lack of reflection: ★★☆☆☆
+- "executor-style contribution": ★★★☆☆
+- "vagueness": ★★☆☆☆
+- "lack of reflection": ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's role in the project's success is not clearly defined, leading to ambiguity in ownership.
-- There is a lack of discussion around challenges faced, which is critical for growth and learning in a collaborative environment.
+- The candidate's role appears more focused on facilitation rather than direct contribution to project outcomes.
+- Impact metrics are mentioned but lack clear attribution to the candidate's actions.
+- The response lacks depth in reflecting on personal challenges or learning experiences.
 
 =====================
 4. Improvement Suggestions
-- Clearly articulate individual contributions versus team efforts to demonstrate ownership.
-- Include specific challenges encountered during the project and how they were addressed.
-- Reflect on lessons learned to show growth and adaptability in team dynamics.
+- Clearly articulate specific actions taken that directly influenced project outcomes.
+- Provide quantifiable metrics linked to personal contributions to demonstrate impact.
+- Reflect on challenges faced during the project and how they were overcome to showcase personal growth and learning.

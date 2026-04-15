@@ -1,0 +1,190 @@
+{
+  "scale_utilization": {
+    "total_ratings": 4600,
+    "bins_used": 4,
+    "distribution": {
+      "No Hire": 0.0,
+      "Leaning No Hire": 0.1404,
+      "Leaning Hire": 0.7715,
+      "Hire": 0.0837,
+      "Strong Hire": 0.0043
+    },
+    "entropy_nats": 0.7071,
+    "effective_categories": 2.028,
+    "gini_simpson_diversity": 0.378,
+    "max_possible_entropy": 1.6094,
+    "normalized_entropy": 0.4393
+  },
+  "friedman_test": {
+    "description": "Friedman test: do models give significantly different ratings? (Google Senior)",
+    "questions": [
+      "Describe a time when you led a team. What was the outcome?",
+      "Describe a time when you went above and beyond the requirements for a project.",
+      "Describe a time you received tough or critical feedback",
+      "How do you handle a situation where you don't know the answer to a question?",
+      "Provide an example of a time when you had to make a difficult decision.",
+      "Tell me about a situation when you had a conflict with a teammate.",
+      "Tell me about a time you failed. How did you deal with the situation?",
+      "Tell me about a time you had a disagreement with your manager.",
+      "Tell me about a time you worked well under pressure.",
+      "Tell me about yourself."
+    ],
+    "models": [
+      "claude-haiku-4-5",
+      "claude-opus-4-6",
+      "claude-sonnet-4-6",
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.1-flash-lite-preview",
+      "gemini/gemini-3.1-pro-preview",
+      "gpt-5.4",
+      "gpt-5.4-mini",
+      "gpt-5.4-pro"
+    ],
+    "chi2": 35.56,
+    "p_value": 2.8e-05,
+    "n_blocks": 10,
+    "k_treatments": 9,
+    "mean_ranks": [
+      7.9,
+      3.15,
+      3.9,
+      6.75,
+      5.1,
+      4.65,
+      5.2,
+      6.3,
+      2.05
+    ]
+  },
+  "kendalls_w": {
+    "description": "Kendall's W: inter-model concordance on question ranking (Google Senior)",
+    "models": [
+      "claude-haiku-4-5",
+      "claude-opus-4-6",
+      "claude-sonnet-4-6",
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.1-flash-lite-preview",
+      "gemini/gemini-3.1-pro-preview",
+      "gpt-5.4",
+      "gpt-5.4-mini",
+      "gpt-5.4-pro"
+    ],
+    "W": 0.6394,
+    "chi2": 51.7939,
+    "p_value": 0.0,
+    "n_items": 10,
+    "k_raters": 9
+  },
+  "icc_test_retest": {
+    "description": "ICC(2,1) test-retest reliability per model",
+    "per_model": {
+      "claude-haiku-4-5": {
+        "ICC_2_1": 0.1604,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 0.4358,
+        "MS_error": 0.1492
+      },
+      "claude-opus-4-6": {
+        "ICC_2_1": 0.7563,
+        "n_subjects": 10,
+        "k_raters": 10,
+        "MS_between": 2.0622,
+        "MS_error": 0.0622
+      },
+      "claude-sonnet-4-6": {
+        "ICC_2_1": 0.6908,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 1.8411,
+        "MS_error": 0.0785
+      },
+      "gemini/gemini-3-flash-preview": {
+        "ICC_2_1": 0.7342,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 5.2345,
+        "MS_error": 0.1865
+      },
+      "gemini/gemini-3.1-flash-lite-preview": {
+        "ICC_2_1": 0.655,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 2.6976,
+        "MS_error": 0.1351
+      },
+      "gemini/gemini-3.1-pro-preview": {
+        "ICC_2_1": 0.7365,
+        "n_subjects": 50,
+        "k_raters": 2,
+        "MS_between": 0.859,
+        "MS_error": 0.1324
+      },
+      "gpt-5.4": {
+        "ICC_2_1": 0.7528,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 0.5589,
+        "MS_error": 0.0174
+      },
+      "gpt-5.4-mini": {
+        "ICC_2_1": 0.3418,
+        "n_subjects": 100,
+        "k_raters": 10,
+        "MS_between": 0.2668,
+        "MS_error": 0.043
+      },
+      "gpt-5.4-pro": {
+        "ICC_2_1": 0.8518,
+        "n_subjects": 20,
+        "k_raters": 10,
+        "MS_between": 2.0471,
+        "MS_error": 0.0348
+      }
+    }
+  },
+  "krippendorff_alpha": {
+    "description": "Krippendorff's alpha (ordinal): inter-model agreement (Google Senior)",
+    "models": [
+      "claude-haiku-4-5",
+      "claude-opus-4-6",
+      "claude-sonnet-4-6",
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.1-flash-lite-preview",
+      "gemini/gemini-3.1-pro-preview",
+      "gpt-5.4",
+      "gpt-5.4-mini",
+      "gpt-5.4-pro"
+    ],
+    "alpha": 0.5234,
+    "Do": 117.05,
+    "De": 245.6188,
+    "n_units": 10,
+    "n_coders_total_values": 90
+  },
+  "wilcoxon_tier_comparison": {
+    "description": "Wilcoxon signed-rank: flagship vs lightweight model tier",
+    "matched_questions": [
+      "Describe a time when you led a team. What was the outcome?",
+      "Describe a time when you went above and beyond the requirements for a project.",
+      "Describe a time you received tough or critical feedback",
+      "How do you handle a situation where you don't know the answer to a question?",
+      "Provide an example of a time when you had to make a difficult decision.",
+      "Tell me about a situation when you had a conflict with a teammate.",
+      "Tell me about a time you failed. How did you deal with the situation?",
+      "Tell me about a time you had a disagreement with your manager.",
+      "Tell me about a time you worked well under pressure.",
+      "Tell me about yourself."
+    ],
+    "W": 0,
+    "W_plus": 0,
+    "W_minus": 55.0,
+    "z": -2.8031,
+    "p_value": 0.005062,
+    "n_pairs": 10,
+    "n_nonzero_diffs": 10,
+    "mean_x": 2.67,
+    "mean_y": 2.9788,
+    "mean_diff": -0.3088
+  }
+}

@@ -1,0 +1,11 @@
+# Table 1: Rating Improvement Comparison (Group A vs Group B)
+
+| Metric | Group A (Automated) | Group B (Human-in-Loop) |
+| --- | --- | --- |
+| N | 50 | 50 |
+| Mean Improvement | 0.58 | 0.64 |
+| Std Improvement | 1.21 | 1.10 |
+| Improved Count | 19 | 18 |
+| Improvement Rate (%) | 38.0% | 36.0% |
+| Reached Strong Hire | 0 | 0 |
+| Strong Hire Rate (%) | 0.0% | 0.0% |

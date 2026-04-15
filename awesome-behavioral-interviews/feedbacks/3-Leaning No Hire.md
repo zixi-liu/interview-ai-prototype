@@ -16,29 +16,29 @@ Situation: During a previous role as a software developer, I was part of a team 
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Conflict with teammate (Sarah)
 - Disagreement on implementation approach
-- Initiated meeting to understand perspective
-- Presented both solutions to team
-- Focused on technical merits
-- Hybrid solution chosen
-- Improved relationship with Sarah
+- Task: resolve conflict, maintain harmony
+- Action: initiated meeting, listened, explained benefits
+- Suggested team input on both approaches
+- Result: hybrid solution, improved relationship
 - Learned collaboration, open communication
+============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a conflict with a teammate regarding the implementation of a new feature. They took the initiative to understand the teammate's perspective and facilitated a team discussion to evaluate both proposed solutions. The outcome was a hybrid approach that combined elements of both solutions, leading to successful feature completion and improved team dynamics. While the candidate demonstrated some effective conflict resolution skills, the impact of their actions was limited to a small team context, which may not fully meet the expectations for ownership and scope at this level.
+The candidate described a conflict with a teammate regarding differing implementation approaches for a software feature. They took the initiative to meet with the teammate to understand her perspective and facilitated a team discussion to evaluate both approaches. The outcome was a hybrid solution that combined elements of both proposals, leading to successful project completion and improved team dynamics. While the candidate demonstrated good communication skills and a collaborative mindset, the example lacked clear metrics and data-driven decision-making, which are critical at this competitive level.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Demonstrated ability to initiate conflict resolution
-- Effective communication and listening skills
-- Willingness to collaborate and consider multiple perspectives
-- Focused on technical merits rather than personal preferences
+- Good communication and active listening skills
+- Demonstrated ability to facilitate team discussions
+- Willingness to consider different perspectives
+- Positive outcome with improved team dynamics
 
 ============================================================
 4. Areas for Improvement
-- Need to demonstrate clearer ownership of the solution and its impact on the project.
-- Provide more specific metrics or outcomes that resulted from the hybrid solution.
-- Expand on how this experience will influence future collaborative efforts.
+- Need to provide clearer metrics or data to support decision-making
+- More emphasis on personal ownership of the solution and impact on the project
+- Could improve on demonstrating the scope of influence beyond immediate team
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
@@ -54,39 +54,38 @@ The candidate described a conflict with a teammate regarding the implementation 
 6. Final Overall Recommendation
 - 🤔 Leaning No Hire
 
-The candidate showcased strong collaboration and communication skills but fell short in demonstrating ownership and measurable impact. The example lacked clear metrics and the scope of influence was limited, which raises concerns about their readiness for a Junior-Mid level position in a competitive environment.
+The candidate showed strong collaboration and communication skills but fell short in demonstrating ownership and influence over the project. The lack of clear metrics and personal impact on the decision-making process indicates that they may not meet the expectations for a Junior-Mid level role in this competitive hiring environment.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific metrics or outcomes that resulted from the hybrid solution you implemented?
-2. How did you ensure that your proposed solution was the best fit for the project beyond just your personal preference?
-3. In future conflicts, how would you take greater ownership of the resolution process to ensure a more impactful outcome?
-4. Can you describe a time when you had to influence a decision beyond your immediate team? What was the outcome?
-5. How do you plan to apply the lessons learned from this experience in future collaborative projects?
+1. Can you provide specific metrics or data that influenced your decision-making process during the project?
+2. How did you ensure that your proposed solution was the best fit for the project, and what was your role in that assessment?
+3. Can you describe a time when you had to take ownership of a project or task? What was the outcome?
+4. How did you measure the success of the hybrid solution after implementation?
+5. In what ways could you have taken more initiative to influence the team's decision beyond just presenting options?
+6. Can you share an example of how you handled a similar conflict in the past, and what you learned from that experience?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "communication breakdown" (the candidate does not mention any proactive follow-up after the team meeting to ensure alignment)
-  - "lack of reflection" (no mention of personal learnings or how this experience influenced future collaboration)
-  - "ambiguity avoidance" (the candidate does not clearly define the impact of the hybrid solution on the project or team dynamics)
+  - "lack of reflection" - The candidate does not demonstrate personal growth or learning from the conflict beyond the immediate resolution.
+  - "ambiguity avoidance" - The resolution process lacks clear metrics or criteria for evaluating the success of the hybrid solution.
 
 =====================
 2. Red Flag Severity Rating
-- "communication breakdown": ★★☆☆☆
 - "lack of reflection": ★★☆☆☆
-- "ambiguity avoidance": ★★★☆☆
+- "ambiguity avoidance": ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate demonstrates a basic ability to handle conflict but lacks depth in follow-up actions.
-- There is insufficient reflection on personal growth or future application of the experience.
-- The impact of the solution is vague, which raises concerns about the candidate's understanding of project scope.
+- The candidate resolves the conflict but does not reflect on personal learnings or improvements for future situations.
+- The decision-making process lacks explicit metrics or data-driven reasoning, which is critical in a competitive environment.
+- Overall, the example demonstrates collaboration but lacks depth in ownership and impact.
 
 =====================
 4. Improvement Suggestions
-- Clearly outline follow-up actions taken after team discussions to ensure alignment.
-- Reflect on personal learnings and how they would apply in future conflicts.
-- Provide specific metrics or outcomes that demonstrate the impact of the hybrid solution on the project or team performance.
+- Include specific metrics or outcomes that demonstrate the success of the hybrid solution.
+- Reflect on personal growth or lessons learned from the conflict resolution process.
+- Clarify individual contributions to the team's decision-making process to enhance ownership perception.

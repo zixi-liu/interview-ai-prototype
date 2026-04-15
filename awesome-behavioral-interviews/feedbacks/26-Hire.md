@@ -14,76 +14,79 @@ Situation: In my last role as a software developer at a digital marketing firm, 
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Situation: dev team, analytics tool, marketing dept
-- Task: meet marketing needs, contribute to tool
-- Action: initiated joint meetings, clarified needs, agile approach, shared channel
-- Result: effective collaboration, tool well-received, enhanced workflow
-- Skills: translating tech to non-tech, communication focus
+- Software dev at digital marketing firm
+- New analytics tool for marketing
+- Collaborated with marketing team
+- Initiated joint meetings
+- Clarifying questions, explained tech constraints
+- Agile approach, iterative feedback
+- Shared communication channel
+- Final product well-received, enhanced workflow
+- Importance of cross-departmental collaboration
 ============================================================
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a project where they collaborated with the marketing department to develop an analytics tool. They initiated joint meetings to gather requirements and adopted an agile approach for iterative feedback. The candidate emphasized clear communication and established a shared channel for ongoing dialogue. The result was a well-received tool that improved the marketing team's workflow. While the candidate demonstrated effective collaboration and communication skills, the example lacked specific metrics to quantify the impact of their contributions.
+The candidate described their experience as a software developer at a digital marketing firm, where they collaborated with the marketing department to develop a new analytics tool. They took the initiative to organize joint meetings to gather requirements, facilitated communication, and adopted an agile approach for iterative feedback. The collaboration resulted in a well-received product that improved the marketing team's workflow. While the candidate demonstrated effective communication and structured thinking, the impact of their contributions could be better quantified.
 
 ============================================================
 3. Strengths (Interviewer perspective)
 - Clear articulation of collaboration process
-- Structured approach to gathering requirements
-- Effective communication with non-technical stakeholders
-- Demonstrated initiative in setting up meetings and channels
+- Structured approach to meetings and communication
+- Ability to translate technical concepts for non-technical audiences
+- Initiative in setting up shared communication channels
+- Focus on iterative development and feedback
 
 ============================================================
 4. Areas for Improvement
-- Provide specific metrics or data to quantify the impact of the project
-- Clarify personal contributions versus team efforts to highlight ownership
+- Lack of specific metrics or data to quantify the impact of the tool on the marketing team's workflow
+- More emphasis on personal contributions versus team efforts; could clarify individual ownership in the project
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
 - Ownership: Meets(👌)
-- Problem Solving: Meets(👌)
+- Problem Solving: Meets+(👍)
 - Execution: Meets(👌)
 - Collaboration: Strong(🌟)
 - Communication: Strong(🌟)
 - Leadership / Influence: Meets(👌)
-- Culture Fit: Meets(👌)
+- Culture Fit: Meets+(👍)
 
 ============================================================
 6. Final Overall Recommendation
-- 👍Hire
-
-The candidate demonstrated strong collaboration and communication skills, essential for a Junior-Mid level role. However, the lack of specific metrics and clarity on personal contributions limits the overall impact of their example, but they still meet the expectations for hiring.
+👍 Hire  
+The candidate demonstrated a solid understanding of collaboration and communication in a cross-departmental context, which is essential for a Junior-Mid level role. However, the lack of quantifiable impact and clarity on personal contributions slightly limits their overall rating. They show promise and could be a valuable addition to the team with further development in ownership and metrics-driven results.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific metrics or feedback from the marketing team that demonstrate the impact of the analytics tool?
-2. What specific challenges did you face during the collaboration, and how did you address them?
-3. Can you clarify your individual contributions in the project compared to the overall team effort?
-4. How did you ensure that the marketing team's requirements were accurately translated into technical specifications?
-5. What steps did you take to maintain alignment between both teams throughout the project?
+1. Can you provide specific metrics or data that demonstrate how the new analytics tool improved the marketing team's workflow?
+2. What specific challenges did you face during the collaboration, and how did you personally address them?
+3. Can you elaborate on your individual contributions to the project, particularly in the context of the agile development process?
+4. How did you ensure that the marketing team's feedback was effectively integrated into the tool's development?
+5. Were there any instances where you had to resolve conflicts or differing opinions between the development and marketing teams? How did you handle that?
+6. What steps did you take to maintain engagement and motivation among team members during the iterative feedback process?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "executor-style contribution" (the candidate describes actions but lacks clear ownership of outcomes)
-  - "vagueness" (the impact of the collaboration is described as "well-received" without specific metrics or quantifiable results)
-  - "lack of reflection" (no mention of personal learnings or how this experience influenced future work)
+  - "overclaiming contribution" - The candidate describes initiating meetings and setting up communication channels, but does not clarify their direct impact on the outcomes.
+  - "lack of reflection" - The candidate does not reflect on any challenges faced during collaboration or how they overcame them, which is critical for demonstrating growth and learning.
 
 =====================
 2. Red Flag Severity Rating
-- "executor-style contribution": ★★★☆☆
-- "vagueness": ★★☆☆☆
+- "overclaiming contribution": ★★☆☆☆
 - "lack of reflection": ★★☆☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate describes a collaborative effort but does not clearly articulate personal ownership of the project's success.
-- The impact of the collaboration lacks specific metrics, making it difficult to assess effectiveness.
-- There is no reflection on personal growth or lessons learned, which is crucial for a Junior-Mid level role.
+- The candidate's role in the collaboration is somewhat vague, lacking specific examples of their direct contributions to the project's success.
+- There is no mention of challenges faced or lessons learned, which are essential for demonstrating personal growth and adaptability.
+- Overall impact and ownership are not clearly articulated, raising concerns about the depth of their involvement.
 
 =====================
 4. Improvement Suggestions
-- Clearly define personal contributions and ownership in collaborative projects.
-- Include specific metrics or outcomes to quantify the impact of the collaboration.
-- Reflect on personal learnings and how they can be applied to future projects.
+- Provide specific examples of challenges encountered during collaboration and how they were addressed.
+- Quantify the impact of the project, such as improvements in efficiency or metrics that demonstrate success.
+- Clarify personal contributions versus team efforts to better illustrate ownership and accountability.

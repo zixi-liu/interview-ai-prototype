@@ -15,30 +15,30 @@ Situation: In my previous role as a software developer at a digital agency, I wa
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
 - Missed deadline on e-commerce update
-- Complex features, tight deadline
-- Technical challenges, integration issues
+- Complex features, tight timeline
 - Communicated delay to PM & client
-- Proposed phased deployment, critical features first
-- Increased work hours, focused on critical features
-- Client appreciated transparency, maintained trust
-- Lessons: risk assessment, contingency planning, communication
-============================================================
+- Proposed contingency plan (critical features first)
+- Increased work hours, focused on priorities
+- Client appreciated transparency
+- Maintained trust, avoided disruption
+- Lessons learned: risk assessment, communication, time management
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a situation where they missed a deadline for a critical update on a client's e-commerce website due to unforeseen technical challenges. They took ownership by promptly communicating the delay to both their project manager and the client, proposing a phased deployment strategy to ensure that the most critical features were delivered on time. The candidate's actions resulted in maintaining client trust and successfully delivering essential components for a major promotional event. This experience highlighted their understanding of risk management and the importance of communication, which are valuable skills for a Junior-Mid level role.
+The candidate described a situation where they missed a deadline while working on a critical update for a client's e-commerce website. They faced unanticipated technical challenges but communicated the delay to both their project manager and the client, proposing a contingency plan to prioritize critical features. The candidate increased their work hours to meet the new timeline, successfully delivering essential features in time for a major promotional event. This experience highlighted their ability to manage client relationships and adapt under pressure, although it lacked specific metrics to quantify the impact.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear communication with stakeholders about delays
-- Proactive approach to problem-solving with a contingency plan
-- Ability to prioritize critical tasks under pressure
-- Demonstrated reliability in delivering essential features on time
+- Clear communication with stakeholders during a crisis
+- Proactive in proposing solutions to mitigate impact
+- Ability to prioritize tasks under pressure
+- Demonstrated reliability in delivering critical features
 
 ============================================================
 4. Areas for Improvement
-- Need to provide more specific metrics or data regarding the impact of the missed deadline and subsequent actions.
-- Could improve on demonstrating personal ownership of the project beyond just communication and execution of tasks.
+- Provide specific metrics or data to quantify impact of actions taken
+- More clarity on personal contributions versus team efforts in the project
+- Develop a stronger focus on time estimation and project management skills
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
@@ -54,39 +54,40 @@ The candidate described a situation where they missed a deadline for a critical 
 6. Final Overall Recommendation
 - 👍Hire
 
-The candidate demonstrated a solid understanding of project management and communication, effectively handling a challenging situation. While there is room for improvement in demonstrating personal ownership and providing quantifiable impact, their proactive approach and reliability make them a suitable hire for a Junior-Mid level position.
+The candidate demonstrated a solid understanding of communication and problem-solving in a challenging situation, which aligns well with Junior-Mid expectations. However, the lack of specific metrics and clarity on personal contributions slightly limits their overall impact assessment.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you provide specific metrics or data that illustrate the impact of the missed deadline on the project or the client’s business?
-2. What specific steps did you take to ensure that the critical features were delivered on time, and how did you prioritize your tasks during that period?
-3. How did you assess the risks that led to the missed deadline, and what changes have you made in your approach to project management since then?
-4. Can you describe a situation where you took ownership of a project from start to finish? What were the challenges, and how did you address them?
-5. How do you ensure that you are accurately estimating timelines for your projects? What strategies do you use to improve your time management skills?
+1. Can you provide specific metrics or data that illustrate the impact of your actions on the project outcome?
+2. How did you ensure that your proposed contingency plan was feasible and aligned with the team's capabilities?
+3. Can you clarify your individual contributions to the project versus those of your team members?
+4. What specific steps have you taken since this experience to improve your time estimation skills?
+5. How do you typically assess risks in your projects, and can you give an example of a time you applied this assessment? 
+6. When communicating with the client, how did you ensure they felt supported and informed throughout the process?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
 - Red Flags: 
-  - "blames others" (implies external factors caused the delay without personal accountability)
-  - "lack of reflection" (no clear indication of personal responsibility or learning from the situation)
-  - "ambiguity avoidance" (vague on specific actions taken to mitigate the delay)
+  - "lack of reflection" (while the candidate mentions lessons learned, there is no specific reflection on how to prevent similar issues in the future)
+  - "ambiguity avoidance" (the candidate does not specify what the unanticipated technical challenges were, which raises concerns about transparency and clarity)
+  - "executor-style contribution" (the candidate's role in the project appears limited to execution without clear leadership or ownership of the overall project outcome)
 
 =====================
 2. Red Flag Severity Rating
-- "blames others": ★★☆☆☆ 
-- "lack of reflection": ★★☆☆☆ 
-- "ambiguity avoidance": ★★★☆☆ 
+- "lack of reflection": ★★☆☆☆
+- "ambiguity avoidance": ★★☆☆☆
+- "executor-style contribution": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate attributes the missed deadline to external technical challenges without taking full ownership.
-- There is insufficient reflection on personal responsibility or specific lessons learned.
-- The response lacks clarity on the candidate's direct actions and contributions to resolving the issue.
+- The candidate demonstrates some ownership by communicating the delay and proposing a contingency plan.
+- However, the lack of specific details on challenges and reflections on personal accountability raises concerns.
+- The overall impact appears limited to the candidate's immediate task without broader project leadership.
 
 =====================
 4. Improvement Suggestions
-- Clearly articulate personal contributions and ownership of the situation.
-- Reflect on specific lessons learned and how they have been applied in subsequent projects.
-- Provide quantifiable metrics or outcomes to demonstrate the impact of actions taken.
+- Provide specific examples of how to prevent similar deadline misses in the future.
+- Clearly articulate the challenges faced and how they were addressed to demonstrate problem-solving skills.
+- Highlight any leadership or initiative taken beyond execution to show ownership of project outcomes.

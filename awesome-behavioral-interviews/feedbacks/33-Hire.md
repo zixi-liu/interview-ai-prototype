@@ -14,79 +14,81 @@ Situation: At my previous job as a software developer at a data analytics firm, 
 
 ============================================================
 1. Real-Time Raw Notes (Interviewer's scratch notes)
-- Data analytics firm, large-scale data processing
-- IoT devices, real-time analysis
-- Lead core data processing module
-- Used Apache Kafka, Apache Spark
+- Data analytics firm
+- Large-scale data processing system
+- Core module development
+- Real-time analysis, IoT devices
+- Apache Kafka, Apache Spark
 - Microservices architecture
-- Emphasized testing, simulated environment
-- Coordinated with front-end, database teams
-- Successful deployment, high accuracy, minimal latency
-- Enhanced client decision-making
-- Learning experience, skills in leadership, problem-solving
+- Rigorous testing, simulated environment
+- Cross-team coordination
+- Successful deployment, high accuracy
+- Learning experience, skills honed
 
 ============================================================
 2. Formal Interview Summary (for hiring committee)
-The candidate described a significant technical challenge faced at a data analytics firm, where they led the development of a large-scale data processing system for real-time analysis of IoT device data. They took initiative by researching and selecting appropriate technologies, such as Apache Kafka and Apache Spark, and implemented a microservices architecture. The project was successfully deployed, resulting in improved performance and client satisfaction. While the candidate demonstrated structured thinking and a solid understanding of the technical aspects, the depth of ownership and measurable impact could be further clarified.
+The candidate described a significant technical challenge involving the development of a large-scale data processing system for IoT devices at a previous job. They led the development of the core module using Apache Kafka and Apache Spark, focusing on scalability and performance. The candidate emphasized rigorous testing and cross-team collaboration, resulting in a successfully deployed system that enhanced client decision-making. While the project showcased technical skills and leadership, the candidate's ownership and impact could be more clearly defined.
 
 ============================================================
 3. Strengths (Interviewer perspective)
-- Clear articulation of the technical challenge and solution
+- Clear articulation of technical challenge
 - Structured approach to problem-solving
-- Demonstrated ability to lead a team and coordinate across functions
-- Effective use of modern technologies (Kafka, Spark)
-- Focus on testing and performance optimization
+- Research-driven decision-making on technologies
+- Demonstrated teamwork and communication skills
+- Ability to adapt based on feedback
 
 ============================================================
 4. Areas for Improvement
-- Clarify personal contributions versus team efforts in the project
-- Provide specific metrics or data to quantify the impact of the system
-- More detail on how challenges were overcome during development
+- Need clearer ownership of the project outcomes and personal contributions
+- More quantifiable metrics on system performance and impact on clients
+- Greater emphasis on individual leadership in team dynamics
 
 ============================================================
 5. Competency Ratings (use FAANG rubric)
-- Ownership: 👍
-- Problem Solving: 👍
-- Execution: 👍
-- Collaboration: 👍
-- Communication: 👍
-- Leadership / Influence: 👍
-- Culture Fit: 👍
+- Ownership: Meets(👌)
+- Problem Solving: Meets+(👍)
+- Execution: Meets(👌)
+- Collaboration: Meets+(👍)
+- Communication: Meets(👌)
+- Leadership / Influence: Meets(👌)
+- Culture Fit: Meets+(👍)
 
 ============================================================
 6. Final Overall Recommendation
 - 👍Hire
 
-The candidate demonstrated a solid understanding of technical challenges and effective problem-solving skills. While there are areas for improvement in articulating personal contributions and quantifying impact, they showed potential for growth and reliability in a team setting.
+The candidate demonstrated a solid understanding of technical challenges and effective collaboration. However, there is a need for clearer ownership and impact metrics. Overall, they are a strong fit for a Junior-Mid level role, with potential for growth in ownership and leadership.
 
 ============================================================
 7. Probing Follow-up Questions
-1. Can you elaborate on your specific contributions to the project, particularly in the design and implementation phases?
-2. What specific metrics did you use to measure the success of the data processing system post-deployment?
-3. Were there any significant challenges you faced during the development, and how did you address them?
-4. How did you ensure that your team was aligned with the project goals, and what strategies did you use to facilitate communication?
-5. Can you describe a situation where you had to adapt your approach based on feedback from other teams? What was the outcome?
+1. Can you provide specific metrics that demonstrate the performance improvements of the system you developed?
+2. What was your individual contribution to the project, and how did you ensure your leadership was felt within the team?
+3. How did you handle any conflicts or differing opinions during the cross-team collaboration?
+4. Can you describe a specific challenge you faced during the testing phase and how you addressed it?
+5. In what ways did you adapt your approach based on the feedback received from other teams?
+6. How did you prioritize tasks within your team to meet project deadlines?
 
 ## Red Flag
 
 =====================
 1. Red Flag Detection
-- Overclaiming contribution: The candidate describes leading a team and making significant decisions but lacks specific examples of their individual contributions or challenges faced.
-- Lack of reflection: The candidate does not discuss any personal challenges or learning moments that arose during the project, which is critical for growth in a Junior-Mid role.
+- Red Flags: 
+  - "overclaiming contribution" - The candidate describes leading a team but does not clearly delineate their specific contributions versus the team's collective efforts.
+  - "vagueness" - The description lacks specific metrics or quantifiable results that demonstrate the system's performance improvements or impact on client decision-making.
 
 =====================
 2. Red Flag Severity Rating
-- Overclaiming contribution: ★★★☆☆
-- Lack of reflection: ★★☆☆☆
+- "overclaiming contribution": ★★☆☆☆
+- "vagueness": ★★★☆☆
 
 =====================
 3. Short Justification (Interviewer Tone)
-- The candidate's narrative suggests a leadership role but lacks detailed evidence of personal impact.
-- There is no reflection on personal growth or specific challenges faced, which is essential for a Junior-Mid level candidate.
-- The answer could benefit from more quantifiable metrics to support the claims of success.
+- Candidate claims leadership but does not specify individual contributions, making it difficult to assess personal impact.
+- The lack of quantifiable results raises concerns about the effectiveness and significance of the project.
+- Overall, the answer lacks the clarity and specificity expected at a Junior-Mid level.
 
 =====================
 4. Improvement Suggestions
-- Provide specific examples of personal contributions and challenges faced during the project.
-- Include metrics or data to quantify the impact of the project on clients or the company.
-- Reflect on personal learning experiences or skills developed through the project to demonstrate growth.
+- Clearly outline specific contributions to the project, differentiating personal efforts from team actions.
+- Include quantifiable metrics or results to demonstrate the impact of the project on performance and client outcomes.
+- Provide more detail on the challenges faced and how they were overcome, showcasing problem-solving skills.

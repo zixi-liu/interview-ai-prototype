@@ -1,0 +1,15 @@
+﻿company,level,model,n_questions,mean_expected_score,stdev_expected_score,min_expected_score,max_expected_score,range_expected_score,iqr_expected_score
+Amazon,senior,gpt-5.4-mini,10,3.006,0.0457,2.92,3.12,0.2,0.0
+Google,mid-level,gpt-5.4,10,3.04,0.08,3.0,3.2,0.2,0.0
+Google,mid-level,gpt-5.4-mini,10,3.084,0.1444,3.0,3.4,0.4,0.04
+Google,mid-level,gpt-5.4-pro,10,2.96,0.0917,2.7,3.0,0.3,0.0
+Google,senior,claude-haiku-4-5,10,3.082,0.2622,2.4,3.46,1.06,0.175
+Google,senior,claude-opus-4-6,10,2.58,0.4308,2.0,3.0,1.0,0.875
+Google,senior,claude-sonnet-4-6,10,2.704,0.3938,2.0,3.12,1.12,0.5
+Google,senior,gemini/gemini-3-flash-preview,10,3.092,0.6842,2.0,4.02,2.02,1.255
+Google,senior,gemini/gemini-3.1-flash-lite-preview,10,2.872,0.4744,2.0,3.86,1.86,0.53
+Google,senior,gemini/gemini-3.1-pro-preview,10,2.79,0.6284,2.0,3.9,1.9,1.025
+Google,senior,gpt-5.4,10,2.9,0.3,2.0,3.0,1.0,0.0
+Google,senior,gpt-5.4-mini,10,3.022,0.0751,2.92,3.22,0.3,0.0
+Google,senior,gpt-5.4-pro,10,2.35,0.441,2.0,3.0,1.0,0.85
+Meta,senior,gpt-5.4-mini,10,2.972,0.1728,2.48,3.18,0.7,0.0

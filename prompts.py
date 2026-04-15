@@ -254,7 +254,7 @@ Dimensions:
 6. Final Overall Recommendation
 Choose:
 - 🌟 Strong Hire
-- 👍Hire
+- 👍 Hire
 - 🤔 Leaning Hire
 - 🤨 Leaning No Hire
 - ❌ No Hire
@@ -499,6 +499,8 @@ class BQAnswer:
 Your task:
 Using ONLY the content inside INPUT: section, extract the candidate's original answer
 and rewrite it into a significantly stronger version that meets the highest bar for a FAANG Senior-level behavioral interview.
+
+CRITICAL: Do NOT fabricate details, metrics, or specifics not in the original answer.
 
 MANDATORY REQUIREMENTS:
 - Output ONLY the improved answer (no analysis, no explanation, no bullet points).
